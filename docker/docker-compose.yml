@@ -1,0 +1,26 @@
+#Implemetación global de todo el proyecto. 
+
+#Por ahora todo en local menos la base de datos. 
+
+#Creamos a base de datos primero 
+services: 
+  app: 
+    image: mariadb:latest
+    ports: 
+      - "3306:3306"
+    environment: 
+      MYSQL_ROOT_PASSWORD: "ertUIbd93"
+      #Recordar(se crea la base desde aquí para que el nuevo usuario tenga permisos)
+      MYSQL_DATABASE: "elysiumDatabase"
+      MYSQL_USER: "userAdmin"
+      MYSQL_PASSWORD: "1234"
+    volumes:
+    #Reemplazamos el fichero de ejecución por el nuestro. 
+      - ../database/init.sql:/docker-entrypoint-initdb.d/init.sql
+    #Almacenar los datos en local, para simular una copia de seguridad. 
+      - persistence_vol_database:/var/lib/mysql 
+      
+
+#TODO -  Recordar realizar el app de backup de la base de datos. 
+volumes: 
+  persistence_vol_database: 
