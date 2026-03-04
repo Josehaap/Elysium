@@ -6,4 +6,6 @@ import mysql2 from 'mysql2';
 import configDataPool from './database.config';
 //-----------------------------
 
+//Configuramos la conexión. 
 const pool = mysql2.createPool(configDataPool); 
+
