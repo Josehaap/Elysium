@@ -11,6 +11,7 @@ create table if not exists user(
     email varchar(100) not null, 
     profile_img varchar(200)
 );
+
 -- TODO Implementar las demás tablas. 
 
 
