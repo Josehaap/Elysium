@@ -1,10 +1,9 @@
 import dotenv from 'dotenv';
 dotenv.config(); 
-
 const configDataPool = {
     host: process.env.DB_HOST,
-    user: process.env.DB_USER,
-    password: process.env.DB_PASSWORD,
+    user: 'userAdmin',
+    password: '1234',
     database: process.env.DB_NAME, 
     port: process.env.DB_PORT
 };

@@ -7,7 +7,10 @@ import mysql2 from 'mysql2/promise';
 import configDataPool from './database.config.js';
 //-----------------------------
 
-//Configuramos la conexión. 
-export const pool = mysql2.createPool(configDataPool); 
+//Configuramos la conexión y la exportamos
+const pool = mysql2.createPool(configDataPool); 
+
+
+export default   pool;
 
 
