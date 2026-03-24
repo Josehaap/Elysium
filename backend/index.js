@@ -8,18 +8,7 @@ import UserController from "./src/controllers/user.controller.js";
 
 
 
-import bcrypt from 'bcrypt'
 
-const password = 'miContraseña123';
-
-async function hashPassword(password) {
-  const saltRounds = 10; // nivel de seguridad
-  const hash = await bcrypt.hash(password, saltRounds);
-  console.log('Hash:', hash);
-  return hash;
-}
-
-hashPassword(password);
 
 
 

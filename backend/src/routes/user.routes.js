@@ -12,6 +12,13 @@ const user = new UserController();
 
 //! Responde a, ¿Username o gmail están ya logeados.?
 router.get('/register',user.getUserRegisterByValidation);
+
+//? Validamos al usuario y lo registramos 
+//!Recordar tener que hacer si el usuario es una entrprise es decir
+//! Agregarlo a una tabla más y además enviar email.
 router.post('/register', user.userRegister)
+
+
+router.post('/login',user.userLoginValidate);
 
 export default router;
