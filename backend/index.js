@@ -1,10 +1,9 @@
-import  pool from "./src/database/db.js";
-import app from "./src/app.js"; 
-import userRouter from "./src/routes/user.routes.js"
-import UserController from "./src/controllers/user.controller.js";
-//Creamos la intancia de express y hacemos uso de middlware par indicar que se permite las conexiones 
-//y que se recibirá datos en formato json. 
- app.use("/user", userRouter);
+import app from "./src/app.js";   //*Importamos la creación de nuestro servidor y la inicialización. 
+import userRouter from "./src/routes/user.routes.js"; //Importamos las rutas de los usuarios. 
+/**
+ * *File - Archivo utilizado para centrar toda la funcionalidad de middleware y la conexión a la base de datos y todo lo demás. 
+ */
+ app.use("/user", userRouter); //! Todo aquel que entre a través de user entrará a las rutas de los usuarios. 
 
 
 

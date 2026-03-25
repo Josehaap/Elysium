@@ -1,9 +1,13 @@
 import bcrypt from "bcrypt";
 import dotenv from 'dotenv';
 dotenv.config(); 
-
+/**
+ * @class User
+ * @description Clase utilizada para mantener una lógica de los datos recibidos o sacadosde la base de datos 
+ * aquí buscamos una estandarización de los datos basándonos en el frontend. 
+ */
 export default class User{
-#username; //Nombre de usuario en la plataforma.
+  #username; //Nombre de usuario en la plataforma.
   #email;
   #password; //Almacenaremos la contraseña ya cifrada
   #levelSegurityPassword = 10; //! Pasarlo al env

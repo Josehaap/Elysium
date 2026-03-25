@@ -11,6 +11,6 @@ import configDataPool from './database.config.js';
 const pool = mysql2.createPool(configDataPool); 
 
 
-export default   pool;
+export default pool;
 
 

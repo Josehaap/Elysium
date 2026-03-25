@@ -1,5 +1,3 @@
-
-
 import express from 'express';
 import UserController from '../controllers/user.controller.js';
 const router = express.Router(); //Generamos una instancia de las funcione de enrutamiento. 
@@ -10,10 +8,12 @@ const user = new UserController();
  * @author Jose de Haro Jiménez. 
  */
 
-//! Responde a, ¿Username o gmail están ya logeados.?
+
+//* Responde a, ¿Username o gmail están ya logeados.?
 router.get('/register',user.getUserRegisterByValidation);
 
 //? Validamos al usuario y lo registramos 
+
 //!Recordar tener que hacer si el usuario es una entrprise es decir
 //! Agregarlo a una tabla más y además enviar email.
 router.post('/register', user.userRegister)
