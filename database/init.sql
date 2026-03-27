@@ -9,7 +9,8 @@ create table if not exists user(
     username varchar(50) not null unique, 
     password varchar(255) not null, 
     email varchar(100) not null unique, 
-    profile_img varchar(200)
+    profile_img varchar(200), 
+    is_active boolean not null
 );
 
 create table if not exists user_activity(
@@ -25,10 +26,8 @@ create table if not exists user_enterprise(
     user_id bigint primary key, 
     enterprise_name varchar(100),
     enterprise_phone varchar(15), 
-    is_active boolean not null, 
     constraint fk_userEnterprise_user FOREIGN KEY (user_id) references user(user_id)
 ); 
--- TODO Implementar las demás tablas. 
 
 create table if not exists follow(
     follower_id bigint,
