@@ -54,3 +54,8 @@ logs/
 # -----------------------
 backup/
 *.zip
+
+# -----------------------
+# Arquitectura
+# -----------------------
+ARCHITECTURE_GUIDE.md

@@ -4,9 +4,11 @@ import UserValidators from "../validators/UserValidators.js";
 import User from "../model/User.js";
 import Exception from "../utils/exceptions.js";
 import bcrypt from "bcrypt";
+import Email from "../utils/email/Email.js";
 
 const helper = new Helper();
-
+//TODO - Para mejorar la intereacción con el usuario tendré que generar un hash con la informacion del usuario para almacenar en localstorage 
+//Todo - 
 /**
  * @class UserController
  * @description Clase que es utilizada para aplicar la lógica de las inteeraciones en las rutas, especialida para ser un puente entre la capa de rutas y la capa
@@ -79,7 +81,7 @@ export default class UserController {
   userRegister = async (req, res) => {
     try {
       //Todo Implementar la logica de crear carpeta para guardar foto perfil.
-      //Todo Implementar envio de gmail
+      //Todo Mejorar la clase EMAIL
       //Todo implementar comprobación de imagenes y videos que se han aptos.
       console.log("Este es el usuairo recibido: ");
       console.log(req.body);
@@ -87,7 +89,7 @@ export default class UserController {
       UserValidators.validateKeys(req.body);
       UserValidators.validateValues(req.body);
       const data = req.body;
-      //Si todo ha salido bien instanciamos al usuario
+      //Si  todo ha salido bien instanciamos al usuario
       console.log(data);
       let user = new User(data.username, data.email);
       user.firstName = data.first_name;
@@ -121,6 +123,14 @@ export default class UserController {
           .status(409)
           .send(helper.generateRespond(this.#response, RESPONSE));
 
+      //Creamos la acrpeta del usuario para almacenar sus imagenes
+      //helper.mkdirAndUploadImg(user.username);
+
+      //Si todo está genial y es una empresa enviamos un correo 
+      if (user.iAmEnterprise === 0){  //Significa que es una empresa
+        Email.sendEmail(user.email, "Registro nueva Empresa."); //TODO Desarrollo mejorar implementación .  
+      }
+      
       //Si todo está bien le informamos de que si existe
       return res
         .status(200)
@@ -185,10 +195,7 @@ export default class UserController {
         profile_img: "",
       };
 
-      if (
-        esValido
-      ) //! Hacer el envio de dato recordar databsae unique hay que reiniciar.
-      {
+      if (esValido){
         dataResponds.id = user_id;
         dataResponds.username = username;
         dataResponds.profile_img = profile_img;
