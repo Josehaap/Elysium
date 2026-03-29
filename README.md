@@ -2,14 +2,12 @@
 
   <img src="https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/rainbow.png" width="100%">
 
-  # 🌌 ELYSIUM
+  # ELYSIUM
   ### *Elevando la Simbiosis Creativa y la Colaboración Mutua*
 
-  [![Angular](https://img.shields.io/badge/Angular-DD0031?style=for-the-badge&logo=angular&logoColor=white)](https://angular.io/)
-  [![Node.js](https://img.shields.io/badge/Node.js-339933?style=for-the-badge&logo=nodedotjs&logoColor=white)](https://nodejs.org/)
-  [![PostgreSQL](https://img.shields.io/badge/PostgreSQL-316192?style=for-the-badge&logo=postgresql&logoColor=white)](https://www.postgresql.org/)
-  [![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)](https://tailwindcss.com/)
-
+[![Angular](https://img.shields.io/badge/Angular-DD0031?style=for-the-badge&logo=angular&logoColor=white)](https://angular.io/) [![Node.js](https://img.shields.io/badge/Node.js-339933?style=for-the-badge&logo=nodedotjs&logoColor=white)](https://nodejs.org/) [![MariaDB](https://img.shields.io/badge/MariaDB-003545?style=for-the-badge&logo=mariadb&logoColor=white)](https://mariadb.org/)  [![Docker](https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white)](https://www.docker.com/)  [![Tailwind](https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)](https://tailwindcss.com/)
+ 
+  
   <p align="center">
     <a href="#-sobre-el-proyecto">Sobre el Proyecto</a> •
     <a href="#-tecnologías">Tecnologías</a> •
@@ -28,29 +26,26 @@
 ## 📖 Sobre el Proyecto
 
 > [!NOTE]
-> *“Donde la creatividad se encuentra con la ayuda mutua.”*
-> Elysium es una plataforma de nueva generación diseñada para fomentar la simbiosis entre creadores independientes y profesionales.
-
-[Breve descripción de alto nivel del proyecto aquí. Explica el propósito de la plataforma.]
+> *“La ayuda que necesitaban los modelos”*
+> Elysium es una plataforma orientada a ser una red social pero que su enfoque es más laboral que de ocio. 
 
 ---
 
 ## 🛠 Tecnologías Utilizadas
 
-### **Arquitectura Frontend**
+### **Arquitectura Frontend**          
 | Tecnología | Uso |
 | :--- | :--- |
-| **Framework** | Angular 18+ |
+| **Framework** | Angular |
 | **Estilos** | Tailwind CSS / Vanilla CSS |
 | **Animaciones** | GSAP / CSS Transitions |
-| **Estado** | Signals / RxJS |
 
 ### **Ecosistema Backend**
 | Tecnología | Uso |
 | :--- | :--- |
 | **Entorno** | Node.js |
 | **Framework** | Express.js |
-| **Base de Datos** | PostgreSQL / SQL |
+| **Base de Datos** | MariaDB / SQL |
 | **Seguridad** | Bcrypt / JWT / CORS |
 
 ---
@@ -79,21 +74,30 @@ graph TD
 ## 🚀 Empezando
 
 ### **Prerrequisitos**
-- Node.js (v18+)
-- PostgreSQL
-- Gestor de paquetes (pnpm/npm)
+ 1. Tener docker instalado. 
+ 2. Tener node instalado (Implementar npm y pnpm ). 
+ 3. Angular instalado. 
+ 4. Pedirme las credenciales de los ENV (backend y frontend). 
+
 
 ### **Instalación**
 
 1. **Clonar el repositorio**
    ```bash
-   git clone https://github.com/usuario/elysium.git
+   git clone "Url Del Repositorio"
    cd elysium
    ```
+2. Confiruación de la base de datos. 
+    ```bash
+   cd database
+   docker compose up
+   
+   ```
+   En este preciso instante se debería de generar en docker desktop un contenedor de la imagen de mariadb. 
 
 2. **Configuración del Frontend**
    ```bash
-   cd client
+   cd ../client
    pnpm install
    ng serve
    ```
@@ -102,49 +106,10 @@ graph TD
    ```bash
    cd ../backend
    pnpm install
-   # Configura tu archivo .env
+   # Configura tu archivo .env ejemplo en env.example
    pnpm dev
    ```
 
 ---
 
-## ✨ Características Principales
 
-- [ ] **Autenticación Dual:** Registro e inicio de sesión seguro para usuarios y empresas.
-- [ ] **Lógica de Ayuda Mutua:** Sistema dinámico de recompensas y colaboración.
-- [ ] **Landing Interactiva:** Visuales de alto rendimiento y animaciones fluidas.
-- [ ] **Encriptación Extremo a Extremo:** Comunicaciones privadas y seguras.
-
----
-
-## 🗺 Hoja de Ruta (Roadmap)
-
-- [x] Arquitectura Inicial y Esquema DB
-- [x] UI de la Landing Responsiva
-- [ ] Implementación del Panel de Usuario
-- [ ] Herramientas de Colaboración en Tiempo Real
-- [ ] Versión para Aplicación Móvil
-
----
-
-## 🤝 Contribuir
-
-Las contribuciones son las que hacen que la comunidad de código abierto sea un lugar increíble para aprender, inspirar y crear.
-
-1. Haz un Fork del proyecto
-2. Crea tu rama de función (`git checkout -b feature/NuevaFuncionalidad`)
-3. Haz commit de tus cambios (`git commit -m 'Añadir NuevaFuncionalidad'`)
-4. Haz push a la rama (`git push origin feature/NuevaFuncionalidad`)
-5. Abre un Pull Request
-
----
-
-## 📧 Contacto
-
-**Desarrollador Principal:** Tu Nombre - [LinkedIn](https://linkedin.com/in/tuperfil) - email@ejemplo.com
-
-Enlace del Proyecto: [https://github.com/usuario/elysium](https://github.com/usuario/elysium)
-
-<div align="center">
-  <sub>Construido con ❤️ para la Comunidad Creativa</sub>
-</div>
