@@ -90,7 +90,7 @@ graph TD
 2. Confiruación de la base de datos. 
     ```bash
    cd docker
-   docker compose up
+   docker compose up -d
    
    ```
    En este preciso instante se debería de generar en docker desktop un contenedor de la imagen de mariadb. 
