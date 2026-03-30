@@ -84,12 +84,12 @@ graph TD
 
 1. **Clonar el repositorio**
    ```bash
-   git clone "Url Del Repositorio"
+   git clone https://github.com/Josehaap/Elysium
    cd elysium
    ```
 2. Confiruación de la base de datos. 
     ```bash
-   cd database
+   cd docker
    docker compose up
    
    ```
