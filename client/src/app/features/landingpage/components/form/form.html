@@ -1,0 +1,16 @@
+<div id="containForm" class="w-[100%] rounded-3xl overflow-hidden border border-white/30 shadow" [ngClass]="iWantLogin ? 'h-60': 'h-130'">
+  <div class="cabecera w-full flex justify-evenly">
+    @for (item of ['login', 'register']; track $index) {
+      <p  (click)="selectedOption($event)" [ngClass]="($index ===0 && iWantLogin)||($index ===1 && !iWantLogin) ? 'active': 'bg-[#EFA287]' " class="text-white w-full p-2 text-center uppercase tracking-wider font-semibold cursor-pointer hover:bg-orange-300/50 transition-all h-10">{{ item }}</p>
+    }
+  </div>
+
+  @if(iWantLogin){
+    <app-form-login [receptEmailUser]="this.userEmail" (userExists)="isUserExist($event)"></app-form-login>  
+  }
+  @else {<app-form-register (userExists)="isUserExist($event)" (userIsNowLogin)="goToLogin($event)"></app-form-register>}
+</div>
+
+@if(userExist && !iWantLogin){<app-alert [alertLevel]="ifUserExistsAlertLevel" [message]="ifUserExistsMessage"></app-alert>}
+@else if (userExist && iWantLogin) {<app-alert [alertLevel]="ifUserExistsAlertLevel" [message]="ifUserExistsMessage"></app-alert>}  
+@if(this.userIsEnterprise && iWantLogin) {<app-alert [alertLevel]="'warning'" [message]="menssageAlertIfEnterprise"></app-alert>}

@@ -1,0 +1,5 @@
+<section class="bg-bluse-500 flex flex-col justify-between gap-10 items-center">
+  @for (post of listPost(); track $index) {
+   <app-post-card [dataPost]="post"></app-post-card>
+  }
+</section>

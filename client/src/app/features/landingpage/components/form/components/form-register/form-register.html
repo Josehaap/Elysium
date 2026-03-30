@@ -1,0 +1,45 @@
+
+<form autocomplete="off" [formGroup]="profileForm"  class="grid grid-cols-2 p-8 gap-x-8 gap-y-6   text-sm text-primary-light   " (submit)="onSubmit()">
+    <div class="flex flex-col gap-1">
+      <label for="first_name" class="font-medium">Nombre</label>
+      <input type="text" formControlName="first_name" id="first_name" placeholder="Tu nombre" />
+    </div>
+
+    <div class="flex flex-col gap-1">
+      <label for="surnames" class="font-medium">Apellidos</label>
+      <input type="text" formControlName="surnames" id="surnames" placeholder="Tus apellidos" />
+    </div>
+
+    <div class="flex flex-col gap-1">
+      <label for="username" class="font-medium">Username</label>
+      <input type="text" formControlName="username" id="username" placeholder="Nombre de usuario" (change)="checkUser($event)"/>
+    </div>
+
+    <div class="flex flex-col gap-1">
+      <label for="email" class="font-medium" >Email</label>
+      <input type="email" formControlName="email" id="email" placeholder="ejemplo@correo.com" (change)="checkUser($event)" />
+    </div>
+
+    <div class="flex flex-col gap-1">
+      <label for="password" class="font-medium">Contraseña</label>
+      <input type="password" formControlName="password" id="password" placeholder="Ingrese su contraseña" />
+    </div>
+
+    <div class="flex flex-col gap-1">
+      <label for="profile_img" class="font-medium">Foto de Perfil</label>
+      <input type="file" class="p-30" formControlName="profile_img" accept="image/*" capture="camera" id="profile_img" />
+    </div> 
+    <div class="flex gap-1 items-center ">
+      <label for="iAmEnterprise" class="font-medium">Soy una empresa: </label>
+      <input class="" type="checkbox" formControlName="iAmEnterprise" id="iAmEnteprise"/>
+    </div>
+
+    <div class="col-span-2 flex justify-center mt-4">
+      <!--El botón estará activo cuando todo este escrito y que el username y email no esté ya registrado en la base de datos ya que son unicos. -->
+      <button type="submit"  [disabled]="(!profileForm.valid || this.isvalidUser)" 
+        class="bg-orange-400 hover:bg-orange-500 text-white font-medium py-2 px-6 rounded-full transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
+        Registrarse
+      </button>
+    </div>
+
+  </form>

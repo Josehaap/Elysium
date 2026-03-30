@@ -1,0 +1,18 @@
+<header class="w-full h-30 flex justify-between items-center p-10 font-bold ">
+  <div class="logo">
+    <img class="w-[80%]" [src]="dataHeader().urlLogo" alt="" />
+  </div>
+  <nav class="hidden md:inline-flex w-[30%] flex justify-between text-3xl md:mr-50 ">
+    @for (navOption of dataHeader().nav; track $index) {
+      <a (click)="irASeccion(navOption.superLinkSelect)" class="text-orange-400 hover:text-[#CB6846] duration-300 cursor-pointer">{{ navOption.title }}</a>
+    }
+  </nav>
+  <div
+    id="btn"
+    class="w-80 sm:w-40 pt-3 pb-3 pl-6 sm:pr-6 flex gap-3 items-center text-white  bg-[#EFA287] hover:bg-[#CB6846] duration-300 rounded-full cursor-pointer" 
+    routerLink="/login"
+  >
+    <img [src]="dataHeader().btn.urlIcon" alt="icono" />
+    <a>{{ dataHeader().btn.title}}</a>
+  </div>
+</header>

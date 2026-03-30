@@ -1,0 +1,15 @@
+<div class="bg-[#F9F3F1] h-110 w-100 p-5 rounded-[20px] shadow-md">
+  <div class="flex justify-between mb-7 items-center">
+    <div class="flex gap-3 items-center">
+      <img class="rounded-full w-10" [src]="dataPost()['user'].avatar_url" alt="imagen de perfil" />
+      <p>{{ dataPost()['user'].username }}</p>
+    </div>
+
+    <p>Sin seguir</p>
+  </div>
+  <img class="h-50 w-full bg-black rounded-[10px]" alt="" [src]="dataPost().image_url" />
+  <app-card-actions></app-card-actions>
+  <h3>{{ dataPost().title }}</h3>
+  <p>{{ dataPost().description }}</p>
+  <span>{{ dataPost().created_at }}</span>
+</div>

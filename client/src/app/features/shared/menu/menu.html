@@ -1,0 +1,12 @@
+<header
+  class="fixed w-full h-40 p-10 bottom-0 items-center md:w-35 md:h-full md:flex md:flex-col  md:gap-28  md:border-r-2  md:border-gray-400/20"
+>
+  <div class="hidden md:block">
+    <img src="img/icons/Icon_Elysium.png" alt="" />
+  </div>
+  <div class="bg-light shadow-xl flex justify-between pt-5 pl-7 pr-7 pb-5 rounded-full md:rounded-none md:h-80 md:flex md:flex-col md:p-0 md:shadow-none">
+    @for (icon of icons; track icon.id) {
+      <img [src]="isActive(icon)" alt="" (click)="activeEvent($event)" [id]="icon.id" class="" />
+    }
+  </div>
+</header>

@@ -1,0 +1,19 @@
+<app-header [dataHeader]="dataHeader"></app-header>
+<section class="flex flex-col gap-10">
+
+  <app-hero [data]="dataHero"></app-hero>
+
+  <section id="containerCarrucel" class="flex flex-col items-center items-center  font-bold  md:text-3xl">
+    <p class="  text-center md:w-220">
+      {{dataCarrucel.firstText[0]}}<span class="text-orange-400">{{dataCarrucel.firstText[1]}}</span>{{dataCarrucel.firstText[2]}}
+      <span class="text-orange-400">{{dataCarrucel.firstText[3]}}</span> {{dataCarrucel.firstText[4]}}
+      <span class="text-orange-400">{{dataCarrucel.firstText[5]}}</span>{{dataCarrucel.firstText[6]}}
+    </p>
+    <app-carrucel [urlImg]="dataCarrucel.urlImg"></app-carrucel>
+    <p class="text-center md:w-280">{{dataCarrucel.lastText}}</p>
+  </section>
+  <app-list-card id="autonomo" [dataCards]="dataOportunities.cards"></app-list-card>
+  <app-section-marcas id="marcas" [dataColaboration]="dataColaboration"></app-section-marcas>
+</section>
+
+<app-footer [textInput]="dataFooter.title"></app-footer>

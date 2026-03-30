@@ -1,0 +1,9 @@
+<section class="flex flex-col items-center mb-20">
+    <h1 class="flex flex-col items-center items-center text-center font-bold text-xl md:w-220 md:text-6xl gfs-didot-italic-bold   mb-5  ">{{dataColaboration().title}}</h1>
+    <div class="containerImg w-full flex gap-4 justify-center">
+        @for (nameImg of dataColaboration().urlsImg.options; track $index) {
+            <img class="w-[70px] h-[50px] md:w-[15%]  md:h-[170px] shadowHoverActive" [src]="dataColaboration().urlsImg.urlBase+nameImg+dataColaboration().urlsImg.extension" alt="">
+        }
+    </div>
+    <p class="text-[13px] md:w-320 md:text-3xl gfs-didot-regular mt-14 text-center">{{dataColaboration().description}}</p>
+</section>

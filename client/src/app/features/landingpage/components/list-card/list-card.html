@@ -1,0 +1,6 @@
+
+<section id="containerCard" class="grid xl:grid-cols-2 grid-rows-2  p-15 gap-8 bg-[rgba(239,162,135,50%)]" >
+  @for (dataCard of dataCards(); track $index) {
+    <app-card [data]="dataCard"></app-card>
+  }
+</section>

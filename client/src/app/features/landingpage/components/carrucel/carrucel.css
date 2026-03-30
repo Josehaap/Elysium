@@ -1,0 +1,47 @@
+/*Esta configuración será previa para hacer la animación */
+
+/*
+* Movemos todas las imágenes a la derecha. 
+*/
+
+
+
+section, .group{
+    display: flex;
+    animation: carrucel 40s linear infinite;
+    -webkit-animation: carrucel 40s linear infinite ;
+    width: calc(200px * 6);
+}
+
+.group, .slide, img{
+    width: 200px;
+}
+
+.group{
+    width: 100% ;
+    display: flex; 
+    gap: 40px;
+    border: 1px solid red;
+    overflow: hidden;
+
+}
+.slider{
+    width: 75%;
+    height: auto;
+    margin: auto;
+    overflow: hidden;
+}
+section::-webkit-scrollbar{
+    display: none;
+}
+
+
+@keyframes carrucel{
+    from{
+        transform: translateX(0);
+    }
+    to{
+        transform: translateX(-100%);
+        
+    }
+}

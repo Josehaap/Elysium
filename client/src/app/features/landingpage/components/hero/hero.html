@@ -1,0 +1,13 @@
+
+<section class="w-full pl-20 pr-20 pt-10 ">
+  <div class="flex shadow-md rounded-xl border border-gray-200 p-9 md:p-2 gap-5 md:h-100 bg-[#F9F3F1] ">
+    <img [src]="data().urlImg" alt="" />
+    <div id="contentCard" class="md:w-[50%] h-full md:p-10 ">
+      <h1 class="gfs-didot-italic-bold text-center font-bold text-5xl mb-10">{{data().title}}</h1>
+      <p class="w-full mb-5 text-xl ">{{ data().description }}</p>
+      @if (data()['cardConfig'].iWantBtn) {
+        <a routerLink="/login" class="bg-[#EFA287] pb-3 pt-3 pl-6 pr-6 rounded-full">{{ data().textBtn }}</a>
+      }
+    </div>
+  </div> 
+</section>

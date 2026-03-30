@@ -1,0 +1,9 @@
+.shadowHoverActive{
+    transition: all 0.5s ease;
+
+}
+.shadowHoverActive:hover{
+    filter: drop-shadow(0 0 15px rgba(0, 0, 0, 0.366));
+    transform: scale(1.1);
+    transform: translateY(-20px);
+}

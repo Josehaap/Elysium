@@ -1,0 +1,14 @@
+<div
+  id="container"
+  class=" w-full justify-center flex shadow-md rounded-3xl border border-gray-200 p-9 md:p-2 gap-5 md:h-85  bg-[#F9F3F1]"
+  [ngClass]="data().cardConfig.cssConfig"
+>
+  <img class="" [src]="data().urlImg" alt="" />
+  <div id="contentCard" class="md:w-[50%] h-full md:p-10">
+    <h1 class=" font-bold text-2xl mb-2 gfs-didot-italic-bold ">{{ data().title }}</h1>
+    <p class="w-full mb-10">{{ data().description }}</p>
+    @if (data()['cardConfig'].iWantBtn) {
+      <a routerLink="/login" class="bg-[#EFA287] pb-3 pt-3 pl-6 pr-6 rounded-full ">{{ data().textBtn }}</a>
+    }
+  </div>
+</div>

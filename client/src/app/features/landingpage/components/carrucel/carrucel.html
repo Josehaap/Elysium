@@ -1,0 +1,18 @@
+<section class="carrucel">
+  <div class="group">
+    @for (url of urlImg(); track $index) {
+      <div class="slide">
+        <img [src]="url" class="" alt="" />
+
+      </div>
+    }
+  </div>  
+  <div aria-hidden class="group">
+    @for (url of urlImg(); track $index) {
+      <div class="slide">
+        <img [src]="url" class="" alt="" />
+      </div>
+    
+    }
+  </div>  
+</section>

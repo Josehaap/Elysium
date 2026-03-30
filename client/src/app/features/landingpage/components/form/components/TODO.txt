@@ -1,0 +1,2 @@
+1. Puedo hace una abstraccion de los div>label + input  ya que todos siguen una misma estructura, solo 
+habr´ñia que detectar lo que cambia y pasarlo a través de inputs. 
