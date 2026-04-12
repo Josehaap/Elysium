@@ -2,12 +2,12 @@ import { HttpClient, httpResource } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { UserExistsResponse, UserLogin, UserRegister } from '../models/form-register';
 import { Observable } from 'rxjs';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class FormApi {
-  //!Guardar los endpoint en los .env
   private http = inject(HttpClient);
 
   /**
@@ -17,7 +17,7 @@ export class FormApi {
    * @returns 
    */
   public iHaveThisUser(field: string, value: string): Observable<UserExistsResponse> {
-    return this.http.get<UserExistsResponse>('http://localhost:3000/user/register', {
+    return this.http.get<UserExistsResponse>(`${environment.apiUrl}/user/register`, {
       params: { field: field, value: value },
     });
   }
@@ -27,8 +27,8 @@ export class FormApi {
    * @param data 
    * @returns 
    */
-  public sendData(data: UserRegister): Observable<UserExistsResponse> {
-    return this.http.post<UserExistsResponse>('http://localhost:3000/user/register', data);
+  public sendData(data: FormData): Observable<UserExistsResponse> {
+    return this.http.post<UserExistsResponse>(`${environment.apiUrl}/user/register`, data);
   }
 
   /**
@@ -37,7 +37,7 @@ export class FormApi {
    * @returns 
    */
   public validateLogin(data:UserLogin):Observable<UserExistsResponse> {
-    return this.http.post<UserExistsResponse>("http://localhost:3000/user/login", data)
+    return this.http.post<UserExistsResponse>(`${environment.apiUrl}/user/login`, data)
   };
 
 }

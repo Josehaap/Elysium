@@ -1,0 +1,35 @@
+.containerPost{
+    position: relative;
+    border-radius: 30px;
+    overflow: hidden;
+    transition: all 0.5s ease;
+    user-select: none;
+    cursor: default;
+}
+
+.containerPost::after{
+    position: absolute;
+    width: 100%;
+    height: 25%;
+    content: "";
+    bottom: 0;
+    backdrop-filter: blur(5px);
+    background-color: rgba(255, 255, 255, 0.304);
+}
+
+.containerPostInfo{
+    border-radius: 0;
+    position: absolute;
+    width: 100%;
+    height: 25%;
+    content: "";
+    bottom: 0;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.containerPost:hover{
+    transform: scale(1.01);
+}

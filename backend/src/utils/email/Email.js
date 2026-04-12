@@ -1,6 +1,15 @@
 import nodemailer from 'nodemailer';
 import dotenv from 'dotenv';
 dotenv.config(); 
+import fs from 'fs';
+import { get } from 'http';
+import path from 'path';
+
+
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 //TODO utilizar herramienta de archivos para enviar arcchivos html con una estructura determinada. 
 /**
@@ -8,6 +17,9 @@ dotenv.config();
  * Solo se crea una instancia de la API para toda la aplicación.
  */
 export default class Email {
+  
+  static pathHtmlTemplate = 'template';
+
   static #transport = nodemailer.createTransport({
     service: "gmail",
     auth: {
@@ -20,7 +32,7 @@ export default class Email {
       from: `"Elysium Enterprise" <${'elysiumEnterpriseNorepeat.org'}>`,
       to: "",
       subject: "",
-      html: "<strong>Hola, este es un correo real con HTML!</strong>",
+      html: "",
     }
 
   /**
@@ -28,18 +40,34 @@ export default class Email {
    * @param {string} toEmail - Email del destinatario
    * @param {string} toName - Nombre del destinatario
    * @param {string} subject - Asunto del correo
-   * @param {string} htmlContent - Contenido HTML del correo
+   * @param {object} htmlConfig - Objeto literal donde indicamos el tipo de usuario (Normal o Enterprise )y nombre del archivo a enviar con su extension. 
    */
-  static async sendEmail(toEmail, subject, htmlContentReference) {
+  static async sendEmail(toEmail, subject, htmlConfig) {
     this.#configEmail.to = toEmail; 
     this.#configEmail.subject = subject
+    this.#configEmail.html = this.getHtml(htmlConfig.type, htmlConfig.nameFile, htmlConfig.token);
+
     try {
-    const info = await this.#transport.sendMail();
-    console.log("Correo enviado:", info.messageId);
-  } catch (error) {
-    console.error("Error al enviar el correo:", error);
-    
+      const info = await this.#transport.sendMail(this.#configEmail);
+      console.log("Correo enviado:", info.messageId);
+    } catch (error) {
+      console.error("Error al enviar el correo:", error);
+      
+    }  
   }
-}
+
+  static getHtml(typeUser, nameFile, token){
+    let user = typeUser.toLowerCase() ==="normal"? "acountsNormal" : "acountsEnterprise";
+    const templateUrl = path.join(__dirname, this.pathHtmlTemplate, user, nameFile); 
+    console.log(templateUrl)
+    let baseUrl = typeUser.toLowerCase() === 'normal'
+      ? process.env.urlUserNormal
+      : process.env.urlUserEnterprise;
+
+    const finalActivationUrl = `${baseUrl}/user/userActivation?token=${token}`;
+    let html =  fs.readFileSync(templateUrl, 'utf-8').replace(/{{ACTIVATION_LINK}}/g, finalActivationUrl);
+  
+    return html;
+  }
 
 }

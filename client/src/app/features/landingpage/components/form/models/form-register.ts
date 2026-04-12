@@ -1,5 +1,4 @@
 
-
 /**
  * Interfaz de datos que se utilizará para mapear los datos del formulario de registro. 
  */
@@ -29,10 +28,9 @@ export interface ExistsData {
 
 //*Cuando ahgamos login el backend nos responderá con si es válido el login y si lo fuese con su id, username y la url de su foto de perfil. 
 export interface ExistsDataLogin {
-  isValid: boolean; 
-  id: string; 
-  username: string; 
-  profile_img: string
+  isValid: boolean;
+  accessToken: string;
+  refreshToken: string
 }
 
 /*Interfaz de datos para mapear los datos que se recogerán desde el login */
@@ -40,3 +38,9 @@ export interface UserLogin {
   userIdentification: string ;
   password: string
 }
+
+
+interface refreshToken{
+  id:string
+}
+

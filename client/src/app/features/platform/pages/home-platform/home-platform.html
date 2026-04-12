@@ -1,1 +1,4 @@
-<app-post>
+@if (this.homeApi.getDashboardInfo.hasValue()) {
+  <img [src]="this.imgUser" alt="Imagen perfil" (click)="this.goToPerfil()" />
+  <app-post [posts]="this.homeApi.getDashboardInfo.value().dataNewPost"></app-post>
+}

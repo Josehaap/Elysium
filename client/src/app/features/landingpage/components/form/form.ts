@@ -14,8 +14,8 @@ import { UserExistsResponse } from './models/form-register';
 })
 export class Form {
   protected userExist = false;
-  protected menssageAlertIfEnterprise =
-    'Si eres una empresa se te enviará un correo para pedir más información. ¿Por qué sale este mensaje?';
+  protected messageAlert =
+    'Antes de poder logearte deberás activar su correo, se le enviará al correo. ';
   protected ifUserExistsMessage = '';
   protected ifUserExistsAlertLevel = '';
   protected iWantLogin = true;
@@ -47,21 +47,20 @@ export class Form {
       this.userExist = true;
       this.ifUserExistsAlertLevel = 'info';
       this.ifUserExistsMessage = response.Error;
-      console.log('Este es el error');
     }
   }
 
+
+  
   protected userEmail: string = ''; //Parametro que se rellenará una vez el login se haya hecho.
-  protected userIsEnterprise: boolean = false; //Variable que determinará ver una alerta o no
+
 
   //Función que nos permite visualizar (no ir) al componente login . 
   goToLogin(response: UserExistsResponse) {
     if ('exists' in response.Data) {
       this.iWantLogin = response.Data.exists; //Cambiamos la vista
+      //this.userExist = response.Data.exists;
       this.userEmail = response.Data.email;
-      this.userIsEnterprise = response.Data.iAmEnterprise
-      console.log(response.Data.iAmEnterprise);
-      console.log('Aquí tenemos al usuario en gotologin ' + this.userEmail);
     }
   }
 }

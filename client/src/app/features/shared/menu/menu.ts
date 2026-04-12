@@ -1,6 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { IMenu } from './models/menu';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { dataIcons } from './data/dataIcons';
 @Component({
   selector: 'app-menu',
@@ -10,21 +10,50 @@ import { dataIcons } from './data/dataIcons';
 })
 export class Menu {
   protected router = inject(Router);
+  protected routerActivate = inject(ActivatedRoute)
   //Exportación de datos sobre los iconos. 
   protected icons: IMenu[] = dataIcons;
+
+  // Mapa para relacionar el ID del icono con su ruta
+  private routeMap: { [key: string]: string } = {
+    'home': '/elysium/home',
+    'chat': '/elysium/chat',
+    'add': '/elysium/add',
+    'search': '/elysium/search',
+    'profile': '/elysium/profile'
+  };
+
+  constructor() {
+    this.updateActiveState();
+    // Escuchamos los cambios de ruta para mantener el menu sincronizado
+    this.router.events.subscribe(() => {
+      this.updateActiveState();
+    });
+  }
+
+  /**
+   * Sincroniza el estado 'active' de los iconos con la URL actual del navegador
+   */
+  private updateActiveState() {
+    const currentUrl = this.router.url;
+    this.icons.forEach((icon) => {
+      icon.active = currentUrl.includes(this.routeMap[icon.id]);
+    });
+  }
+
 
   /**
    * Método el cual detecta el id que se a clicado y modifica cada objtLiteral.active a true o false.
    * Además llama al método navegar(). 
    * @param event : Desde aqui accederemos al elemento html y a su id, el cual debera ser el id de cada objLiteral.
    */
+  
+
   activeEvent(event: Event) {
     const elementoHtml = event.target as HTMLElement;
-    this.icons.forEach((icon) => {
-      icon.active = icon.id === elementoHtml.id;
-    });
-    
-    this.navegar(elementoHtml.id);
+    const id = elementoHtml.id;
+    // La navegación disparará el evento del router que actualizará el estado active
+    this.navegar(id);
   }
 
   //Devulve la ruta actual segun si está activado o no
@@ -49,6 +78,9 @@ export class Menu {
         break;
       case 'search':
         this.router.navigate(['elysium/search']);
+        break;
+      case 'profile':
+        this.router.navigate(['elysium/profile']);
         break;
     }
   }

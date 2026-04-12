@@ -1,9 +1,11 @@
 import { Component, inject, input, output } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms'; 
-import { UserLogin, UserExistsResponse } from '../../models/form-register';
+import { UserExistsResponse  } from '../../models/form-register';
+import { accessToken } from "src/app/features/shared/models/shared";
+
 import { FormApi } from '../../service/form-api';
 import { Router } from '@angular/router';
-
+import { jwtDecode } from "jwt-decode";
 @Component({
   selector: 'app-form-login',
   imports: [ReactiveFormsModule], 
@@ -31,24 +33,32 @@ export class FormLogin {
 
   
   ngOnInit() {
-    
-    //Sacamos al usuario almacenado si existiese: 
-    //Comprobamos en local o session storage: 
-    const getDataNavegador = localStorage.getItem('user') ?? sessionStorage.getItem('user');
+    //Diferentes comprobaciones antes de visulizar login: 
+
+    //Comprobamos que no haya una sesión iniciada.  
+    const getDataNavegador = sessionStorage.getItem('accessToken'); 
     //Luego hacemos la conversión si getData* es null lo devolvemos sino hacemos un parse a json
-    const user : UserExistsResponse | null = getDataNavegador ? JSON.parse(getDataNavegador) : getDataNavegador;
+    const user : string | null = getDataNavegador ? getDataNavegador: null;
 
-    //Si no es null y data es de un tipo específico comprobaremos que el usuario sea válido
     //Si ya hay significa que ya está registrado por ende entraremos a la app del tirón.
-    if(user !== null && 'isValid' in user.Data && user.Data.isValid) this.router.navigate(['elysium/home']);
-    //Si no mostraremos el email escrito en el registro si venimos de el. 
+    if(user) this.router.navigate(['elysium/home']);
+    //? Esto aunque parezca un problema de seguridad no lo es ya que tenemos un auth-guardh 
+    //? el cual comprobará la validez del token. 
 
+    //Si llegamos hasta aquí significa que no hemos hecho un login anteriormente por ende: 
+    //Comprobamos si venimos de registrarnos comprobando que hayamos recibido un email
     const emailRecibido = this.receptEmailUser();
-
+    
     if (emailRecibido) {
+      //Escribimo en el input el correo
       this.profileForm.patchValue({
         userIdentification: emailRecibido
       });
+
+      //Redirigimos al correo del usuario
+      setTimeout(()=>{
+        window.open("https://mail.google.com/", "_blank");
+      },3000);
     }
     
   }
@@ -58,9 +68,10 @@ export class FormLogin {
     this.FormApi.validateLogin(this.profileForm.getRawValue()).subscribe({
       next:(res) =>{
         if ('isValid' in res.Data && res.Data.isValid) {
-          console.log("Vamos a navegar al home.  "); 
-          console.log(res)
-          
+          console.log(res);
+          console.log("Se guardará el accesToken en sessión:  "); 
+          sessionStorage.setItem('accessToken', res.Data.accessToken );
+          this.router.navigate(['elysium/home']);
         }else{
           console.log("La contraseña no es váida")
         }

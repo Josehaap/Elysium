@@ -1,8 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, input } from '@angular/core';
 import { PostList } from './components/post-list/post-list';
-import {Ipost} from './models/ipost';
-import {posts} from "./mokdata/postMock"
-
+//import {posts} from "./mokdata/postMock"
+import { infoDataPost } from '../platform/pages/home-platform/models/home';
 @Component({
   selector: 'app-post',
   imports: [PostList],
@@ -10,7 +9,6 @@ import {posts} from "./mokdata/postMock"
   styleUrl: './post.css',
 })
 export class Post {
-  public posts : Ipost[] = posts; 
-
-
+  //public posts : Ipost[] = posts;
+  public posts = input.required<infoDataPost[]>();
 }

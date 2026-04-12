@@ -7,10 +7,13 @@ create table if not exists user(
     first_name varchar(100) not null, 
     surnames varchar(200) not null,
     username varchar(50) not null unique, 
+    description_user text default null,
     password varchar(255) not null, 
     email varchar(100) not null unique, 
     profile_img varchar(200), 
-    is_active boolean not null
+    is_active boolean not null default false , 
+    temporalTokenActivaction varchar(255) default null
+
 );
 
 create table if not exists user_activity(
@@ -19,14 +22,14 @@ create table if not exists user_activity(
     action_type ENUM('create', 'update', 'delete') not null,
     action_details text not null, 
     create_at timestamp default current_timestamp, 
-    constraint fk_userAct_user FOREIGN KEY (user_id) references user(user_id)
+    constraint fk_userAct_user FOREIGN KEY (user_id) references user(user_id) on delete cascade
 );
 
 create table if not exists user_enterprise(
     user_id bigint primary key, 
     enterprise_name varchar(100),
     enterprise_phone varchar(15), 
-    constraint fk_userEnterprise_user FOREIGN KEY (user_id) references user(user_id)
+    constraint fk_userEnterprise_user FOREIGN KEY (user_id) references user(user_id) on delete cascade
 ); 
 
 create table if not exists follow(
@@ -41,6 +44,7 @@ create table if not exists post(
     post_id bigint primary key AUTO_INCREMENT, 
     user_id bigint not null,
     title varchar(200), 
+    img_post varchar(200),
     description_post varchar(500), 
     created_at  timestamp default current_timestamp, 
     constraint fk_post_user FOREIGN key (user_id) references user(user_id) on delete cascade
@@ -60,7 +64,31 @@ create table if not exists comment(
     user_id bigint not null, 
     message text not null, 
     post_id bigint not null, 
-    created_at timestamp default current_timestamp
+    created_at timestamp default current_timestamp,
+     constraint fk_comment_user 
+        foreign key (user_id) 
+        references user(user_id) 
+        on delete cascade,
+
+    constraint fk_comment_post 
+        foreign key (post_id) 
+        references post(post_id) 
+        on delete cascade
+);
+
+create table if not exists shared(
+    id bigint primary key AUTO_INCREMENT, 
+    user_id bigint not null,
+    post_id bigint not null,
+    constraint fk_shared_user 
+        foreign key (user_id) 
+        references user(user_id) 
+        on delete cascade, 
+        
+    constraint fk_shared_post 
+        foreign key (post_id) 
+        references post(post_id) 
+        on delete cascade
 );
 
 create table if not exists chat(
@@ -92,7 +120,7 @@ create table if not exists job(
     salary varchar(50) not null, 
     created_at timestamp default current_timestamp, 
     is_active boolean not null,
-    constraint fk_job_user FOREIGN key (user_id) references user(user_id)
+    constraint fk_job_user FOREIGN key (user_id) references user(user_id) on delete cascade
 );
 
 create table if not exists application(
@@ -101,6 +129,6 @@ create table if not exists application(
     user_id bigint not null, 
     message text not null,
     applied_at timestamp not null, 
-    constraint fk_aplication_job FOREIGN KEY(job_id) references job(job_id),
-    constraint fk_aplication_user FOREIGN KEY(user_id) references user(user_id)
+    constraint fk_aplication_job FOREIGN KEY(job_id) references job(job_id) on delete cascade, 
+    constraint fk_aplication_user FOREIGN KEY(user_id) references user(user_id)on delete cascade
 );

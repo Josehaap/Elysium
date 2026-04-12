@@ -15,6 +15,7 @@ export default class User{
   #surnames;
   #profile_img;
   #iAmEnterprise;
+  #activationToken;
 
 
 
@@ -70,6 +71,20 @@ export default class User{
 
   get iAmEnterprise() {
     return this.#iAmEnterprise;
+  }
+  set profile_img(value) {
+    this.#profile_img = value;
+  }
+
+  get profile_img() {
+    return this.#profile_img;
+  }
+  set activationToken(value) {
+    this.#activationToken = value;
+  }
+
+  get activationToken() {
+    return this.#activationToken;
   }
 
 }

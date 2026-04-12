@@ -20,7 +20,7 @@ export default class UserValidators {
             "username",
             "email",
             "password",
-            "profile_img",
+            // "profile_img",
             "iAmEnterprise"
         ];
 

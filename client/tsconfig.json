@@ -3,6 +3,11 @@
 {
   "compileOnSave": false,
   "compilerOptions": {
+    //Mis modificacoines: 
+    "baseUrl": ".",
+    "paths": {
+      "@enveriorments/*":["src/enveriorments/*"]
+    },
     "strict": true,
     "noImplicitOverride": true,
     "noPropertyAccessFromIndexSignature": true,

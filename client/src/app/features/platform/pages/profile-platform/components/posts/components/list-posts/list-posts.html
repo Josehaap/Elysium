@@ -1,0 +1,5 @@
+<section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 ">
+    @for (post of listPost(); track $index) {
+        <app-card-post [infoPost]="post" ></app-card-post>
+    }
+</section>

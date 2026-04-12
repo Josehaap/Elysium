@@ -9,9 +9,9 @@ export default class Helper {
 
   #pathRaizCarpeta = "./imgUsers"
   constructor() {}
-  generateRespond(params, values) {
+  generateLiteralObject(params, values) {
     try {
-      if (params.length !== values.lenght)
+      if (Object.keys(params).length !== values.length)
         throw new Error(
           "Minimo debería tener las mismas longitudes los valores que no quiereas agregar que sehan espacios vacios o null. ",
         );
@@ -35,4 +35,13 @@ export default class Helper {
       
     });
   }
+
+  
+  shuffleArray(array) {
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]];
+  }
+  return array;
+}
 }

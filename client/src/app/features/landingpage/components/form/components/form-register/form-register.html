@@ -27,7 +27,7 @@
 
     <div class="flex flex-col gap-1">
       <label for="profile_img" class="font-medium">Foto de Perfil</label>
-      <input type="file" class="p-30" formControlName="profile_img" accept="image/*" capture="camera" id="profile_img" />
+      <input type="file" class="p-30" formControlName="profile_img" accept="image/*" capture="camera" id="profile_img" (change)="onFileSelected($event)" />
     </div> 
     <div class="flex gap-1 items-center ">
       <label for="iAmEnterprise" class="font-medium">Soy una empresa: </label>

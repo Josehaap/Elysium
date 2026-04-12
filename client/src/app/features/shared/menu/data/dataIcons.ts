@@ -23,4 +23,10 @@ export const dataIcons = [
     pathActive: 'img/icons/icon-search/search_active.svg',
     active: false,
   },
+  {
+    id: 'profile',
+    pathNormal: 'img/icons/icon-profile/profile_normal.svg',
+    pathActive: 'img/icons/icon-profile/profile_active.svg',
+    active: false,
+  },
 ];

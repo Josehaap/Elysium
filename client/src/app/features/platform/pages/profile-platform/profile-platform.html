@@ -1,0 +1,86 @@
+@if(this.profileApi.getProfileInfoUser.hasValue()){
+    <section class="w-full p-8 md:p-12 flex flex-col md:flex-row gap-12 items-center md:items-start rounded-3xl">
+        
+        <!-- Columna de Imagen -->
+        <div class="flex flex-col items-center gap-6">
+            <div class="relative group" [class.cursor-pointer]="isEditing()" (click)="isEditing() ? fileInput.click() : null">
+                <input #fileInput type="file" class="hidden" (change)="onFileSelected($event)" accept="image/*">
+                
+                <!-- SVG Rediseñado y Centrado -->
+                <svg width="220" height="220" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" class="drop-shadow-xl transition-transform duration-500 group-hover:scale-[1.02]">
+                    <defs>
+                        <clipPath id="circle-profile">
+                            <circle cx="100" cy="100" r="95" />
+                        </clipPath>
+                    </defs>
+                    
+                    <!-- Fondo del círculo (por si la imagen tiene transparencias) -->
+                    <circle cx="100" cy="100" r="95" fill="#f3f4f6" />
+
+                    <!-- Imagen centrada matemáticamente -->
+                    <image [attr.href]="profileImagePreview() || 'https://randomuser.me/api/portraits/men/12.jpg'" 
+                           x="5" y="5" width="190" height="190" 
+                           clip-path="url(#circle-profile)" 
+                           preserveAspectRatio="xMidYMid slice"/>
+
+                    <!-- Borde exterior fino -->
+                    <circle cx="100" cy="100" r="97" fill="none" stroke="#e5e7eb" stroke-width="1" />
+
+                    @if (isEditing()) {
+                        <circle cx="100" cy="100" r="95" fill="black" fill-opacity="0.4" pointer-events="none" />
+                        <text x="100" y="105" text-anchor="middle" fill="white" font-size="16" font-weight="600" class="uppercase tracking-widest" pointer-events="none">
+                            Cambiar
+                        </text>
+                    }
+                </svg>
+            </div>
+
+            <!-- Botón posicionado de nuevo debajo de la imagen -->
+            <button (click)="toggleEdit()" 
+                    class="px-6 py-2.5 rounded-full font-bold transition-all duration-300 shadow-md hover:shadow-lg active:scale-95 w-full"
+                    [class]="isEditing() ? 'bg-black text-white' : 'bg-orange-500 text-white hover:bg-orange-600'">
+                {{ isEditing() ? 'Guardar' : 'Editar perfil' }}
+            </button>
+        </div>
+
+        <!-- Columna de Información -->
+        <div class="flex flex-col gap-6 flex-1 text-center md:text-left">
+            <div class="flex flex-col gap-2">
+                @if (!isEditing()) {
+                    <h1 class="font-black text-4xl tracking-tight text-gray-900">{{this.profileApi.getProfileInfoUser.value().Data.name}}</h1>
+                    <span class="text-orange-500 font-semibold tracking-wide">@{{this.profileApi.getProfileInfoUser.value().Data.username}}</span>
+                } @else {
+                    <input [ngModel]="profileData().name" (ngModelChange)="updateName($event)" 
+                            class="font-black text-4xl tracking-tight border-b-2 border-orange-200 outline-none bg-transparent py-1 w-full"
+                            placeholder="Tu nombre">
+                }
+            </div>
+
+            <div class="max-w-xl">
+                @if (!isEditing()) {
+                    <p class="text-lg text-gray-600 leading-relaxed font-medium">{{this.profileApi.getProfileInfoUser.value().Data.description_user}}</p>
+                } @else {
+                    <textarea [ngModel]="profileData().description_user" (ngModelChange)="updateDescription($event)"
+                              class="w-full border-2 border-gray-100 rounded-2xl p-4 outline-none focus:border-orange-500 transition-all text-gray-700 leading-relaxed min-h-32 resize-none bg-gray-50/50"
+                              placeholder="Cuéntanos algo sobre ti..."></textarea>
+                }
+            </div>
+
+            <div class="flex gap-8 border-t border-gray-100 pt-6 justify-center md:justify-start">
+                <div class="flex flex-col items-center md:items-start">
+                    <span class="text-2xl font-black text-gray-900">{{this.profileApi.getProfileInfoUser.value().Data.numberFollower}}</span>
+                    <span class="text-xs uppercase font-bold text-gray-400 tracking-widest">Seguidores</span>
+                </div>
+                <div class="flex flex-col items-center md:items-start">
+                    <span class="text-2xl font-black text-gray-900">{{this.profileApi.getProfileInfoUser.value().Data.numberPublication}}</span>
+                    <span class="text-xs uppercase font-bold text-gray-400 tracking-widest">Publicaciones</span>
+                </div>
+            </div>
+        </div>
+    </section>
+}
+
+
+@if (this.profileApi.getProfileInfoPublish.hasValue()) {
+  <app-posts [listPost]="this.profileApi.getProfileInfoPublish.value().Data"></app-posts>
+}

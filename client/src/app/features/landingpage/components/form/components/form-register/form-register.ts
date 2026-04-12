@@ -58,9 +58,7 @@ export class FormRegister {
       nonNullable: true,
       validators: [Validators.required, Validators.maxLength(255), this.noSoloEspaciosValidator],
     }),
-    profile_img: new FormControl<File | null >(null, {
-      validators: [Validators.maxLength(200)],
-    }),
+    profile_img: new FormControl<File | null >(null),
     iAmEnterprise: new FormControl<boolean>(false, { nonNullable: true }),
   });
   // Validador personalizado //! Controla que no sea espacio en blanco.
@@ -93,19 +91,38 @@ export class FormRegister {
   }
   //Cuando se logee el usuario devolveremos true o false
   public userIsNowLogin = output<UserExistsResponse>();
+
+  selectedFile: File | null = null;
+  onFileSelected(event: Event) {
+    const input = event.target as HTMLInputElement;
+    if (input.files && input.files.length > 0) {
+      this.selectedFile = input.files[0];
+    }
+  }
+
   onSubmit() {
-    console.log(this.profileForm.getRawValue());
+    const formData = new FormData();
+    const formValues = this.profileForm.getRawValue();
+
+    formData.append('first_name', formValues.first_name);
+    formData.append('surnames', formValues.surnames);
+    formData.append('username', formValues.username);
+    formData.append('email', formValues.email);
+    formData.append('password', formValues.password);
+    formData.append('iAmEnterprise', String(formValues.iAmEnterprise));
+
+    if (this.selectedFile) {
+      formData.append('profile_img', this.selectedFile);
+    } 
+
     //Enviamos al usuario al backend para registrarlos
-    this.formService.sendData(this.profileForm.getRawValue()).subscribe({
+    this.formService.sendData(formData).subscribe({
       next: (res) => {
-        console.log('Respuesta correcta - ');
         this.userIsNowLogin.emit(res); //Enviamos la respuesta
       },
       error: (err) => {
-        console.log(err.error);
-        console.log('Respuesta erronea ');
         this.userExists.emit(err.error);
       },
-    });
+    })
   }
 }

@@ -1,3 +1,7 @@
+header {
+  z-index: 50;
+}
+
 img{
   width: 40px;
 }

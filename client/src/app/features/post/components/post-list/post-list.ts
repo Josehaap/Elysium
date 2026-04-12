@@ -1,5 +1,6 @@
 import { Component, input } from '@angular/core';
-import {Ipost} from '../../models/ipost';
+import { infoDataPost } from '../../../platform/pages/home-platform/models/home';
+
 import { PostCard } from '../post-card/post-card';
 @Component({
   selector: 'app-post-list',
@@ -8,5 +9,5 @@ import { PostCard } from '../post-card/post-card';
   styleUrl: './post-list.css',
 })
 export class PostList {
-  public listPost = input.required<Ipost[]>(); 
+  public listPost = input.required<infoDataPost[]>();
 }

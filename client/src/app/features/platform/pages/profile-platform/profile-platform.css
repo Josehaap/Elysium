@@ -1,0 +1,10 @@
+section {
+    user-select: none;
+    cursor: default;
+}
+
+/* Solo permitimos interactuar con el texto en los campos de edición */
+input, textarea {
+    user-select: text;
+    cursor: text;
+}

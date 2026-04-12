@@ -1,5 +1,5 @@
-import{Ipost} from '../models/ipost'
-export const posts: Ipost[] = [
+//import{Ipost} from '../models/ipost'
+/*export const posts: /*Ipost[] = [
   {
     post_id: 1,
     user_id: 101,
@@ -68,4 +68,4 @@ export const posts: Ipost[] = [
       avatar_url: "https://i.pravatar.cc/150?img=47"
     }
   }
-];
+];*/

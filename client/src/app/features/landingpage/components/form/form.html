@@ -13,4 +13,4 @@
 
 @if(userExist && !iWantLogin){<app-alert [alertLevel]="ifUserExistsAlertLevel" [message]="ifUserExistsMessage"></app-alert>}
 @else if (userExist && iWantLogin) {<app-alert [alertLevel]="ifUserExistsAlertLevel" [message]="ifUserExistsMessage"></app-alert>}  
-@if(this.userIsEnterprise && iWantLogin) {<app-alert [alertLevel]="'warning'" [message]="menssageAlertIfEnterprise"></app-alert>}
+@if(iWantLogin && this.userEmail) {<app-alert [alertLevel]="'warning'" [message]="messageAlert"></app-alert>}

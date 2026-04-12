@@ -6,7 +6,7 @@ import { Landingpage } from './features/landingpage/landingpage';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, Landingpage],
+  imports: [RouterOutlet],
   templateUrl: './app.html',
   styleUrl: './app.css'
 })

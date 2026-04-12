@@ -1,0 +1,10 @@
+section{
+    overflow: scroll;
+    height: 450px;
+    padding: 10px;
+    
+}
+
+section::-webkit-scrollbar {
+  display: none;
+}

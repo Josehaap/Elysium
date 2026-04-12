@@ -1,0 +1,13 @@
+      <div
+        class="md:w-full h-80 border containerPost"
+        [ngStyle]="{
+          'background-image': 'url(' + (this.infoPost().img || 'img/img_oportunitis_3.png') + ')',
+          'background-size': 'cover',
+          'background-position': 'center'
+        }"
+      >
+        <div class="containerPostInfo">
+          <app-card-actions [id]="this.infoPost().id" [likes]="this.infoPost().likes" [comments]="this.infoPost().comment" [shareds]="this.infoPost().shared" [isLiked]="this.infoPost().userLike"></app-card-actions>
+        </div>
+      </div>
+    

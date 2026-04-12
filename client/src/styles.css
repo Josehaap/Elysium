@@ -1,9 +1,9 @@
 /* You can add global styles to this file, and also import other style files */
+@import url('https://fonts.googleapis.com/css2?family=GFS+Didot&display=swap');
 
 @import 'tailwindcss';
 /*TODO - Implementar themes personalizados para los colores*/
 /*Importamos el font */
-@import url('https://fonts.googleapis.com/css2?family=GFS+Didot&display=swap');
 
 /*Creamos los colores: */
 :root{
