@@ -7,10 +7,14 @@ export default class PostService {
     #namesField =
         "post_id, user_id, title , img_post , description_post, created_at";
 
-
+    /**
+     * 
+     * @param {*} ids array que recibie el id del suario logueado y el id sobrela informacion que se quiera scar de cierto usuairo 
+     * @returns 
+     */
     async getDataRelativeWithPost(id){
 
-        const RESPONSESHARED = await pool.query("SELECT JSON_OBJECT ('id', p.post_id, 'title', title,'img', img_post,'description', description_post,'likes',(select count(*) from `like` where post_id = p.post_id), 'comment', (select count(*) from comment where post_id = p.post_id),'shared',(select count(*) from shared where post_id = p.post_id), 'userLike', (exists (select  1  from `like` where user_id = p.user_id and post_id = p.post_id))) as Data  from post p where user_id = ?", id);
+        const RESPONSESHARED = await pool.query("SELECT JSON_OBJECT ('id', p.post_id, 'title', title,'img', img_post,'description', description_post,'likes',(select count(*) from `like` where post_id = p.post_id), 'comment', (select count(*) from comment where post_id = p.post_id),'shared',(select count(*) from shared where post_id = p.post_id), 'userLike', (exists (select  1  from `like` where user_id = ? and post_id = p.post_id))) as Data  from post p where user_id = ?", id);
 
         return RESPONSESHARED[0];
     }

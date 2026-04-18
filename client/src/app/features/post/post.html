@@ -1,1 +1,3 @@
-<app-post-list [listPost]="posts()"></app-post-list>
+@if (posts().length === 0) {
+    <p>Al parecer ya has visto todas las nuevas publicaciones</p>
+}@else {<app-post-list [listPost]="posts()"></app-post-list>}

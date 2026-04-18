@@ -12,7 +12,7 @@ export interface responseApiProfileData{
 export interface Post {
     id:string
     title: string;
-    img: string;
+    img : string;
     description: string;
     likes: number;
     comment: number;
@@ -21,10 +21,27 @@ export interface Post {
 }
 
 export interface Data {
-    username :string; 
-    description_user:string;
-    name: string;
-    email:string;
-    numberFollower: string; 
-    numberPublication:string
+  username: string;
+  description_user: string;
+  name: string;
+  surname: string;
+  urlImg: string;
+  numberFollower: string;
+  numberPublication: string;
+  numberFollowed:string
+}
+
+export interface ModalProfileData {
+  name: string;
+  surname:string;
+  description_user: string;
+  urlImg: string;
+  profile_img_file?: File;
+  numberFollower?: string
+}
+
+export interface UpdateData {
+  name: string;
+  description_user: string;
+  [key: string]: string;
 }

@@ -129,13 +129,20 @@ export default class UserService {
           JSON_OBJECT(
             'post_id', p.post_id,
             'title', p.title, 
+            'img_post', p.img_post,
             'description', p.description_post, 
             'created_at', p.created_at,
             'user_id', u.user_id, 
             'username', u.username,
             'profile_img', u.profile_img
           ) 
-        AS postInfo from user u left join post p on p.user_id = u.user_id where u.user_id !=${id} ;`);
+        AS postInfo from user u inner join follow  f on followed_id = u.user_id inner join post p on p.user_id = f.followed_id  where f.follower_id = ?`, id);
+   return response[0];
+  }
+
+  async getListUsers(id){
+    const response = await pool.query(
+      `select username, profile_img from user where user_id != ?`, id);
    return response[0];
   }
 
@@ -161,6 +168,19 @@ export default class UserService {
     try {
       const result = await pool.query(
         `SELECT count(*) as TOTAL FROM user u join follow f ON u.user_id = f.follower_id WHERE f.followed_id = ?`,
+        id,
+      );
+      return result[0][0].TOTAL;
+    } catch (error) {
+      console.log("Error en getNumberFollower: " + error.message);
+      return null;
+    }
+  }
+
+  async getNumberFollowed(id) {
+    try {
+      const result = await pool.query(
+        `SELECT count(*) as TOTAL FROM user u join follow f ON u.user_id = f.followed_id WHERE f.follower_id = ?`,
         id,
       );
       return result[0][0].TOTAL;
@@ -220,4 +240,62 @@ export default class UserService {
       return null;
     }
   }
+
+
+  async updateValuesUser(dataUser) {
+    try {
+      const RESPONSE = await pool.query(`update ${this.#nametable} set first_name = ?, surnames = ?, description_user = ? where user_id = ?`, dataUser);
+      return RESPONSE[0]; 
+    } catch (error) {
+      return null;
+    }
+  }
+
+  async updateImgsUser(dataUser) {
+    try {
+      const RESPONSE = await pool.query(`update ${this.#nametable} set profile_img = ? where user_id = ?`, dataUser);
+      return RESPONSE[0]; 
+    } catch (error) {
+      return null;
+    }
+  }
+
+  async iAmFollower(dataUser) {
+    try {
+      const RESPONSE = await pool.query(`select * from follow where follower_id = ? AND followed_id = ?`, dataUser);
+      return RESPONSE[0]; 
+    } catch (error) {
+      return null;
+    }
+  }
+
+  async insertFollow(dataUser) {
+    try {
+      const [result] = await pool.query(
+        'INSERT INTO follow (follower_id, followed_id) VALUES (?, ?)',
+        dataUser
+      );
+
+      return result;
+    } catch (error) {
+      console.error(error);
+      return null;
+    }
+  }
+
+async deleteFollow(dataUser) {
+    try {
+      const [result] = await pool.query(
+        'DELETE FROM follow WHERE follower_id = ? AND followed_id = ?',
+        dataUser
+      );
+
+      console.log(result);
+      return result;
+    } catch (error) {
+      console.error(error);
+      return null;
+    }
+  }
 }
+

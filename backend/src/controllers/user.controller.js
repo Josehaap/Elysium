@@ -8,7 +8,8 @@ import Email from "../utils/email/Email.js";
 import crypto from 'crypto'; 
 const helper = new Helper();
 import jwt from "jsonwebtoken";
-
+import UploadServices from "../core/middleware/upload.services.js";
+import pool from "../core/config/database/db.js";
 /**
  * @class UserController
  * @description Clase que es utilizada para aplicar la lógica de las inteeraciones en las rutas, especialida para ser un puente entre la capa de rutas y la capa
@@ -80,9 +81,6 @@ export default class UserController {
    */
   userRegister = async (req, res) => {
     try {
-      //Todo Implementar la logica de crear carpeta para guardar foto perfil.
-      //Todo Mejorar la clase EMAIL
-      //Todo implementar comprobación de imagenes y videos que se han aptos.
       console.log("Este es el usuairo recibido: ");
       console.log(req.body);
       
@@ -101,8 +99,9 @@ export default class UserController {
       //Si el usuario ha dicho que es una empresa por defecto en la base de datos su cuenta estará desactividada.
       user.iAmEnterprise = (data.iAmEnterprise === "true" || data.iAmEnterprise === true) ? 0 : 1;
       // Comprobamos si multer capturó un archivo e inyectamos la ruta al usuario para insertarlo en BD
+      
       if (req.file) {
-        user.profile_img = `/imgUsers/${user.username}/fotoPerfil/${req.file.filename}`;
+        user.profile_img = UploadServices.getRelativePath(req.file.path);
       } else {
         user.profile_img = "";
       }
@@ -169,6 +168,7 @@ export default class UserController {
       //Si existe sacamos las variables: */
       const userIdentification = req.body.userIdentification;
       const passLogin = req.body.password;
+        console.log(`Password: ${userIdentification}`);
         console.log(`Password: ${passLogin}`);
       //comrpobamos que el usuario exista.
       const USERNAMEEXIST = await this.#userService.getUserBy(
@@ -199,7 +199,7 @@ export default class UserController {
       //Teniendo el response haremos primero una comprobación con el password:
 
       const esValido = bcrypt.compareSync(passLogin, password);
-      
+      console.log(esValido)
       if (esValido){
         //Generamos un token único con esos datos: 
         const accessToken = jwt.sign(
@@ -226,12 +226,12 @@ export default class UserController {
           .send(
             helper.generateLiteralObject(this.#response, [true, {isValid:esValido, accessToken: accessToken, refreshToken:refreshToken}, ""]),
           );
-      } else
-        return res
-          .status(200)
+      } return res
+          .status(400)
           .send(
-            helper.generateLiteralObject(this.#response, [true, dataResponds, ""]),
+            helper.generateLiteralObject(this.#response, [false, {exits:false}, "La contraseña no es válida"]),
           );
+       
     } catch (error) {
       if (error instanceof Exception) {
         this.#valuesError[2] = error.message;
@@ -239,13 +239,14 @@ export default class UserController {
           .status(401)
           .send(helper.generateLiteralObject(this.#response, this.#valuesError));
       }
-
+      console.log(error.message);
       return res
         .status(500)
         .send(helper.generateLiteralObject(this.#response, this.#valuesError));
     }
   };
 
+  //!Cambiar la impmentacion no veo ogico enviar una redireccion mejor falase o true 
   activateUser = async (req, res) => {
     try {
       // Sacamos el token de localhost:3000/user/userActivation?token=d25f7...
@@ -256,12 +257,9 @@ export default class UserController {
       // Llamamos a nuestro servicio de base de datos
       const isValidActivation = await this.#userService.activateUserAccount(token);
 
-      // Si todo va bien (retorna true), redirigimos al de Angular
       if (isValidActivation === true) {
-        // Redirigimos a una pantalla bonita de tu FRONTEND (ya la crearemos luego)
         return res.redirect("http://localhost:4200/login?activated=true");
       } else {
-        // Si el token es caducado o inventado (retorna false)
         return res.redirect("http://localhost:4200/login?activated=false");
       }
     } catch (error) {
@@ -270,5 +268,72 @@ export default class UserController {
     }
   };
 
-  
+  iAmFollow = async(req, res) => {
+    try {
+      if (!req.header('usernameNow')) throw new Exception('No tenemos al usuario'); 
+      console.log(req.header('usernameNow')); 
+      const token = jwt.decode(req.header('accessToken'));
+      
+      if (req.header('usernameNow') === token['username']) throw new Exception('No puedes seguirte a ti mismo')
+      
+      const RESPONSEDATAUSER = await this.#userService.getUserBy('username', req.header('usernameNow'));
+      
+      if(RESPONSEDATAUSER.length === 0) throw new Exception('No existe ese usuario'); 
+
+      const RESPONSEFOLLOW = await this.#userService.iAmFollower([token['id'],RESPONSEDATAUSER[0]['user_id']]);
+
+      if (!RESPONSEFOLLOW) throw new Error('Hubo un error critico');
+      
+      return res.status(200).send(RESPONSEFOLLOW.length === 1);
+      
+    } catch (error) {
+      if(error instanceof Exception){ 
+        this.#valuesError[2]  = error.message;
+        return res.status(401).send(helper.generateLiteralObject(this.#response, this.#valuesError))
+      }
+      return res.status(500).send(helper.generateLiteralObject(this.#response, this.#valuesError))
+    }
+    
+  }
+
+  iWantFollower = async(req, res) => {
+    try {
+
+      if (!req.header('usernameNow')) throw new Exception('No tenemos al usuario'); 
+      const token = jwt.decode(req.header('accessToken'));
+      if (req.header('usernameNow') === token['username']) throw new Exception('No puedes seguirte a ti mismo')
+
+      const RESPONSEDATAUSER = await this.#userService.getUserBy('username', req.header('usernameNow'));
+
+      if(RESPONSEDATAUSER.length === 0) throw new Exception('No existe ese usuario'); 
+
+      const RESPONSEFOLLOW = await this.#userService.iAmFollower([token['id'],RESPONSEDATAUSER[0]['user_id']]);
+
+      if (!RESPONSEFOLLOW) throw new Error('Hubo un error critico');
+
+      if (RESPONSEFOLLOW.length === 1 ) {
+        const RESPONSEDELFOLLOW  = await this.#userService.deleteFollow([token['id'], RESPONSEDATAUSER[0]['user_id']]);
+
+      if (RESPONSEDELFOLLOW['affectedRows'] ===  0) throw new Error('Problema a insertar el follow');
+        return res.status(200).send(false);
+      }else{
+        const RESPONSESETFOLLOW = await this.#userService.insertFollow([token['id'], RESPONSEDATAUSER[0]['user_id']]);
+        if (RESPONSESETFOLLOW['affectedRows'] ===  0) throw new Error('Problema a eliminar el follow');
+
+        return res.status(200).send(true);
+
+      }
+      
+    } catch (error) {
+      console.log(error.message)
+
+      if(error instanceof Exception){ 
+        
+        this.#valuesError[2]  = error.message;
+        return res.status(401).send(helper.generateLiteralObject(this.#response, this.#valuesError))
+      }
+      return res.status(500).send(helper.generateLiteralObject(this.#response, this.#valuesError))
+    }
+    
+  }
 }

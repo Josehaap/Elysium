@@ -1,0 +1,32 @@
+<section>
+    <p class="name">{{ name() }}</p>
+
+  <div class="perfil">
+    @if (iWantImg()) {
+        <img [src]="img()" alt=""  />
+    }
+  </div>
+  <div class="info">
+    <p id="title" class="text-sm font-bold">{{ title() }}</p>
+    <p id="subtitler" class="text-gray-800 text-xs">{{ subtitle() }}</p>
+  </div>
+  <div class="element">
+    @if (iWantCheck()) {
+      <input type="checkbox" />
+    } @else {
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="40"
+        height="64"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="3"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      >
+        <path d="m9 18 6-6-6-6" />
+      </svg>
+    }
+  </div>
+</section>

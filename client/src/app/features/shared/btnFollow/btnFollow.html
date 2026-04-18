@@ -1,0 +1,7 @@
+<button
+    class=""
+    (click)="followUser();"
+    [class]="isFollowed() ? 'isFollowOrEditing' : 'isNotFollowOrNotEditing'"
+>
+    {{ isFollowed() ? 'Siguiendo' : 'Seguir' }}
+</button>

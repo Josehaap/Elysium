@@ -5,7 +5,7 @@ import { HttpInterceptor, HttpRequest, HttpHandler } from '@angular/common/http'
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
 
-  private accessToken: string | null = null; // aquí puedes inyectar un servicio que maneje tokens
+  private accessToken: string | null = null; 
 
   intercept(req: HttpRequest<any>, next: HttpHandler) {
     const token = this.accessToken;

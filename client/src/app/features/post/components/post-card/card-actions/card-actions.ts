@@ -16,6 +16,9 @@ export class CardActions {
   public shareds = input.required<number>();
   public id = input.required<string>();
 
+
+  
+
   // Estado local para cuando el usuario hace clic
   private manualToggle = signal<boolean | null>(null);
 
@@ -25,7 +28,6 @@ export class CardActions {
     return manual !== null ? manual : this.isLiked();
   });
 
-  // Calcula el total evitando el salto de +2
   protected totalLikes = computed(() => {
     const initialLiked = this.isLiked();
     const currentlyLiked = this.liked();

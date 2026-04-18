@@ -4,44 +4,79 @@
 * Movemos todas las imágenes a la derecha. 
 */
 
-
-
-section, .group{
-    display: flex;
-    animation: carrucel 40s linear infinite;
-    -webkit-animation: carrucel 40s linear infinite ;
-    width: calc(200px * 6);
+.carrucel-container {
+  width: 100%;
+  overflow: hidden;
+  padding: 2rem 0;
+  position: relative;
+  /* Premium fade effect on edges */
+  mask-image: linear-gradient(
+    to right,
+    transparent,
+    black 15%,
+    black 85%,
+    transparent
+  );
+  -webkit-mask-image: linear-gradient(
+    to right,
+    transparent,
+    black 15%,
+    black 85%,
+    transparent
+  );
 }
 
-.group, .slide, img{
-    width: 200px;
+.carrucel-track {
+  display: flex;
+  gap: 2.5rem; /* Better spacing */
+  width: max-content;
+  animation: scroll 30s linear infinite;
 }
 
-.group{
-    width: 100% ;
-    display: flex; 
-    gap: 40px;
-    border: 1px solid red;
-    overflow: hidden;
-
-}
-.slider{
-    width: 75%;
-    height: auto;
-    margin: auto;
-    overflow: hidden;
-}
-section::-webkit-scrollbar{
-    display: none;
+.carrucel-track:hover {
+  animation-play-state: paused;
 }
 
+.carrucel-slide {
+  flex-shrink: 0;
+  height: 250px; /* Consistent height for good proportions */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.3s ease;
+}
 
-@keyframes carrucel{
-    from{
-        transform: translateX(0);
-    }
-    to{
-        transform: translateX(-100%);
-        
-    }
+.carrucel-slide img {
+  height: 100%;
+  width: auto;
+  object-fit: contain;
+  border-radius: 12px;
+  /* Hover effect for premium feel */
+  filter: grayscale(20%);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.carrucel-slide:hover img {
+  filter: grayscale(0%);
+  transform: scale(1.05);
+}
+
+@keyframes scroll {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    /* Translate by 1/3 since we have 3 sets of images */
+    transform: translateX(-33.3333%);
+  }
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .carrucel-slide {
+    height: 180px;
+  }
+  .carrucel-track {
+    gap: 1.5rem;
+  }
 }

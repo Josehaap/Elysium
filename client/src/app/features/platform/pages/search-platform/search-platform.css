@@ -1,0 +1,73 @@
+.containerSearch{
+    width: 100%;
+    height: 90%;
+
+}
+
+.containerInput{
+    margin: auto;
+    width: 50%;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    padding: 20px;
+    gap: 30px;
+    margin-bottom: 30px;
+    border-radius: 25px;
+    background-color: rgba(225, 224, 224, 0.322);
+}
+input{
+    width: 90%;
+
+}
+input:focus{
+    outline: none;
+
+}
+.containerCross{
+    background-color: rgba(0, 0, 0, 0.226);
+    border-radius: 50%;
+    padding: 2  px;
+}
+.containerInfoUser{
+    overflow: scroll;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 30px;
+    width: 50%; 
+    margin: auto;
+}
+
+.containerInfoUser::-webkit-scrollbar{
+    display: none;
+}
+.containerCardUser{
+    width: 90%;
+    height: 80px;
+    padding: 10px;
+    border-radius: 10px;
+    transition: all .5s ease;
+}
+.containerCardUser:hover{
+    box-shadow: 0 0 10px 1px rgba(148, 148, 148, 0.338);
+    background-color: rgba(245, 245, 245, 0.376);
+}
+.containerCardUser, .containerCardUser > div{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.containerCardUser > div{
+    gap: 20px;
+}
+img{
+    width: 60px;
+    border-radius: 100%;
+}
+
+p{
+    font-size: 20px;
+    font-weight: 700;
+}

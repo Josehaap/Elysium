@@ -36,7 +36,13 @@ export default class Helper {
     });
   }
 
-  
+  /**
+   * Mezcla los elementos de un array de forma aleatoria intercambiando 
+   * posiciones mediante el algoritmo Fisher-Yates, sin crear nuevos 
+   * valores.
+   * @param {*} array 
+   * @returns 
+   */
   shuffleArray(array) {
   for (let i = array.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));

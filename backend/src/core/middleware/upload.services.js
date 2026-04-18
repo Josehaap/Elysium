@@ -24,7 +24,7 @@ export default class UploadServices {
             }
         }, 
         filename: (req, file, cb) => { //Modificamos el nombre del archivo para que no haya ninguna sobreescritura. 
-            cb(null, Date.now() + '-' + file.originalname);
+            cb(null, 'foto_perfil.png');
         }
     });
 
@@ -42,7 +42,9 @@ export default class UploadServices {
         });
     }
 
-
+    static getRelativePath (pathAbsolute){
+        return path.relative(process.cwd(), pathAbsolute);
+    }
 
    
 }

@@ -2,6 +2,10 @@ import { Component, inject } from '@angular/core';
 import { Post } from '../../../post/post';
 import { Router } from '@angular/router';
 import { HomeApi } from './services/home-api';
+import { environment } from 'src/environments/environment';
+import { RoutingElysium } from 'src/app/core/services/routingElysium';
+import { TokenService } from 'src/app/core/services/token-service';
+import news from './mock/dataNews';
 @Component({
   selector: 'app-home-platform',
   imports: [Post],
@@ -11,17 +15,12 @@ import { HomeApi } from './services/home-api';
 export class HomePlatform {
   protected homeApi = inject(HomeApi);
   protected router = inject(Router);
+  protected routingElysium = inject(RoutingElysium);
+  protected news = news;
+  protected imgUser: string = new URL(this.homeApi.imgUserUrl,environment.apiUrl).toString() ;
 
-  protected imgUser: string = this.homeApi.imgUserUrl;
-  /**
-   * Vamos a obtener diferentes información sobre el usuario:
-   */
-  ngOnInit() {
-    //Obtenemos la foto de perfil del usuario:
-    console.log(this.homeApi.getDashboardInfo.value());
+  goToPerfil =() =>{
+    this.routingElysium.goToProfile(TokenService.getUsenameToken());
   }
-
-  goToPerfil() {
-    this.router.navigate(['elysium/chat']);
-  }
+ 
 }

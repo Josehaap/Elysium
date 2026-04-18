@@ -2,6 +2,9 @@ import { Component, inject } from '@angular/core';
 import { IMenu } from './models/menu';
 import { Router, ActivatedRoute } from '@angular/router';
 import { dataIcons } from './data/dataIcons';
+import { TokenService } from 'src/app/core/services/token-service';
+import { jwtDecode } from 'jwt-decode';
+import { accessToken } from '../models/shared';
 @Component({
   selector: 'app-menu',
   imports: [],
@@ -80,7 +83,9 @@ export class Menu {
         this.router.navigate(['elysium/search']);
         break;
       case 'profile':
-        this.router.navigate(['elysium/profile']);
+        let token :accessToken = jwtDecode(TokenService.getToken()); 
+        console.log(token['username']);
+        this.router.navigate([`elysium/profile/${token['username']}`]);
         break;
     }
   }

@@ -1,7 +1,4 @@
-import { Component, AfterViewInit, input } from '@angular/core';
-import { gsap } from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
-gsap.registerPlugin(ScrollTrigger);
+import { Component, input } from '@angular/core';
 
 @Component({
   selector: 'app-carrucel',
@@ -9,31 +6,9 @@ gsap.registerPlugin(ScrollTrigger);
   templateUrl: './carrucel.html',
   styleUrl: './carrucel.css',
 })
-export class Carrucel implements AfterViewInit {
+export class Carrucel {
   /**
-   * *Important -  Hacemos uso de esta implementación para poder manipular el DOM antes de la primera carga inicial.
+   * Input property for the array of image URLs to display in the carousel.
    */
-
   public urlImg = input.required<string[]>();
-  
-  ngAfterViewInit() {
-    /*gsap.registerPlugin(ScrollTrigger);
-   
-    gsap.fromTo('.panel', {
-      x:1300, 
-      scale:1,
-    },{
-      ease:"none",
-      x:-1500,
-      scrollTrigger: {
-        trigger: ".wrapper", 
-        start: "top 90%", 
-        end:"+=1200",
-        scrub: 1
-
-      },
-    });
-   */   
-      
-  }
 }

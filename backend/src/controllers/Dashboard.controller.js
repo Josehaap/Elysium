@@ -24,10 +24,15 @@ export default class DashboardController {
         JSON.parse(item.postInfo)
       ))
     };
-    
+    console.log(responseJson.dataNewPost);
     responseJson.dataNewPost = helper.shuffleArray(responseJson.dataNewPost);
-
-    console.log(responseJson);
     return res.status(201).send(responseJson);
+  };
+
+  getNumberFollowed = async (req, res) => {
+    const id = jwt.decode(req.header('accessToken')).id;    
+    const RESPONSE = await this.#userService.getNumberFollowed(id);
+    console.log(RESPONSE)
+    return res.status(201).send(RESPONSE);
   };
 }

@@ -37,6 +37,7 @@
   font-weight: 900;
   font-style: italic;
 }
+
 /***********************************/
 
 *,
@@ -67,6 +68,10 @@ body {
     sans-serif;
   line-height: 1.5;
   -webkit-font-smoothing: antialiased;
+}
+
+body::-webkit-scrollbar{
+    display: none;
 }
 
 img,

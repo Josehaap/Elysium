@@ -1,18 +1,22 @@
-<section class="carrucel">
-  <div class="group">
+<section class="carrucel-container">
+  <div class="carrucel-track">
+    <!-- First set of images -->
     @for (url of urlImg(); track $index) {
-      <div class="slide">
-        <img [src]="url" class="" alt="" />
-
+      <div class="carrucel-slide">
+        <img [src]="url" alt="Carousel image" />
       </div>
     }
-  </div>  
-  <div aria-hidden class="group">
-    @for (url of urlImg(); track $index) {
-      <div class="slide">
-        <img [src]="url" class="" alt="" />
+    <!-- Duplicate set for seamless transition -->
+    @for (url of urlImg(); track $index + '_duplicate') {
+      <div class="carrucel-slide">
+        <img [src]="url" alt="Carousel image duplicate" />
       </div>
-    
     }
-  </div>  
+    <!-- Triple set if needed for very wide screens -->
+    @for (url of urlImg(); track $index + '_triple') {
+      <div class="carrucel-slide">
+        <img [src]="url" alt="Carousel image triple" />
+      </div>
+    }
+  </div>
 </section>

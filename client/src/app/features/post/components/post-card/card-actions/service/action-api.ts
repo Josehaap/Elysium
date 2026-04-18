@@ -17,22 +17,6 @@ export class ActionApi {
     post_id: post_id
   });
 }
-  /**
-   * Función que nos devuelve un objeto literal con bastante información
-   */
-  public getPostInfo = (id: Signal<string | undefined>) => {
-    return httpResource<ResponseApiActions>(() => {
-      const postId = id();
-      if (!postId) return undefined; 
-      return {
-        url: `${environment.apiUrl}/post/info`,
-        method: 'GET',
-        headers: {
-          post_id: postId, 
-        },
-      };
-    });
-  };
 
   public insertLike(id:string){
     return this.http.post(`${environment.apiUrl}/post/Ilike`,null,{headers:this.getHeaders(id)} )

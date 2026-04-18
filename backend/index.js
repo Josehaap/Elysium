@@ -7,8 +7,5 @@ import postRouter from "./src/routes/post.routes.js"; //Importamos las rutas de 
  */
 app.use("/user", userRouter); //! Todo aquel que entre a través de user entrará a las rutas de los usuarios. 
 
-app.use('/imgUsers',()=>{
-    console.log('dhjwedjhwbe');
-})
 
 app.use('/post', postRouter);

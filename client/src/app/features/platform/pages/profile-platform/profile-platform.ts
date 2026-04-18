@@ -1,76 +1,153 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, inject, signal, linkedSignal } from '@angular/core';
 import { ProfileApi } from './service/profile-api';
-import { NgStyle } from '@angular/common';
-import { Posts} from "src/app/features/platform/pages/profile-platform/components/posts/posts";
+import { Posts } from 'src/app/features/platform/pages/profile-platform/components/posts/posts';
 import { FormsModule } from '@angular/forms';
+import { ModalProfileData } from './models/profile';
+import { Options } from './components/options/options';
+import { environment } from 'src/environments/environment';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { jwtDecode } from 'jwt-decode';
+import { TokenService } from 'src/app/core/services/token-service';
+import { accessToken } from 'src/app/features/shared/models/shared';
+import { btnFollow } from 'src/app/features/shared/btnFollow/btnFollow';
 
 @Component({
   selector: 'app-profile-platform',
-  imports: [NgStyle, Posts, FormsModule],
+  imports: [Posts, FormsModule, Options, btnFollow, RouterLink],
   templateUrl: './profile-platform.html',
   styleUrl: './profile-platform.css',
 })
 export class ProfilePlatform {
+  
+  //Injectamos los servicios
   protected profileApi = inject(ProfileApi);
+  private urlProfile = inject(ActivatedRoute);
+  private router = inject(Router);
 
-  // Estado para controlar si estamos editando
-  public isEditing = signal(false);
+  //Atributo que determinará que el usuario que haya entrado al perfil sea igual o no al usuario logueado.
+  protected isUserOrVisit: boolean = false;
+  //Atributo que servirá para almacenar el username del usuario que venga de la url.
+  protected usernameURL: string = '';
 
-  // Señal para almacenar temporalmente los datos editables
-  public profileData = signal({
-    name: '',
-    description_user: ''
+ 
+
+  //*Cuando se inicie el componente vamos a comprobar que el usuario sea el usuario o sea una persona distinta.
+  ngOnInit() {
+    this.urlProfile.params.subscribe((params) => {
+      const token: accessToken = jwtDecode(TokenService.getToken());
+      this.usernameURL = params['username'];
+      this.profileApi.usernameUrl.set(params['username']);
+      this.isUserOrVisit = this.usernameURL === token['username'];
+    });
+  }
+
+  protected profileData = linkedSignal({
+    source: () => this.profileApi.getProfileInfoUser.value()?.Data,
+    computation: (source) => {
+      let urlMapeada: string = '';
+      if (!source) return undefined;
+      //* Vamos a comprobar que exista y que  no sea una url válida
+      if (source.urlImg && !source.urlImg.startsWith('http') && !source.urlImg.startsWith('blob')) {
+        urlMapeada = new URL(source.urlImg, environment.apiUrl).toString(); //Contruimos una nueva url válida apuntando a nuestro servidor ya sea en local o en producción
+      } else urlMapeada = source.urlImg;
+      return {
+        ...source, //Pasamos todos los datos y vamos a formatear la url qque nos llega:
+        urlImg: urlMapeada,
+      };
+    },
   });
 
-  // Señal para la previsualización de la nueva imagen
-  public profileImagePreview = signal<string | null>(null);
+  protected isEditing = signal(false);
 
-  /**
-   * Cambia entre el modo edición y visualización.
-   * Si entra en modo edición, copia los datos actuales de la API a la señal local.
-   * Si sale de modo edición (Guardar), dispara la lógica de guardado.
-   */
-  public toggleEdit() {
-    if (this.isEditing()) {
-      this.saveChanges();
-    } else {
-      // Cargamos los datos actuales en el modo edición
-      const current = this.profileApi.getProfileInfoUser.value()?.Data;
-      if (current) {
-        this.profileData.set({
-          name: current.name,
-          description_user: current.description_user
-        });
-      }
-    }
-    this.isEditing.set(!this.isEditing());
-  }
+  public modalData = signal<ModalProfileData>({
+    name: '',
+    surname: '',
+    description_user: '',
+    urlImg: '',
+    numberFollower: '',
+  });
 
-  private saveChanges() {
-    console.log("Guardando cambios:", this.profileData());
-    // TODO: Implementar llamada al backend para guardar texto e imagen
-  }
-
-  /**
-   * Maneja la selección de un nuevo archivo de imagen
-   */
-  onFileSelected(event: Event) {
-    const file = (event.target as HTMLInputElement).files?.[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = () => {
-        this.profileImagePreview.set(reader.result as string);
+  //Método que me permitirña actualizar el modalData cuando lo vaya a cambiar
+  protected updateField(field: string, newValue: string) {
+    this.modalData.update((prev) => {
+      return {
+        ...prev, //Copiamos todos los valores que estuvieran en el signal
+        [field]: newValue, //sobreescribimos unicamente el campo especificado.
       };
-      reader.readAsDataURL(file);
+    });
+  }
+
+  protected showForm() {
+    //Lo primero que haces es actualizar is editing
+    this.isEditing.set(!this.isEditing());
+    //Luego comprobamos que vamos hacer
+    if (this.isEditing()) {
+      //Si es true significa que tendremos que actualizar modalData con la información de la señal
+      //para que así se muestre en lso inputs
+      this.modalData.set({
+        name: this.profileData()?.name || '',
+        surname: this.profileData()?.surname || '',
+        description_user: this.profileData()?.description_user || '',
+        urlImg: this.profileData()?.urlImg || '',
+      });
+    } else {
+      //Actualizamos nuestro señalComputada
+      this.profileData.set({
+        ...this.profileData()!,
+        name: this.modalData().name,
+        surname: this.modalData().surname,
+        description_user: this.modalData().description_user,
+        urlImg: this.modalData()?.urlImg || '',
+      });
+
+      //Una vez la actualizacion de los datos se hayan hecho hacemos una peticion de actualizacion
+      //Primero peparamo los datos generando un formData por el tema de la imagen:
+      const formData = new FormData();
+      formData.append('name', this.profileData()?.name || '');
+      formData.append('surname', this.profileData()?.surname || '');
+      formData.append('description_user', this.profileData()?.description_user || '');
+      formData.append('username', this.profileData()?.username || '');
+
+      if (this.modalData().profile_img_file) {
+        formData.append('profile_img', this.modalData().profile_img_file!);
+      }
+      //Lanzamos la consulta
+      this.profileApi.updateProfileInfo(formData, this.usernameURL);
     }
   }
 
-  // Métodos auxiliares para ngModel con signals
-  updateName(value: string) {
-    this.profileData.update(prev => ({ ...prev, name: value }));
+  onFileSelected(event: Event) {
+    //Obtenemos el archivo
+    const input = event.target as HTMLInputElement;
+    if (input.files && input.files[0]) {
+      const file = input.files[0]; //Obtenemos la informacion total del archivo
+      const imgURL = URL.createObjectURL(file); //Creamos una url temporal para visualiazr el archivo;
+      this.modalData.update((prev) => ({
+        ...prev,
+        urlImg: imgURL,
+        profile_img_file: file,
+      }));
+    }
   }
 
-  updateDescription(value: string) {
-    this.profileData.update(prev => ({ ...prev, description_user: value }));
+  protected menuInVisible = signal(true);
+
+   public goToProfile() {
+    this.router.navigate([`elysium/profile/${TokenService.getUsenameToken()}`]);
+    //Actualizamos nuestro señalComputada
+   
+      this.modalData.set({
+        name: this.profileApi.getProfileInfoUser.value()?.Data.name || '',
+        surname: this.profileApi.getProfileInfoUser.value()?.Data.surname|| '',
+        description_user: this.profileApi.getProfileInfoUser.value()?.Data.description_user || '',
+        urlImg: this.profileApi.getProfileInfoUser.value()?.Data.urlImg|| '',
+      });
+    
+      this.showForm();
   }
+
+  public logout = () => {
+    TokenService.logout();
+    window.location.reload();
+  };
 }
