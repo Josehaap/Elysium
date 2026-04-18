@@ -14,6 +14,10 @@ export interface infoDataPost{
     user_id: string;
     username: string;
     profile_img: string;
+    likes: number;
+    comment: number;
+    shared: number;
+    userLike: boolean;
 }
 
 

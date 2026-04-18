@@ -17,12 +17,17 @@ export default class DashboardController {
   //!Caso ideal recibo el objeto literal del fonrtend tener que validar el token además de enviar desde el frontend.
   getAllDataUser = async (req, res) => {
     const id = jwt.decode(req.header('accessToken')).id;    
-    const ResponseRawPostsByUser = await this.#userService.getUserFollowedDataAndPost(id);
+    const ResponseRawPostsByUser = await this.#userService.getUserFollowedDataAndPost([id, id]);
    
    const responseJson = {
-      dataNewPost: ResponseRawPostsByUser.map(item => (
-        JSON.parse(item.postInfo)
-      ))
+      dataNewPost: ResponseRawPostsByUser.map(item => {
+        let parseRaw = JSON.parse(item.postInfo);
+        parseRaw.likes = Number(parseRaw.likes);
+        parseRaw.comment = Number(parseRaw.comment);
+        parseRaw.shared = Number(parseRaw.shared);
+        parseRaw.userLike = Boolean(Number(parseRaw.userLike));
+        return parseRaw;
+      })
     };
     console.log(responseJson.dataNewPost);
     responseJson.dataNewPost = helper.shuffleArray(responseJson.dataNewPost);

@@ -123,7 +123,7 @@ export default class UserService {
    */
    /*TODO - Imlpementar offaset y que además sehan actuales de ese dia o del dia anterior al dia actual */
 
-  async getUserFollowedDataAndPost(id, limit){
+  async getUserFollowedDataAndPost(ids){
     const response = await pool.query(
       `Select 
           JSON_OBJECT(
@@ -134,9 +134,13 @@ export default class UserService {
             'created_at', p.created_at,
             'user_id', u.user_id, 
             'username', u.username,
-            'profile_img', u.profile_img
+            'profile_img', u.profile_img,
+            'likes',(select count(*) from \`like\` where post_id = p.post_id), 
+            'comment', (select count(*) from comment where post_id = p.post_id),
+            'shared',(select count(*) from shared where post_id = p.post_id), 
+            'userLike', (exists (select  1  from \`like\` where user_id = ? and post_id = p.post_id))
           ) 
-        AS postInfo from user u inner join follow  f on followed_id = u.user_id inner join post p on p.user_id = f.followed_id  where f.follower_id = ?`, id);
+        AS postInfo from user u inner join follow  f on followed_id = u.user_id inner join post p on p.user_id = f.followed_id  where f.follower_id = ?`, ids);
    return response[0];
   }
 

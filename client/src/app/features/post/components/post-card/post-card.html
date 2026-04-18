@@ -7,6 +7,15 @@
     <app-btnFollow class="" [username]="dataPost().username"></app-btnFollow>
   </div>
   <img class="h-50 w-full bg-black rounded-[10px]" alt="" [src]="dataPost().img_post" />
-  <h3>{{ dataPost().title }}</h3>
+  <h3 class="font-bold">{{ dataPost().title }}</h3>
   <p>{{ dataPost().description }}</p>
+  <div class="mt-4 border-t border-gray-100">
+    <app-card-actions 
+      [id]="dataPost().post_id" 
+      [likes]="dataPost().likes" 
+      [comments]="dataPost().comment" 
+      [shareds]="dataPost().shared" 
+      [isLiked]="dataPost().userLike">
+    </app-card-actions>
+  </div>
 </div>

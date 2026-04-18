@@ -36,7 +36,7 @@ export class CardActions {
     if (initialLiked && !currentlyLiked) offset = -1; // Tenía like y se lo quité
     if (!initialLiked && currentlyLiked) offset = 1;  // No tenía y se lo puse
 
-    return this.likes() + offset;
+    return (this.likes() || 0) + offset;
   });
 
   // El color del corazón
