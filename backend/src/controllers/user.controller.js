@@ -81,16 +81,12 @@ export default class UserController {
    */
   userRegister = async (req, res) => {
     try {
-      console.log("Este es el usuairo recibido: ");
-      console.log(req.body);
       
-
       //Comprobamos las claves y luego los valores.
       UserValidators.validateKeys(req.body);
       UserValidators.validateValues(req.body);
       const data = req.body;
       //Si  todo ha salido bien instanciamos al usuario
-      console.log(data);
       let user = new User(data.username, data.email);
       user.firstName = data.first_name;
       //Esperamos que se codifiquen la contraseña.
@@ -145,8 +141,6 @@ export default class UserController {
         .status(200)
         .send(helper.generateLiteralObject(this.#response, RESPONSE));
     } catch (error) {
-      console.log("He entrado aquí ");
-      console.log(error.message);
       this.#valuesError[2] = error.message;
       res
         .status(400)
@@ -168,8 +162,6 @@ export default class UserController {
       //Si existe sacamos las variables: */
       const userIdentification = req.body.userIdentification;
       const passLogin = req.body.password;
-        console.log(`Password: ${userIdentification}`);
-        console.log(`Password: ${passLogin}`);
       //comrpobamos que el usuario exista.
       const USERNAMEEXIST = await this.#userService.getUserBy(
         "username",
@@ -199,7 +191,6 @@ export default class UserController {
       //Teniendo el response haremos primero una comprobación con el password:
 
       const esValido = bcrypt.compareSync(passLogin, password);
-      console.log(esValido)
       if (esValido){
         //Generamos un token único con esos datos: 
         const accessToken = jwt.sign(
@@ -239,7 +230,7 @@ export default class UserController {
           .status(401)
           .send(helper.generateLiteralObject(this.#response, this.#valuesError));
       }
-      console.log(error.message);
+      console.error(error.message);
       return res
         .status(500)
         .send(helper.generateLiteralObject(this.#response, this.#valuesError));
@@ -263,7 +254,7 @@ export default class UserController {
         return res.redirect("http://localhost:4200/login?activated=false");
       }
     } catch (error) {
-      console.log(error.message);
+      console.error(error.message);
       return res.redirect("http://localhost:4200/login?activated=error");
     }
   };
@@ -271,7 +262,6 @@ export default class UserController {
   iAmFollow = async(req, res) => {
     try {
       if (!req.header('usernameNow')) throw new Exception('No tenemos al usuario'); 
-      console.log(req.header('usernameNow')); 
       const token = jwt.decode(req.header('accessToken'));
       
       if (req.header('usernameNow') === token['username']) throw new Exception('No puedes seguirte a ti mismo')
@@ -325,7 +315,7 @@ export default class UserController {
       }
       
     } catch (error) {
-      console.log(error.message)
+      console.error(error.message)
 
       if(error instanceof Exception){ 
         

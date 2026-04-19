@@ -27,7 +27,7 @@ export default class UserService {
       );
       return result[0];
     } catch (error) {
-      console.log(
+      console.error(
         "Se ha detectado un error devolveremos null, el error es el siguiente: " +
           error.message,
       );
@@ -58,7 +58,6 @@ export default class UserService {
         DATAUSER,
       );
       if (!RESULTUSER) throw new Error("Hubo un error inesperado");
-      console.log("Este es el resultado de la inserción de user ");
       if (user.iAmEnterprise === 0)
         //Significa que es una empresa
         await pool.query(
@@ -82,14 +81,14 @@ export default class UserService {
     } catch (error) {
       //Aquí podemos moldear un poco que hacemos segun que tipo de error tengamos.
       if (error instanceof Exception) {
-        console.log(
+        console.error(
           "Se ha detectado un usuario ya registrado con esa información se devolverá el siguiente mensaje: " +
             error.message,
         );
         return [false, "", error.message];
       }
       //Determina un fallo en el sql error critico
-      console.log(error);
+      console.error(error);
       return null;
     }
   }
@@ -112,7 +111,7 @@ export default class UserService {
 
       return true;
     } catch (error) {
-      console.log("Error activando usuario: " + error.message);
+      console.error("Error activando usuario: " + error.message);
       return null;
     }
   }
@@ -176,7 +175,7 @@ export default class UserService {
       );
       return result[0][0].TOTAL;
     } catch (error) {
-      console.log("Error en getNumberFollower: " + error.message);
+      console.error("Error en getNumberFollower: " + error.message);
       return null;
     }
   }
@@ -189,7 +188,7 @@ export default class UserService {
       );
       return result[0][0].TOTAL;
     } catch (error) {
-      console.log("Error en getNumberFollower: " + error.message);
+      console.error("Error en getNumberFollower: " + error.message);
       return null;
     }
   }
@@ -207,7 +206,7 @@ export default class UserService {
       );
       return result[0][0].TOTAL;
     } catch (error) {
-      console.log("Error en getNumberPosts: " + error.message);
+      console.error("Error en getNumberPosts: " + error.message);
       return null;
     }
   }
@@ -240,7 +239,7 @@ export default class UserService {
       );
       return result[0];
     } catch (error) {
-      console.log("Error en getAllPostUser: " + error.message);
+      console.error("Error en getAllPostUser: " + error.message);
       return null;
     }
   }
@@ -294,7 +293,6 @@ async deleteFollow(dataUser) {
         dataUser
       );
 
-      console.log(result);
       return result;
     } catch (error) {
       console.error(error);

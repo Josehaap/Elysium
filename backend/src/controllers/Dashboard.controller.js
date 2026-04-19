@@ -29,7 +29,6 @@ export default class DashboardController {
         return parseRaw;
       })
     };
-    console.log(responseJson.dataNewPost);
     responseJson.dataNewPost = helper.shuffleArray(responseJson.dataNewPost);
     return res.status(201).send(responseJson);
   };
@@ -37,7 +36,6 @@ export default class DashboardController {
   getNumberFollowed = async (req, res) => {
     const id = jwt.decode(req.header('accessToken')).id;    
     const RESPONSE = await this.#userService.getNumberFollowed(id);
-    console.log(RESPONSE)
     return res.status(201).send(RESPONSE);
   };
 }

@@ -36,7 +36,6 @@ export default class PostService {
     async deleteLike(post_id  ,user_id){
         const RESPONSE = await pool.query(
         "DELETE from `like` where user_id =  ?  and  post_id = ?", [user_id, post_id]);
-        console.log(RESPONSE);
        return RESPONSE[0];
     }
 

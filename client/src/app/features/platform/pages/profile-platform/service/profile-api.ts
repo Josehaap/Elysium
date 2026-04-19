@@ -12,24 +12,31 @@ export class ProfileApi {
     public usernameUrl = signal<string>(''); 
 
     
-    public getProfileInfoPublish = httpResource<responseApiProfilePost>(() => ({
+    public getProfileInfoPublish = httpResource<responseApiProfilePost>(() => {
+      const username = this.usernameUrl();
+      if (!username) return undefined;
+      return {
         url: `${environment.apiUrl}${'/post/info'}`,
         method: 'GET',
-        headers:{
-        accessToken: TokenService.getToken(),
-        usernameNow: this.usernameUrl()
-    },
-    }));
-    
-     public getProfileInfoUser = httpResource<responseApiProfileData>(() => ({
+        headers: {
+          accessToken: TokenService.getToken(),
+          usernameNow: username
+        },
+      }
+    });
+
+    public getProfileInfoUser = httpResource<responseApiProfileData>(() => {
+      const username = this.usernameUrl();
+      if (!username) return undefined;
+      return {
         url: `${environment.apiUrl}${'/user/profile/data'}`,
         method: 'GET',
-        headers:{
-        accessToken: TokenService.getToken(),
-        usernameNow: this.usernameUrl()
-    },
-
-    }));
+        headers: {
+          accessToken: TokenService.getToken(),
+          usernameNow: username
+        },
+      }
+    });
 
     public updateProfileInfo = (formData:FormData, username:string ) =>{
       return this.http.post<boolean>(`${environment.apiUrl}/user/profile/update`, formData, {

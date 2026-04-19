@@ -19,8 +19,9 @@ export default class PostController {
 
     getDataInfo = async (req, res) => {
         try {
-          const token = jwt.decode(req.header("accessToken"));
-                if (!req.header('usernameNow')) throw new Exception('Faltan parámetros');
+            console.log(req.header('usernameNow')   );
+            const token = jwt.decode(req.header("accessToken"));
+                  if (!req.header('usernameNow')) throw new Exception('Faltan parámetros');
           
                 let id = req.header('usernameNow') === token['username'] ? token['id']:'';
                 
@@ -41,7 +42,7 @@ export default class PostController {
             const result = helper.generateLiteralObject(this.#response, [true, RESPONSEMAPJSON, '']);
             res.status(200).send(result);
         } catch (error) {
-            console.error(error);
+            console.log(error);
             res.status(500).send({ Success: false, Error: error.message });
         }
     }
