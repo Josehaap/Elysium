@@ -40,4 +40,146 @@
 
 .containerPost:hover{
     transform: scale(1.01);
+    .toggleButton {
+        opacity: 1;
+    }
+}
+
+/* --- BOTÓN DE ACTIVACIÓN DEL MENÚ --- */
+.toggleButton {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    opacity: 0;
+    transition: all 0.3s ease;
+    z-index: 20;
+    /* Círculo traslúcido elegante */
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: white;
+    border-radius: 50%;
+    width: 38px;
+    height: 38px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.toggleButton:hover {
+    background: rgba(255, 255, 255, 0.3);
+    transform: rotate(90deg) scale(1.1);
+}
+
+/* --- MENÚ DE OPCIONES (Premium Glassmorphism) --- */
+.option {
+  position: absolute;
+  inset: 0;
+  /* Fondo oscuro traslúcido para centrar la atención */
+  background-color: rgba(0, 0, 0, 0.45);
+  /* Efecto de cristal esmerilado profundo */
+  backdrop-filter: blur(14px) saturate(160%);
+  -webkit-backdrop-filter: blur(14px) saturate(160%);
+  z-index: 15;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  /* Animación de entrada suave */
+  animation: menuAppear 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+  padding: 24px;
+}
+
+@keyframes menuAppear {
+  from { opacity: 0; backdrop-filter: blur(0px); }
+  to { opacity: 1; backdrop-filter: blur(14px); }
+}
+
+.option .menu-content {
+  width: 100%;
+  max-width: 220px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  /* El contenido sube suavemente al aparecer */
+  animation: contentSlide 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes contentSlide {
+  from { transform: translateY(30px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+.mensaje {
+  color: white;
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  font-weight: 800;
+  margin-bottom: 12px;
+  text-align: center;
+  opacity: 0.7;
+}
+
+.option-btn {
+  width: 100%;
+  padding: 16px;
+  border-radius: 9px;
+  /* Estilo de botón "vidrio" con borde fino */
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  background: rgba(255, 255, 255, 0.08);
+  color: white;
+  font-weight: 600;
+  font-size: 0.92rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.option-btn:hover {
+  background: rgba(255, 255, 255, 0.18);
+  border-color: rgba(255, 255, 255, 0.3);
+  transform: translateY(-3px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+}
+
+.option-btn.modify {
+  /* Tinte azul sutil para modificar */
+  background: rgba(59, 130, 246, 0.15);
+  border-color: rgba(59, 130, 246, 0.2);
+}
+
+.option-btn.modify:hover {
+  background: rgba(59, 130, 246, 0.3);
+}
+
+.option-btn.delete {
+  /* Tinte rojo elegante para eliminar */
+  background: rgba(239, 68, 68, 0.15);
+  border-color: rgba(239, 68, 68, 0.2);
+  color: #fca5a5;
+}
+
+.option-btn.delete:hover {
+  background: rgba(239, 68, 68, 0.4);
+  color: white;
+}
+
+.close-menu {
+  font-size: 0.82rem;
+  color: rgba(255, 255, 255, 0.45);
+  font-weight: 500;
+  cursor: pointer;
+  text-align: center;
+  transition: all 0.2s;
+}
+
+.close-menu:hover {
+  color: white;
+  transform: scale(1.05);
 }

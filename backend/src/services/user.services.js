@@ -148,6 +148,13 @@ export default class UserService {
       `select username, profile_img from user where user_id != ?`, id);
    return response[0];
   }
+  
+  async getListUsersLike(username,id){
+    const value = [`%${username}%`, id]; 
+    const response = await pool.query(
+      `select username, profile_img from user where username like ? AND user_id != ?` , value);
+   return response[0];
+  }
 
   /**
    * Obtener a todos los seguidos del usuario

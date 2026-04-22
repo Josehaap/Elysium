@@ -1,6 +1,6 @@
 export interface SearchPlatformAPIResponse {
     Success: boolean;
-    Data: DataUser[ ];
+    Data: DataUser[];
     Error: string;
 }
 

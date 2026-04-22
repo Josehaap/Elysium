@@ -1,0 +1,43 @@
+@if (alertMessage() !== '') {
+    <div class="fixed top-5 right-5 z-[1000] w-80">
+        <app-alert [message]="alertMessage()" [alertLevel]="alertLevel()"></app-alert>
+    </div>
+}
+<section class="contenedor">
+    <!-- Columna del Formulario -->
+    <div class="formulario">
+        <h2 class="font-black text-3xl mb-6">Crear Publicación</h2>
+        
+        <div class="campo">
+            <label>Título</label>
+            <input 
+                type="text" 
+                placeholder="Escribe un título llamativo..."
+                [ngModel]="infoPost().title"
+                (ngModelChange)="updateField('title', $event)" />
+        </div>
+
+        <div class="campo">
+            <label>Descripción</label>
+            <textarea 
+                placeholder="¿De qué trata esta publicación?"
+                [ngModel]="infoPost().description"
+                (ngModelChange)="updateField('description', $event)"></textarea>
+        </div>
+
+        <div class="campo">
+            <label>Imagen de la publicación</label>
+            <div class="zona-subida">
+                <input type="file" (change)="onFileSelected($event)" accept="image/*" />
+                <p>Selecciona una imagen para tu post</p>
+            </div>
+        </div>
+
+        <button class="btn-publicar" (click)="onSubmitPost()">Publicar ahora</button>
+    </div>
+
+    <!-- Columna de Vista Previa -->
+    <div class="previa">
+        <app-post-card [dataPost]="infoPost()" [dontViewActions]="false" ></app-post-card>
+    </div>
+</section>

@@ -1,24 +1,29 @@
 <section class="containerSearch">
   <div class="containerInput">
-    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m21 21-4.34-4.34"/><circle cx="11" cy="11" r="8"/></svg>
-    <input type="text" placeholder="Ingrese el nombre del usuario" />
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="2"
+    >
+      <path d="m21 21-4.34-4.34" />
+      <circle cx="11" cy="11" r="8" />
+    </svg>
+    <input type="text" placeholder="Ingrese el nombre del usuario" (input)="onSearchUser($event)" />
   </div>
-  <section class="containerInfoUser">
-    @if (searchApi.getAllUser.hasValue()) {
-      @if (searchApi.getAllUser.value().Data.length > 0) {
-        @for (item of searchApi.getAllUser.value().Data; track $index) {
-          <div class="containerCardUser">
-            <div>
-                <img [src]="item.profile_img" alt="Imagen del usuario" />
-                <P>{{ item.username }}</P>
-            </div>
-          
-            <app-btnFollow [username]="item.username"></app-btnFollow>
-          </div>
-        }
-      }
+
+  @if (mostrar()) {
+    @if (searchUserData() && searchUserData()!.Data.length > 0) {
+      <app-list-card [listInfoCard]="searchUserData()!.Data"></app-list-card>
     } @else {
       <p>No hay usuarios</p>
     }
-  </section>
+  } @else {
+     @if (searchApi.getAllUser.hasValue()) {
+       <app-list-card [listInfoCard]="searchApi.getAllUser.value().Data"></app-list-card>
+     }
+  }
 </section>

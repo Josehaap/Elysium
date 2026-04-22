@@ -1,6 +1,8 @@
+import { exec } from "child_process";
 import UserService from "../services/user.services.js";
 import Helper from "../utils/helpers.js";
 import jwt from "jsonwebtoken";
+import Exception from "../utils/exceptions.js";
 
 const helper = new Helper();
 
@@ -31,6 +33,30 @@ export default class SearchController{
 
             let dataRespAleatorio = helper.shuffleArray(RESPONSEDATARAW);
 
+            res.status(200).send(helper.generateLiteralObject(this.#response, [true, dataRespAleatorio, '']))
+        } catch (error) {
+            
+            console.log(error.message
+
+            )
+        }
+    }
+    /**
+     *  Nos traeremos los datos de lo usuarios. que o seamos nosotros
+     */
+    getAllUserSameLike = async (req ,res)=>{
+       
+        try {
+            const token = req.header('accessToken');
+            const id = jwt.decode(token).id;
+            const username = req.header('username') ?? ''; 
+            if(username === '') throw new Exception('Faltan parámetros.');
+
+            const RESPONSEDATARAW = await this.#userService.getListUsersLike(username, id);
+
+            let dataRespAleatorio = helper.shuffleArray(RESPONSEDATARAW);
+            
+            console.log(dataRespAleatorio);
             res.status(200).send(helper.generateLiteralObject(this.#response, [true, dataRespAleatorio, '']))
         } catch (error) {
             

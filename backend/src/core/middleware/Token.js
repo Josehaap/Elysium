@@ -8,7 +8,6 @@ import Exception from "../../utils/exceptions.js";
 dotenv.config(); 
 export default class Token {
     static generateTokens(data, firma,config){
-
         return jwt.sign(data,firma,config)
     }
 
@@ -31,4 +30,6 @@ export default class Token {
             return res.status(401).send(error.message);
         }
     }
+
+    
 }

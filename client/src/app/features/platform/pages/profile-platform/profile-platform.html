@@ -185,10 +185,10 @@
           <app-options
             [name]="'Perfil'"
             [iWantImg]="true"
-            [img]="profileData()?.urlImg || '/img/profile/profile_userDefault.webp'"
+            [img]="imgUrlOption"
             [title]="'Configuración del perfil'"
             [subtitle]="'Podrás cambiar la información visible de tu cuenta, ya sea nombre de usuario, description, etc'"
-            (click)="goToProfile();this.menuInVisible.set(!this.menuInVisible());"
+            (click)=" goToProfile(); "
           ></app-options>
           <hr/>
           <app-options

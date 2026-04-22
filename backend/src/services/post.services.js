@@ -14,7 +14,7 @@ export default class PostService {
      */
     async getDataRelativeWithPost(id){
 
-        const RESPONSESHARED = await pool.query("SELECT JSON_OBJECT ('id', p.post_id, 'title', title,'img', img_post,'description', description_post,'likes',(select count(*) from `like` where post_id = p.post_id), 'comment', (select count(*) from comment where post_id = p.post_id),'shared',(select count(*) from shared where post_id = p.post_id), 'userLike', (exists (select  1  from `like` where user_id = ? and post_id = p.post_id))) as Data  from post p where user_id = ?", id);
+        const RESPONSESHARED = await pool.query("SELECT JSON_OBJECT ('id', p.post_id, 'title', title,'img', img_post,'description', description_post,'likes',(select count(*) from `like` where post_id = p.post_id), 'comment', (select count(*) from comment where post_id = p.post_id),'shared',(select count(*) from shared where post_id = p.post_id), 'userLike', (exists (select  1  from `like` where user_id = ? and post_id = p.post_id))) as Data  from post p where user_id = ? ORDER BY p.created_at DESC", id);
 
         return RESPONSESHARED[0];
     }
@@ -26,11 +26,10 @@ export default class PostService {
        return RESPONSE[0];
     }
 
-     async insertLike(post_id ,user_id){
+    async insertPost(user_id, title, img_post, description_post){
         const RESPONSE = await pool.query(
-        "INSERT INTO `like` (user_id, post_id) VALUES (?, ?)",[user_id, post_id ]);
-
-       return RESPONSE[0];
+        "INSERT INTO `post` (user_id, title, img_post, description_post) VALUES (?, ?, ?, ?)", [user_id, title, img_post, description_post]);
+        return RESPONSE[0];
     }
 
     async deleteLike(post_id  ,user_id){
@@ -39,4 +38,9 @@ export default class PostService {
        return RESPONSE[0];
     }
 
+    async deletePost(post_id, user_id){
+        const RESPONSE = await pool.query(
+        "DELETE from `post` where user_id =  ?  and  post_id = ?", [user_id, post_id]);
+        return RESPONSE[0];
+    }
 }

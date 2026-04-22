@@ -37,7 +37,7 @@ export class btnFollow {
         this.isFollowed.set(resp);
       }, 
       error: (err)=>{
-        console.error(err.message)
+        this.isFollowed.set(false);
       }
     })
   }

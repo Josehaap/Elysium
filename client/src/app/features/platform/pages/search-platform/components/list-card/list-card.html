@@ -1,0 +1,5 @@
+<section class="containerInfoUser">
+  @for (infoCard of listInfoCard(); track $index) {
+    <app-card [infoCard]="infoCard"></app-card>
+  }
+</section>

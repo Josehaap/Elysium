@@ -1,0 +1,131 @@
+.contenedor {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+    padding: 40px;
+    max-width: 1200px;
+    margin: auto;
+}
+.formulario{
+    box-shadow: 0 0 10px rgba(129, 129, 129, 0.244);
+    padding: 10px;
+    border-radius: 10px;
+}
+.campo {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 20px;
+}
+
+.campo label {
+    font-weight: 700;
+    color: #444;
+}
+
+input[type="text"], textarea {
+    padding: 12px;
+    border: 2px solid #eee;
+    border-radius: 12px;
+    outline: none;
+    transition: border-color 0.3s;
+}
+
+input:focus, textarea:focus {
+    border-color: #ff8c00;
+}
+
+textarea {
+    min-height: 120px;
+    resize: none;
+}
+
+.zona-subida {
+    border: 2px dashed #ccc;
+    padding: 20px;
+    border-radius: 12px;
+    text-align: center;
+    background: #fafafa;
+    position: relative;
+    cursor: pointer;
+}
+
+.zona-subida input {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    cursor: pointer;
+}
+
+.btn-publicar {
+    background: black;
+    color: white;
+    padding: 15px;
+    width: 100%;
+    border-radius: 50px;
+    font-weight: bold;
+    cursor: pointer;
+    border: none;
+    transition: transform 0.2s;
+}
+
+.btn-publicar:hover {
+    transform: scale(1.02);
+}
+
+.previa {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    min-height: 500px;
+}
+
+@media (max-width: 992px) {
+    .contenedor {
+        grid-template-columns: 1fr;
+        padding: 20px;
+        gap: 30px;
+    }
+
+    .previa {
+        padding: 0;
+        order: -1; /* La vista previa aparece arriba en móviles */
+        min-height: auto;
+    }
+
+    .formulario h2 {
+        font-size: 1.5rem;
+        text-align: center;
+    }
+}
+
+@media (max-width: 600px) {
+    .contenedor {
+        padding: 10px;
+        padding-bottom: 180px; /* Evita que el menú inferior tape el contenido */
+        gap: 20px;
+    }
+
+    .previa {
+        padding: 15px;
+        border-radius: 15px;
+    }
+
+    input[type="text"], textarea {
+        font-size: 16px;
+    }
+
+    .btn-publicar {
+        position: sticky;
+        bottom: 100px; /* Lo subimos para que flote sobre el menú */
+        box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        z-index: 10;
+    }
+}
+
+/* Reset global para evitar desbordamientos */
+* {
+    box-sizing: border-box;
+}

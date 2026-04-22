@@ -1,15 +1,24 @@
 <div class="bg-[#F9F3F1] w-90  max-w-md h-auto min-h-[400px] p-5 rounded-[20px] shadow-md mx-auto">
   <div class="flex justify-between mb-7 items-center">
     <div class="flex gap-3 items-center">
-      <img class="rounded-full w-10" [src]="dataPost().profile_img" alt="imagen de perfil" (click)="this.routingElysium.goToProfile(dataPost().username);" />
+      <img class="rounded-full w-10" [src]="imgUrlProfile()" alt="imagen de perfil" (click)="this.routingElysium.goToProfile(dataPost().username);" />
       <p class="font-bold">{{ dataPost().username }}</p>
     </div>
-    <app-btnFollow class="" [username]="dataPost().username"></app-btnFollow>
   </div>
-  <img class="h-50 w-full bg-black rounded-[10px]" alt="" [src]="dataPost().img_post" />
-  <h3 class="font-bold">{{ dataPost().title }}</h3>
-  <p>{{ dataPost().description }}</p>
+  <img class="h-50 w-full bg-black rounded-[10px]" alt="" [src]="dataPost().img_post=== '' ? 'img/placeholder/publish/publish.webp':dataPost().img_post " />
+  <h3 class="font-bold cursor-pointer" [class.expanded]="isTitleExpanded()" (click)="toggleTitle()">{{ dataPost().title }}</h3>
+  <div class="caja-desc">
+    <p class="texto" [class.expanded]="isExpanded()">
+      {{ dataPost().description }}
+    </p>
+    @if (dataPost().description.length > 100) {
+      <span class="btn-mas" (click)="toggleExpand()">
+        {{ isExpanded() ? 'Ver menos' : 'Leer más...' }}
+      </span>
+    }
+  </div>
   <div class="mt-4 border-t border-gray-100">
+    @if (this.dontViewActions()) {
     <app-card-actions 
       [id]="dataPost().post_id" 
       [likes]="dataPost().likes" 
@@ -17,5 +26,6 @@
       [shareds]="dataPost().shared" 
       [isLiked]="dataPost().userLike">
     </app-card-actions>
+  }
   </div>
 </div>

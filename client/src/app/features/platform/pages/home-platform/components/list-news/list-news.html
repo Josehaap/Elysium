@@ -1,0 +1,18 @@
+
+<section class="containerListNews">
+      @for (item of news.data; track $index) {
+      <div class="containerNew">
+          <img class="imgNew" [src]="item.photo_url" alt="">
+          <div class="containerTitle">
+            <p class="titleNew">{{item.title}}</p>
+            <a [href]="item.source_url">
+              <img [src]="item.source_logo_url" alt="">
+              <p>{{item.source_name}}</p>
+            </a>
+          </div>
+          <p class="snippetNew">{{item.snippet}}</p>
+          <a [href]="item.link" class="more">Leer más</a>
+
+      </div>
+    }
+</section>

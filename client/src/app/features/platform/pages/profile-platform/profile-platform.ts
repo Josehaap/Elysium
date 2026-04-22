@@ -23,13 +23,12 @@ export class ProfilePlatform {
   protected profileApi = inject(ProfileApi);
   private urlProfile = inject(ActivatedRoute);
   private router = inject(Router);
-
+  protected imgUrlOption = TokenService.getProfileImg();
   //Atributo que determinará que el usuario que haya entrado al perfil sea igual o no al usuario logueado.
   protected isUserOrVisit: boolean = false;
   //Atributo que servirá para almacenar el username del usuario que venga de la url.
   protected usernameURL: string = '';
 
- 
 
   //*Cuando se inicie el componente vamos a comprobar que el usuario sea el usuario o sea una persona distinta.
   ngOnInit() {
@@ -38,16 +37,19 @@ export class ProfilePlatform {
       this.usernameURL = params['username'];
       this.profileApi.usernameUrl.set(params['username']);
       this.isUserOrVisit = this.usernameURL === token['username'];
+
     });
   }
 
+  
   protected profileData = linkedSignal({
     source: () => this.profileApi.getProfileInfoUser.value()?.Data,
     computation: (source) => {
       let urlMapeada: string = '';
       if (!source) return undefined;
       //* Vamos a comprobar que exista y que  no sea una url válida
-      if (source.urlImg && !source.urlImg.startsWith('http') && !source.urlImg.startsWith('blob')) {
+      if (source.urlImg === '') urlMapeada = 'img/placeholder/profile/profile_userDefault.webp'
+      else if(source.urlImg && !source.urlImg.startsWith('http') && !source.urlImg.startsWith('blob')) {
         urlMapeada = new URL(source.urlImg, environment.apiUrl).toString(); //Contruimos una nueva url válida apuntando a nuestro servidor ya sea en local o en producción
       } else urlMapeada = source.urlImg;
       return {
@@ -110,6 +112,7 @@ export class ProfilePlatform {
 
       if (this.modalData().profile_img_file) {
         formData.append('profile_img', this.modalData().profile_img_file!);
+        console.log(this.modalData().profile_img_file)
       }
       //Lanzamos la consulta
       this.profileApi.updateProfileInfo(formData, this.usernameURL);
@@ -135,14 +138,14 @@ export class ProfilePlatform {
    public goToProfile() {
     this.router.navigate([`elysium/profile/${TokenService.getUsenameToken()}`]);
     //Actualizamos nuestro señalComputada
-   
       this.modalData.set({
         name: this.profileApi.getProfileInfoUser.value()?.Data.name || '',
         surname: this.profileApi.getProfileInfoUser.value()?.Data.surname|| '',
         description_user: this.profileApi.getProfileInfoUser.value()?.Data.description_user || '',
         urlImg: this.profileApi.getProfileInfoUser.value()?.Data.urlImg|| '',
       });
-    
+
+      this.menuInVisible.set(!this.menuInVisible())
       this.showForm();
   }
 

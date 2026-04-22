@@ -3,6 +3,7 @@ import jwt from "jsonwebtoken";
 import Helper from "../utils/helpers.js";
 import Exception from "../utils/exceptions.js";
 import UserService from "../services/user.services.js";
+import UploadServices from "../core/middleware/upload.services.js";
 
 const helper = new Helper();
 export default class PostController {
@@ -19,7 +20,6 @@ export default class PostController {
 
     getDataInfo = async (req, res) => {
         try {
-            console.log(req.header('usernameNow')   );
             const token = jwt.decode(req.header("accessToken"));
                   if (!req.header('usernameNow')) throw new Exception('Faltan parámetros');
           
@@ -96,4 +96,61 @@ export default class PostController {
             
         } 
     }
+
+
+    addPost = async (req, res)=>{
+        try{
+            if (req.body.title.length > 50 || req.body.description_post.length > 200) throw new Exception('El título o la descripción son muy largos');
+            
+            const decoded = jwt.decode(req.header('accessToken'));
+            if (!decoded || !decoded.id) throw new Exception("Token inválido o no proporcionado");
+            const user_id = decoded.id;
+            
+            const imgPath = UploadServices.getRelativePath(req.file.path);
+
+            const result = await this.#postService.insertPost(user_id, req.body.title, imgPath, req.body.description_post);
+            
+            if (result.affectedRows === 1) {
+                return res.status(201).send(helper.generateLiteralObject(this.#response, [true, {}, '']));
+            } else {
+                throw new Exception("Error al crear el post en la base de datos");
+            }
+        } catch (error) {
+            if (req.file && req.file.path) {
+                UploadServices.deleteImageByPath(req.file.path);
+            }
+
+            if (error instanceof Exception) {
+                this.#valuesError[2] = error.message;
+                return res
+                .status(400)
+                .send(helper.generateLiteralObject(this.#response, this.#valuesError));
+            }
+
+            this.#valuesError[2] = error.message;
+            return res
+            .status(500)
+            .send(helper.generateLiteralObject(this.#response, this.#valuesError));
+        }
+    }
+
+    deletePost = async(req, res) => {
+        try {
+            const username = req.header('username') ?? ''; 
+            const post_id = req.header('post_id') ?? ''; 
+            const usernameNow = req.header('usernameNow') ?? '';
+             const user_id = jwt.decode(req.header('accessToken'))['id']; 
+            if (username !== usernameNow) throw new Exception('Si no es el usuario no puede eliminar la publicación');
+            if ([username, post_id, usernameNow].includes('') ) throw new Exception('Faltan parámetros'); 
+            const RESPONSE = await this.#postService.deletePost(post_id,user_id);
+            if (RESPONSE.affectedRows === 0) throw Error('Hubo un problema inesperado');
+
+            return res.status(200).send(helper.generateLiteralObject(this.#response, [true, {}, '']))
+        } catch (error) {
+            this.#valuesError[2] = error.message; 
+            if (error instanceof Exception) res.status(400).send(helper.generateLiteralObject(this.#response, this.#valuesError));
+            res.status(500).send(helper.generateLiteralObject(this.#response, this.#valuesError));
+        }
+    }
+  
 }

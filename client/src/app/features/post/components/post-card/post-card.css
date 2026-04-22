@@ -3,3 +3,55 @@
     user-select: none;
     cursor: default;
 }
+
+h3 {
+    display: block;
+    margin-top: 15px;
+    margin-bottom: 10px;
+    font-size: 1.25rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    transition: all 0.3s ease;
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+    word-break: break-word;
+}
+
+h3.expanded {
+    white-space: normal;
+    overflow: visible;
+    text-overflow: clip;
+}
+
+p.texto {
+    margin-top: 8px;
+    color: #666;
+    line-height: 1.5;
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+    word-break: break-word;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+p.texto.expanded {
+    display: block;
+    -webkit-line-clamp: unset;
+}
+
+.btn-mas {
+    color: #ff8c00;
+    font-weight: bold;
+    cursor: pointer;
+    font-size: 0.9rem;
+    margin-top: 4px;
+    display: inline-block;
+}
+
+.btn-mas:hover {
+    text-decoration: underline;
+}

@@ -7,6 +7,7 @@ import { HomePlatform } from './features/platform/pages/home-platform/home-platf
 import { authGuard } from './core/guards/token-guard';
 import { ProfilePlatform } from './features/platform/pages/profile-platform/profile-platform';
 import { SearchPlatform } from './features/platform/pages/search-platform/search-platform';
+import { AddPlatform } from './features/platform/pages/add-platform/add-platform';
 //!Exportar las rutas ha archivos independientes
 export const routes: Routes = [
   {
@@ -38,7 +39,7 @@ export const routes: Routes = [
       },
       {
         path: 'add',
-        component: Home,
+        component: AddPlatform,
       },
       {
         path: 'search',

@@ -1,32 +1,21 @@
 <section class="">
+  <article class="sectionUser">
+
   @if (homeApi.getNumberFollowed.hasValue() && homeApi.getNumberFollowed.value() > 0) {
     @if (homeApi.getDashboardInfo.hasValue()) {
       <app-post [posts]="this.homeApi.getDashboardInfo.value().dataNewPost"></app-post>
     }
   }@else {
-    <p>Ver usuarios </p>
+      <app-sugerens-user></app-sugerens-user>
   }
+    </article>
+
   <article  class="dashboard">
-    <img [src]="this.imgUser" alt="Imagen perfil" (click)="goToPerfil()" class="perfil" />
-
-    <section class="containerListNews">
-      <!--
-      @for (item of  homeApi.getNewsInfo.value()?.data; track $index) {
-      <div class="containerNew">
-          <img class="imgNew" [src]="item.photo_url" alt="">
-          <div class="containerTitle">
-            <p class="titleNew">{{item.title}}</p>
-            <a [href]="item.source_url">
-              <img [src]="item.source_logo_url" alt="">
-              <p>{{item.source_name}}</p>
-            </a>
-          </div>
-          <p class="snippetNew">{{item.snippet}}</p>
-          <a [href]="item.link" class="more">Leer más</a>
-
-      </div>
-    }-->
-  </section>
+    <img [src]="imgUrl()" alt="Imagen perfil" (click)="goToPerfil()" class="perfil" />
+    <section class="chatBot">
+      hola
+    </section>
+    <app-list-news></app-list-news>
   </article>
 
 </section>

@@ -43,7 +43,7 @@ create table if not exists follow(
 create table if not exists post(
     post_id bigint primary key AUTO_INCREMENT, 
     user_id bigint not null,
-    title varchar(200), 
+    title varchar(50), 
     img_post varchar(200),
     description_post varchar(500), 
     created_at  timestamp default current_timestamp, 

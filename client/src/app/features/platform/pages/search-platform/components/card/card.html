@@ -1,0 +1,8 @@
+ <div class="containerCardUser">
+    <div (click)="goToProfile(infoCard().username)">
+        <img [src]="urlImg()" alt="Imagen del usuario"  />
+        <P>{{ infoCard().username }}</P>
+    </div>
+    
+    <app-btnFollow [username]="infoCard().username"></app-btnFollow>
+    </div>

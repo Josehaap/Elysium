@@ -41,7 +41,7 @@ router.get("/dashboard/follows", Token.validateToken,dashboard.getNumberFollowed
 //*Obtenemos los datos del usuario en el profile
 router.get("/profile/publish", Token.validateToken, profile.getAllPostUser);
 router.get("/profile/data", Token.validateToken, profile.getAllDataUser);
-router.post("/profile/update", Token.validateToken,UploadServices.validateImg().single('profile_img'), profile.updateDataUser);
+router.post("/profile/update", Token.validateToken, UploadServices.validateImg().single('profile_img'), profile.updateDataUser);
 
 //*Comprobar si sigo a alguien o no. 
 router.get("/follow", Token.validateToken, user.iAmFollow); 
@@ -50,5 +50,6 @@ router.post("/follow", Token.validateToken,user.iWantFollower );
 //*INformacion sobre la pagina search
 
 router.get('/search/getUsers', Token.validateToken, search.getAllUser);
+router.get('/search/getUsersSameLike', Token.validateToken, search.getAllUserSameLike);
 
 export default router;

@@ -14,5 +14,8 @@ const router = express.Router(); //Generamos una instancia de las funcione de en
 router.get('/info', postController.getDataInfo);
 router.post('/Ilike', postController.insertLike);
 router.delete('/Dlike', postController.deleteLike);
+router.post('/add', Token.validateToken,UploadServices.validateImg().single('img_post'), postController.addPost);
+router.delete('/delete',Token.validateToken, postController.deletePost);
+
 
 export default router;

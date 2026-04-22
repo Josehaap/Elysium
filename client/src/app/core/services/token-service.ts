@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { jwtDecode } from 'jwt-decode';
 import { accessToken } from 'src/app/features/shared/models/shared';
+import { environment } from 'src/environments/environment';
 /**
  * Servicio que nos permitirá consultar eliminar todo sobre sessionStorage.
  */
@@ -27,6 +28,16 @@ export class TokenService {
   static  getUsenameToken ():string{
     const token:accessToken = jwtDecode(this.getToken())
     return token['username']; 
+    
+  }
+  
+  static  getProfileImg():string{
+    const token:accessToken = jwtDecode(this.getToken())
+    if (token.profile_img === '') return 'img/placeholder/profile/profile_userDefault.webp'
+    if (token.profile_img.startsWith('http') || token.profile_img.startsWith('blob')) return token['profile_img']; 
+    const newUrl = `${environment.apiUrl}/${token.profile_img}`; 
+    console.log(newUrl);
+    return newUrl; 
     
   }
 
