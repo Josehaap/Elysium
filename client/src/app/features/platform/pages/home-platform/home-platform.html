@@ -13,7 +13,36 @@
   <article  class="dashboard">
     <img [src]="imgUrl()" alt="Imagen perfil" (click)="goToPerfil()" class="perfil" />
     <section class="chatBot">
-      hola
+      <div class="chatHeader">
+        <div class="statusIndicator"></div>
+        <span>Elysium Assistant</span>
+      </div>
+      <div class="chatMessages" #chatContainer>
+        @for (msg of messages(); track $index) {
+          <div class="message" [class]="msg.sender">
+            <div class="bubble">{{ msg.text }}</div>
+          </div>
+        }
+        @if (isLoading()) {
+          <div class="message bot">
+            <div class="bubble typing-indicator">
+              <span></span><span></span><span></span>
+            </div>
+          </div>
+        }
+      </div>
+      <div class="chatInput">
+        <input 
+          #msgInput
+          type="text" 
+          placeholder="Escribe un mensaje..." 
+          (keyup.enter)="sendMessage(msgInput)"
+          [disabled]="isLoading()"
+        />
+        <button class="sendBtn" (click)="sendMessage(msgInput)" [disabled]="isLoading()">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/></svg>
+        </button>
+      </div>
     </section>
     <app-list-news></app-list-news>
   </article>

@@ -1,14 +1,29 @@
-import { httpResource } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { HttpClient, httpResource } from '@angular/common/http';
+import { inject, Injectable } from '@angular/core';
 import { jwtDecode } from 'jwt-decode';
 import { TokenService } from 'src/app/core/services/token-service';
 import { environment } from 'src/environments/environment';
 import { responseApiDashboard, ResponseApiNews } from '../models/home';
 import { accessToken } from '../../../../shared/models/shared';
+import { map } from 'rxjs';
+
 @Injectable({
   providedIn: 'root',
 })
 export class HomeApi {
+  private http = inject(HttpClient);
+
+  /**
+   * Envía un mensaje al chatbot via webhook y devuelve la respuesta
+   */
+  sendChatMessage(message: string) {
+    return this.http.post<{ response: string }[]>(
+      'http://localhost:5678/webhook-test/chat',
+      { chatInput: message }
+    ).pipe(
+      map(res => res[0]?.response ?? 'No se recibió respuesta.')
+    );
+  }
   /**
    * Función que nos devuelve un objeto literal con bastante información
    */

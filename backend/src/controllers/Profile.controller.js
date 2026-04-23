@@ -85,6 +85,7 @@ export default class ProfileController {
       const RESPONSENUMBERFOLLOWED = await this.#userService.getNumberFollowed(id);
 
       const result = {
+        user_id: id,
         username: username ?? "",
         description_user: description_user ?? "",
         name:first_name ?? '',

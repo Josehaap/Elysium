@@ -10,6 +10,7 @@ import { jwtDecode } from 'jwt-decode';
 import { TokenService } from 'src/app/core/services/token-service';
 import { accessToken } from 'src/app/features/shared/models/shared';
 import { btnFollow } from 'src/app/features/shared/btnFollow/btnFollow';
+import { ChatApi } from '../chat-platform/services/chat-api';
 
 @Component({
   selector: 'app-profile-platform',
@@ -28,6 +29,8 @@ export class ProfilePlatform {
   protected isUserOrVisit: boolean = false;
   //Atributo que servirá para almacenar el username del usuario que venga de la url.
   protected usernameURL: string = '';
+  // Inyección del servicio de chat para iniciar conversaciones
+  private chatApi = inject(ChatApi);
 
 
   //*Cuando se inicie el componente vamos a comprobar que el usuario sea el usuario o sea una persona distinta.
@@ -147,6 +150,24 @@ export class ProfilePlatform {
 
       this.menuInVisible.set(!this.menuInVisible())
       this.showForm();
+  }
+
+  /**
+   * Inicia una conversación con el usuario del perfil.
+   * Llama al endpoint /chat/start y luego navega a la página de chat.
+   */
+  startChatWithUser() {
+    const targetUserId = this.profileData()?.user_id;
+    if (!targetUserId) return;
+
+    this.chatApi.startChat(targetUserId).subscribe({
+      next: () => {
+        this.router.navigate(['/elysium/chat']);
+      },
+      error: (err) => {
+        console.error('Error al iniciar el chat:', err);
+      },
+    });
   }
 
   public logout = () => {

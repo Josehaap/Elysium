@@ -1,0 +1,160 @@
+<!-- 
+  Chat Platform - Interfaz de mensajería tipo Instagram.
+  
+  Estructura de dos paneles:
+    - Panel izquierdo: lista de conversaciones (sidebar)
+    - Panel derecho: chat activo con mensajes y input de escritura
+-->
+<section class="chatLayout">
+
+  <!-- ========================================= -->
+  <!-- PANEL IZQUIERDO: Lista de conversaciones  -->
+  <!-- ========================================= -->
+  <aside class="chatSidebar">
+
+    <!-- Cabecera del sidebar con título -->
+    <div class="sidebarHeader">
+      <h2>Mensajes</h2>
+    </div>
+
+    <!-- Lista de chats -->
+    <div class="chatList">
+      @if (chatApi.getChatList.hasValue() && chatApi.getChatList.value()!.length > 0) {
+        @for (chat of chatApi.getChatList.value(); track chat.chat_id) {
+          <div 
+            class="chatItem" 
+            [class.active]="selectedChat()?.chat_id === chat.chat_id"
+            (click)="selectChat(chat)"
+          >
+            <!-- Avatar del otro usuario -->
+            <div class="chatItemAvatar">
+              <img 
+                [src]="getProfileImgUrl(chat.other_profile_img)" 
+                [alt]="chat.other_username" 
+              />
+              <!-- Indicador de mensajes no leídos -->
+              @if (chat.unread_count > 0) {
+                <span class="unreadBadge">{{ chat.unread_count }}</span>
+              }
+            </div>
+
+            <!-- Información del chat -->
+            <div class="chatItemInfo">
+              <div class="chatItemTop">
+                <span class="chatItemName">{{ chat.other_username }}</span>
+                <span class="chatItemTime">{{ formatChatDate(chat.last_message_at) }}</span>
+              </div>
+              <p class="chatItemLastMsg" [class.unread]="chat.unread_count > 0">
+                {{ chat.last_message || 'Inicia la conversación...' }}
+              </p>
+            </div>
+          </div>
+        }
+      } @else {
+        <!-- Estado vacío: sin conversaciones -->
+        <div class="emptyState">
+          <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="m3 21 1.9-5.7a8.5 8.5 0 1 1 3.8 3.8z"/>
+          </svg>
+          <p>No tienes conversaciones aún</p>
+          <span>Busca a alguien para empezar a chatear</span>
+        </div>
+      }
+    </div>
+  </aside>
+
+  <!-- ========================================= -->
+  <!-- PANEL DERECHO: Chat activo                -->
+  <!-- ========================================= -->
+  <main class="chatMain">
+    @if (selectedChat()) {
+      
+      <!-- Cabecera del chat activo -->
+      <div class="chatMainHeader">
+        <img 
+          [src]="getProfileImgUrl(selectedChat()!.other_profile_img)" 
+          [alt]="selectedChat()!.other_username" 
+          class="chatMainAvatar"
+        />
+        <div class="chatMainUserInfo">
+          <span class="chatMainUsername">{{ selectedChat()!.other_username }}</span>
+        </div>
+      </div>
+
+      <!-- Contenedor de mensajes -->
+      <div class="chatMainMessages" #messagesContainer>
+        @if (loadingMessages()) {
+          <!-- Indicador de carga de mensajes -->
+          <div class="loadingMessages">
+            <div class="spinner"></div>
+            <span>Cargando mensajes...</span>
+          </div>
+        } @else {
+          @if (messages().length === 0) {
+            <!-- Sin mensajes en este chat -->
+            <div class="noMessages">
+              <p>¡Di hola! 👋</p>
+              <span>Envía el primer mensaje para iniciar la conversación</span>
+            </div>
+          } @else {
+            @for (msg of messages(); track msg.message_id) {
+              <div 
+                class="messageRow" 
+                [class.sent]="msg.user_send_id === currentUserId"
+                [class.received]="msg.user_send_id !== currentUserId"
+              >
+                <!-- Avatar del remitente (solo para mensajes recibidos) -->
+                @if (msg.user_send_id !== currentUserId) {
+                  <img 
+                    [src]="getProfileImgUrl(msg.sender_profile_img)" 
+                    [alt]="msg.sender_username" 
+                    class="msgAvatar"
+                  />
+                }
+
+                <!-- Burbuja del mensaje -->
+                <div class="msgBubble">
+                  <p class="msgContent">{{ msg.content }}</p>
+                  <span class="msgTime">
+                    {{ msg.sennt_at | date:'HH:mm' }}
+                  </span>
+                </div>
+              </div>
+            }
+          }
+        }
+      </div>
+
+      <!-- Input de envío de mensajes -->
+      <div class="chatMainInput">
+        <input 
+          #msgInput
+          type="text" 
+          placeholder="Escribe un mensaje..."
+          (keyup.enter)="sendMessage(msgInput)"
+          [disabled]="sendingMessage()"
+        />
+        <button 
+          class="sendBtn" 
+          (click)="sendMessage(msgInput)" 
+          [disabled]="sendingMessage()"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="m22 2-7 20-4-9-9-4Z"/>
+            <path d="M22 2 11 13"/>
+          </svg>
+        </button>
+      </div>
+
+    } @else {
+      <!-- Estado sin chat seleccionado -->
+      <div class="noChatSelected">
+        <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round">
+          <path d="m3 21 1.9-5.7a8.5 8.5 0 1 1 3.8 3.8z"/>
+        </svg>
+        <h3>Tus mensajes</h3>
+        <p>Selecciona una conversación para empezar a chatear</p>
+      </div>
+    }
+  </main>
+</section>

@@ -22,8 +22,8 @@
       <p>No hay usuarios</p>
     }
   } @else {
-     @if (searchApi.getAllUser.hasValue()) {
-       <app-list-card [listInfoCard]="searchApi.getAllUser.value().Data"></app-list-card>
-     }
+    @if (searchApi.getAllUser.hasValue()) {
+      <app-list-card [listInfoCard]="searchApi.getAllUser.value().Data"></app-list-card>
+    }
   }
 </section>

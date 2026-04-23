@@ -21,6 +21,7 @@ export interface Post {
 }
 
 export interface Data {
+  user_id: number;
   username: string;
   description_user: string;
   name: string;

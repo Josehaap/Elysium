@@ -1,32 +1,27 @@
-.containerSearch{
-    width: 100%;
-    height: 90%;
-
+.containerSearch {
+  width: 100%;
+  height: 90%;
 }
 
-.containerInput{
-    margin: auto;
-    width: 50%;
-    height: 50px;
-    display: flex;
-    align-items: center;
-    padding: 20px;
-    gap: 30px;
-    margin-bottom: 30px;
-    border-radius: 25px;
-    background-color: rgba(225, 224, 224, 0.322);
+.containerInput {
+  margin: auto;
+  width: 50%;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  padding: 20px;
+  gap: 30px;
+  margin-bottom: 30px;
+  border-radius: 25px;
+  background-color: rgba(225, 224, 224, 0.322);
 }
-input{
-    width: 90%;
-
+input {
+  width: 90%;
 }
-input:focus{
-    outline: none;
-
+input:focus {
+  outline: none;
 }
 
-
-p{
-    text-align: center;
-    
+p {
+  text-align: center;
 }
