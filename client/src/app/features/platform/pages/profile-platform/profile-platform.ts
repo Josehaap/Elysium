@@ -14,7 +14,7 @@ import { ChatApi } from '../chat-platform/services/chat-api';
 
 @Component({
   selector: 'app-profile-platform',
-  imports: [Posts, FormsModule, Options, btnFollow, RouterLink],
+  imports: [Posts, FormsModule, Options, btnFollow],
   templateUrl: './profile-platform.html',
   styleUrl: './profile-platform.css',
 })
@@ -183,5 +183,18 @@ export class ProfilePlatform {
   public logout = () => {
     TokenService.logout();
     window.location.reload();
+  };
+  public deleteUser = () => {
+    this.profileApi.deleteUser().subscribe({
+      next: (res)=>{
+        console.log(res); 
+        TokenService.logout();
+        window.location.reload();
+
+      },
+      error:(res)=>{
+        console.log(res); 
+      }
+    }); 
   };
 }

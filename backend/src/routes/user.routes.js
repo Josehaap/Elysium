@@ -51,5 +51,5 @@ router.post("/follow", Token.validateToken,user.iWantFollower );
 
 router.get('/search/getUsers', Token.validateToken, search.getAllUser);
 router.get('/search/getUsersSameLike', Token.validateToken, search.getAllUserSameLike);
-
+router.delete('/delete', user.deleteUser)
 export default router;

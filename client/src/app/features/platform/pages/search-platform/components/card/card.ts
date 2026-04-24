@@ -21,7 +21,6 @@ export class Card {
 
   protected urlImg = computed(()=>{
     let img = this.infoCard().profile_img; 
-    console.log(img);
     if(img === '') img = 'img/placeholder/profile/profile_userDefault.webp'; 
     else if (img.startsWith('http') || img.startsWith('blob')) return img; 
     else {

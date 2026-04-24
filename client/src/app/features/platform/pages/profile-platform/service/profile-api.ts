@@ -56,6 +56,12 @@ export class ProfileApi {
       });
     }
 
+    public deleteUser = () => this.http.delete<boolean>(`${environment.apiUrl}/user/delete`, {
+        headers: {
+          accessToken: TokenService.getToken() || '',
+        }
+      })
+      
     public updateChat = () => this.http.post<boolean>(`${environment.apiUrl}/chat/insertChat`, {}, {
         headers: {
           accessToken: TokenService.getToken() || '',

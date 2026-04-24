@@ -17,7 +17,6 @@ router.get("/exists" , Token.validateToken, chatController.comprobateExist);
 router.get("/getChats",Token.validateToken, async (req, res)=>{
     const token = jwt.decode(req.header('accessToken')); 
     const id = token['id']; 
-    console.log(id); 
     const RESPONSE = await pool.query(
         `SELECT c.chat_id,
         CASE 
@@ -71,9 +70,9 @@ router.get("/getChats",Token.validateToken, async (req, res)=>{
         WHERE c.user_1 = ? OR c.user_2 = ?
         ORDER BY last_message_at DESC;`, [id, id, id, id, id, id]);
 
-    console.log(RESPONSE)
     res.status(200).send(RESPONSE[0]);
 });
+
 router.get("/messages" , Token.validateToken, chatController.getMessage); 
 
 

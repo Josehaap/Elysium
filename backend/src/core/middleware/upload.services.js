@@ -14,9 +14,12 @@ export default class UploadServices {
     static #storage = multer.diskStorage({
         destination: (req, file, cb)=>{ 
             try {
-                const token = req.header('accessToken'); 
+                const token = req.header('accessToken')?? ''; 
+                let userFolder = '';
+                if (token !='') userFolder = jwt.decode(token)['username'] ? jwt.decode(token)['username'] : 'unnamed';
+                else userFolder = req.body['username'];
                 //Comprobaremos que la carpeta del usuario exista (si no lo manda, usamos fallback)
-                const userFolder = jwt.decode(token)['username'] ? jwt.decode(token)['username'] : 'unnamed';
+                
                 const carptPathUser = (!req.header('submitPost') || req.header('submitPost') === '0')? path.join(UploadServices.#pathImg, userFolder, "fotoPerfil"): path.join(UploadServices.#pathImg, userFolder, "post") ;
                 console.log('slow cortisol');
                 if (!fs.existsSync(carptPathUser)) {

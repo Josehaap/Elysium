@@ -5,11 +5,12 @@ import User from "../core/model/User.js";
 import Exception from "../utils/exceptions.js";
 import bcrypt from "bcrypt";
 import Email from "../utils/email/Email.js";
-import crypto from 'crypto'; 
+import crypto from "crypto";
 const helper = new Helper();
 import jwt from "jsonwebtoken";
 import UploadServices from "../core/middleware/upload.services.js";
 import pool from "../core/config/database/db.js";
+import { resolveNaptr } from "dns";
 /**
  * @class UserController
  * @description Clase que es utilizada para aplicar la lógica de las inteeraciones en las rutas, especialida para ser un puente entre la capa de rutas y la capa
@@ -42,7 +43,9 @@ export default class UserController {
       if (!RESPONSE)
         return res
           .status(400)
-          .send(helper.generateLiteralObject(this.#response, this.#valuesError));
+          .send(
+            helper.generateLiteralObject(this.#response, this.#valuesError),
+          );
       //Si existe pero no hay nada respondemos la petición
       if (RESPONSE.length !== 0)
         return res
@@ -65,11 +68,9 @@ export default class UserController {
             ]),
           );
     } catch (error) {
-      //Modificamos el mensaje de error.
-      this.#valuesError[2] = error.message;
-      return res
-        .status(400)
-        .send(helper.generateLiteralObject(this.#response, this.#valuesError));
+      this.#valuesError[2] = (error instanceof Exception) ? error.message: this.#valuesError[2]; 
+      
+      res.status((error instanceof Exception) ? 400 : 500).send(helper.generateLiteralObject(this.#response, this.#valuesError));
     }
   };
 
@@ -81,7 +82,6 @@ export default class UserController {
    */
   userRegister = async (req, res) => {
     try {
-      
       //Comprobamos las claves y luego los valores.
       UserValidators.validateKeys(req.body);
       UserValidators.validateValues(req.body);
@@ -93,9 +93,10 @@ export default class UserController {
       await user.setPassword(data.password);
       user.surnames = data.surnames;
       //Si el usuario ha dicho que es una empresa por defecto en la base de datos su cuenta estará desactividada.
-      user.iAmEnterprise = (data.iAmEnterprise === "true" || data.iAmEnterprise === true) ? 0 : 1;
+      user.iAmEnterprise =
+        data.iAmEnterprise === "true" || data.iAmEnterprise === true ? 0 : 1;
       // Comprobamos si multer capturó un archivo e inyectamos la ruta al usuario para insertarlo en BD
-      
+
       if (req.file) {
         user.profile_img = UploadServices.getRelativePath(req.file.path);
       } else {
@@ -118,33 +119,43 @@ export default class UserController {
       // Se lo asignamos dinámicamente al objeto user para enviarlo al servicio
       user.activationToken = tokenActivacion;
       //? - Insertamos el usuario
-      //*El usuario se logeará pero sin estár activado. 
+      //*El usuario se logeará pero sin estár activado.
       const RESPONSE = await this.#userService.insertUser(user);
       //Si recibimos null significa que ha sido un error critico del servidor.
       if (RESPONSE === null)
         return res
           .status(500)
-          .send(helper.generateLiteralObject(this.#response, this.#valuesError));
+          .send(
+            helper.generateLiteralObject(this.#response, this.#valuesError),
+          );
       //Encambio si recibimos false significa que el usuario ya está registrado
       if (!RESPONSE[0])
         return res
           .status(409)
           .send(helper.generateLiteralObject(this.#response, RESPONSE));
 
-      //Si todo está genial y es una empresa enviamos un correo - correo de activación 
-      if (user.iAmEnterprise === 0){  //Significa que es una empresa
-        Email.sendEmail(user.email, "Login Empresa", {type:"Enterprise", nameFile: "activate.html", token: user.activationToken})
-      } else Email.sendEmail(user.email, "Login usuario Normal", {type:"Normal", nameFile: "activate.html", token:user.activationToken})
-      
-      
+      //Si todo está genial y es una empresa enviamos un correo - correo de activación
+      if (user.iAmEnterprise === 0) {
+        //Significa que es una empresa
+        Email.sendEmail(user.email, "Login Empresa", {
+          type: "Enterprise",
+          nameFile: "activate.html",
+          token: user.activationToken,
+        });
+      } else
+        Email.sendEmail(user.email, "Login usuario Normal", {
+          type: "Normal",
+          nameFile: "activate.html",
+          token: user.activationToken,
+        });
+
       return res
         .status(200)
         .send(helper.generateLiteralObject(this.#response, RESPONSE));
     } catch (error) {
-      this.#valuesError[2] = error.message;
-      res
-        .status(400)
-        .send(helper.generateLiteralObject(this.#response, this.#valuesError));
+      this.#valuesError[2] = (error instanceof Exception) ? error.message: this.#valuesError[2]; 
+      
+      res.status((error instanceof Exception) ? 400 : 500).send(helper.generateLiteralObject(this.#response, this.#valuesError));
     }
   };
 
@@ -184,69 +195,79 @@ export default class UserController {
             ]),
           );
       }
-      const { user_id, username, password, email, profile_img, is_active } = USERNAMEEXIST.length > 0 ? USERNAMEEXIST[0] : EMAILEXIST[0];
+      const { user_id, username, password, email, profile_img, is_active } =
+        USERNAMEEXIST.length > 0 ? USERNAMEEXIST[0] : EMAILEXIST[0];
 
-       //Primero comprorameos que esté logeado: Sino saltará un error indicando que no pudeo hacer login: 
-      if(is_active === 0) throw new Exception ("No se puede hacer login ya que no has activado la cuenta. "); 
+      //Primero comprorameos que esté logeado: Sino saltará un error indicando que no pudeo hacer login:
+      if (is_active === 0)
+        throw new Exception(
+          "No se puede hacer login ya que no has activado la cuenta. ",
+        );
       //Teniendo el response haremos primero una comprobación con el password:
 
-      const esValido = true ;//bcrypt.compareSync(passLogin, password);
-      if (esValido){
-        //Generamos un token único con esos datos: 
+      const esValido = true; //bcrypt.compareSync(passLogin, password);
+      if (esValido) {
+        //Generamos un token único con esos datos:
         const accessToken = jwt.sign(
-          //Almacenamos los datos en el token: 
+          //Almacenamos los datos en el token:
           {
-            id:user_id, 
-            username: username, 
-            profile_img: profile_img
+            id: user_id,
+            username: username,
+            profile_img: profile_img,
           },
-          process.env.JWT_ACCESS_SECRET, //Con esto firmamos nuestro token que es nuestra. 
-          {expiresIn: "15m"} //Configuración del token 
-        )
+          process.env.JWT_ACCESS_SECRET, //Con esto firmamos nuestro token que es nuestra.
+          { expiresIn: "15m" }, //Configuración del token
+        );
         //Este token se utilizará para volver a pedir un accesstoken
         const refreshToken = jwt.sign(
-          //Almacenamos los datos en el token: 
+          //Almacenamos los datos en el token:
           {
-            id:user_id, 
+            id: user_id,
           },
-          process.env.JWT_ACCESS_SECRET, 
-          {expiresIn: "30d"} 
-        )
+          process.env.JWT_ACCESS_SECRET,
+          { expiresIn: "30d" },
+        );
         return res
           .status(200)
           .send(
-            helper.generateLiteralObject(this.#response, [true, {isValid:esValido, accessToken: accessToken, refreshToken:refreshToken}, ""]),
+            helper.generateLiteralObject(this.#response, [
+              true,
+              {
+                isValid: esValido,
+                accessToken: accessToken,
+                refreshToken: refreshToken,
+              },
+              "",
+            ]),
           );
-      } return res
-          .status(400)
-          .send(
-            helper.generateLiteralObject(this.#response, [false, {exits:false}, "La contraseña no es válida"]),
-          );
-       
-    } catch (error) {
-      if (error instanceof Exception) {
-        this.#valuesError[2] = error.message;
-        return res
-          .status(401)
-          .send(helper.generateLiteralObject(this.#response, this.#valuesError));
       }
-      console.error(error.message);
       return res
-        .status(500)
-        .send(helper.generateLiteralObject(this.#response, this.#valuesError));
+        .status(400)
+        .send(
+          helper.generateLiteralObject(this.#response, [
+            false,
+            { exits: false },
+            "La contraseña no es válida",
+          ]),
+        );
+    } catch (error) {
+      this.#valuesError[2] = (error instanceof Exception) ? error.message: this.#valuesError[2]; 
+      
+      res.status((error instanceof Exception) ? 400 : 500).send(helper.generateLiteralObject(this.#response, this.#valuesError));
     }
   };
 
-  //!Cambiar la impmentacion no veo ogico enviar una redireccion mejor falase o true 
+  //!Cambiar la impmentacion no veo ogico enviar una redireccion mejor falase o true
   activateUser = async (req, res) => {
     try {
       // Sacamos el token de localhost:3000/user/userActivation?token=d25f7...
-      const { token } = req.query; 
+      const { token } = req.query;
 
       if (!token) throw new Exception("No existe el token enviado");
 
       // Llamamos a nuestro servicio de base de datos
-      const isValidActivation = await this.#userService.activateUserAccount(token);
+      const isValidActivation =
+        await this.#userService.activateUserAccount(token);
 
       if (isValidActivation === true) {
         return res.redirect("http://localhost:4200/login?activated=true");
@@ -254,76 +275,107 @@ export default class UserController {
         return res.redirect("http://localhost:4200/login?activated=false");
       }
     } catch (error) {
-      console.error(error.message);
-      return res.redirect("http://localhost:4200/login?activated=error");
+      this.#valuesError[2] = (error instanceof Exception) ? error.message: this.#valuesError[2]; 
+      
+      res.status((error instanceof Exception) ? 400 : 500).send(helper.generateLiteralObject(this.#response, this.#valuesError));
     }
   };
 
-  iAmFollow = async(req, res) => {
+  iAmFollow = async (req, res) => {
     try {
-      if (!req.header('usernameNow')) throw new Exception('No tenemos al usuario'); 
-      const token = jwt.decode(req.header('accessToken'));
-      
-      if (req.header('usernameNow') === token['username']) throw new Exception('No puedes seguirte a ti mismo')
-      
-      const RESPONSEDATAUSER = await this.#userService.getUserBy('username', req.header('usernameNow'));
-      
-      if(RESPONSEDATAUSER.length === 0) throw new Exception('No existe ese usuario'); 
+      if (!req.header("usernameNow"))
+        throw new Exception("No tenemos al usuario");
+      const token = jwt.decode(req.header("accessToken"));
 
-      const RESPONSEFOLLOW = await this.#userService.iAmFollower([token['id'],RESPONSEDATAUSER[0]['user_id']]);
+      if (req.header("usernameNow") === token["username"])
+        throw new Exception("No puedes seguirte a ti mismo");
 
-      if (!RESPONSEFOLLOW) throw new Error('Hubo un error critico');
-      
+      const RESPONSEDATAUSER = await this.#userService.getUserBy(
+        "username",
+        req.header("usernameNow"),
+      );
+
+      if (RESPONSEDATAUSER.length === 0)
+        throw new Exception("No existe ese usuario");
+
+      const RESPONSEFOLLOW = await this.#userService.iAmFollower([
+        token["id"],
+        RESPONSEDATAUSER[0]["user_id"],
+      ]);
+
+      if (!RESPONSEFOLLOW) throw new Error("Hubo un error critico");
+
       return res.status(200).send(RESPONSEFOLLOW.length === 1);
-      
     } catch (error) {
-      if(error instanceof Exception){ 
-        this.#valuesError[2]  = error.message;
-        return res.status(401).send(helper.generateLiteralObject(this.#response, this.#valuesError))
-      }
-      return res.status(500).send(helper.generateLiteralObject(this.#response, this.#valuesError))
+      this.#valuesError[2] = (error instanceof Exception) ? error.message: this.#valuesError[2]; 
+      
+      res.status((error instanceof Exception) ? 400 : 500).send(helper.generateLiteralObject(this.#response, this.#valuesError));
     }
-    
-  }
+  };
 
-  iWantFollower = async(req, res) => {
+  iWantFollower = async (req, res) => {
     try {
+      if (!req.header("usernameNow"))
+        throw new Exception("No tenemos al usuario");
+      const token = jwt.decode(req.header("accessToken"));
+      if (req.header("usernameNow") === token["username"])
+        throw new Exception("No puedes seguirte a ti mismo");
 
-      if (!req.header('usernameNow')) throw new Exception('No tenemos al usuario'); 
-      const token = jwt.decode(req.header('accessToken'));
-      if (req.header('usernameNow') === token['username']) throw new Exception('No puedes seguirte a ti mismo')
+      const RESPONSEDATAUSER = await this.#userService.getUserBy(
+        "username",
+        req.header("usernameNow"),
+      );
 
-      const RESPONSEDATAUSER = await this.#userService.getUserBy('username', req.header('usernameNow'));
+      if (RESPONSEDATAUSER.length === 0)
+        throw new Exception("No existe ese usuario");
 
-      if(RESPONSEDATAUSER.length === 0) throw new Exception('No existe ese usuario'); 
+      const RESPONSEFOLLOW = await this.#userService.iAmFollower([
+        token["id"],
+        RESPONSEDATAUSER[0]["user_id"],
+      ]);
 
-      const RESPONSEFOLLOW = await this.#userService.iAmFollower([token['id'],RESPONSEDATAUSER[0]['user_id']]);
+      if (!RESPONSEFOLLOW) throw new Error("Hubo un error critico");
 
-      if (!RESPONSEFOLLOW) throw new Error('Hubo un error critico');
+      if (RESPONSEFOLLOW.length === 1) {
+        const RESPONSEDELFOLLOW = await this.#userService.deleteFollow([
+          token["id"],
+          RESPONSEDATAUSER[0]["user_id"],
+        ]);
 
-      if (RESPONSEFOLLOW.length === 1 ) {
-        const RESPONSEDELFOLLOW  = await this.#userService.deleteFollow([token['id'], RESPONSEDATAUSER[0]['user_id']]);
-
-      if (RESPONSEDELFOLLOW['affectedRows'] ===  0) throw new Error('Problema a insertar el follow');
+        if (RESPONSEDELFOLLOW["affectedRows"] === 0)
+          throw new Error("Problema a insertar el follow");
         return res.status(200).send(false);
-      }else{
-        const RESPONSESETFOLLOW = await this.#userService.insertFollow([token['id'], RESPONSEDATAUSER[0]['user_id']]);
-        if (RESPONSESETFOLLOW['affectedRows'] ===  0) throw new Error('Problema a eliminar el follow');
+      } else {
+        const RESPONSESETFOLLOW = await this.#userService.insertFollow([
+          token["id"],
+          RESPONSEDATAUSER[0]["user_id"],
+        ]);
+        if (RESPONSESETFOLLOW["affectedRows"] === 0)
+          throw new Error("Problema a eliminar el follow");
 
         return res.status(200).send(true);
-
       }
+   } catch (error) {
+      this.#valuesError[2] = (error instanceof Exception) ? error.message: this.#valuesError[2]; 
       
-    } catch (error) {
-      console.error(error.message)
-
-      if(error instanceof Exception){ 
-        
-        this.#valuesError[2]  = error.message;
-        return res.status(401).send(helper.generateLiteralObject(this.#response, this.#valuesError))
-      }
-      return res.status(500).send(helper.generateLiteralObject(this.#response, this.#valuesError))
+      res.status((error instanceof Exception) ? 400 : 500).send(helper.generateLiteralObject(this.#response, this.#valuesError));
     }
-    
-  }
+  };
+
+  deleteUser = async (req, res) => {
+    try {
+      const token = jwt.decode(req.header("accessToken"));
+      const id = token["id"];
+      UploadServices.deleteUserFolder(token['username']);
+      const RESPONSE = await this.#userService.deleteUser(id);
+      if (!RESPONSE) throw new Error();
+      
+     res.status(RESPONSE.affectedRows === 0 ? 400 : 200).send(helper.generateLiteralObject(RESPONSE.affectedRows !== 0))
+
+    } catch (error) {
+      this.#valuesError[2] = (error instanceof Exception) ? error.message: this.#valuesError[2]; 
+      
+      res.status((error instanceof Exception) ? 400 : 500).send(helper.generateLiteralObject(this.#response, this.#valuesError));
+    }
+  };
 }

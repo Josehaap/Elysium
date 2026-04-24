@@ -306,5 +306,15 @@ async deleteFollow(dataUser) {
       return null;
     }
   }
+
+async deleteUser(id) {
+    try {
+      const [result] = await pool.query('DELETE FROM user WHERE user_id = ?', id);
+      return result;
+    } catch (error) {
+      console.error(error);
+      return null;
+    }
+  }
 }
 

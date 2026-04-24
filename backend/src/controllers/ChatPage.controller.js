@@ -71,7 +71,7 @@ export default class ChatController{
            
             const userIdOrdenMenorAMayor = await this.comrpobateUserAndReorded(users); 
 
-            console.log(userIdOrdenMenorAMayor)
+          
 
             const RESPONSEEXIST = await  this.#chatService.comprobateChat(userIdOrdenMenorAMayor); 
 

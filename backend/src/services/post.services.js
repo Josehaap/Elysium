@@ -12,6 +12,12 @@ export default class PostService {
      * @param {*} ids array que recibie el id del suario logueado y el id sobrela informacion que se quiera scar de cierto usuairo 
      * @returns 
      */
+    async getDataPost(id){
+
+        const RESPONSESHARED = await pool.query("SELECT * from post where post_id = ?", id);
+
+        return RESPONSESHARED[0];
+    }
     async getDataRelativeWithPost(id){
 
         const RESPONSESHARED = await pool.query("SELECT JSON_OBJECT ('id', p.post_id, 'title', title,'img', img_post,'description', description_post,'likes',(select count(*) from `like` where post_id = p.post_id), 'comment', (select count(*) from comment where post_id = p.post_id),'shared',(select count(*) from shared where post_id = p.post_id), 'userLike', (exists (select  1  from `like` where user_id = ? and post_id = p.post_id))) as Data  from post p where user_id = ? ORDER BY p.created_at DESC", id);

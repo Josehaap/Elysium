@@ -8,7 +8,7 @@ import { SearchPlatformAPIResponse } from './models/search-platform';
 
 @Component({
   selector: 'app-search-platform',
-  imports: [btnFollow, ListCard],
+  imports: [ListCard],
   templateUrl: './search-platform.html',
   styleUrl: './search-platform.css',
 })

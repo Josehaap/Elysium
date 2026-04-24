@@ -142,6 +142,10 @@ export default class PostController {
              const user_id = jwt.decode(req.header('accessToken'))['id']; 
             if (username !== usernameNow) throw new Exception('Si no es el usuario no puede eliminar la publicación');
             if ([username, post_id, usernameNow].includes('') ) throw new Exception('Faltan parámetros'); 
+
+            const RESPONSEPOST= await this.#postService.getDataPost(post_id);
+            UploadServices.deleteImageByPath(RESPONSEPOST[0]['img_post']); 
+
             const RESPONSE = await this.#postService.deletePost(post_id,user_id);
             if (RESPONSE.affectedRows === 0) throw Error('Hubo un problema inesperado');
 
