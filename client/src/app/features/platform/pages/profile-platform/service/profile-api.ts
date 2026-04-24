@@ -2,7 +2,7 @@ import { httpResource,HttpClient } from '@angular/common/http';
 import { inject, Injectable, signal } from '@angular/core';
 import { TokenService } from 'src/app/core/services/token-service';
 import { environment } from 'src/environments/environment';
-import{responseApiProfilePost, responseApiProfileData, UpdateData} from '../models/profile';
+import{responseApiProfilePost, responseApiProfileData, UpdateData, responseApiProfileChat} from '../models/profile';
 @Injectable({
   providedIn: 'root',
 })
@@ -55,6 +55,25 @@ export class ProfileApi {
         }
       });
     }
+
+    public updateChat = () => this.http.post<boolean>(`${environment.apiUrl}/chat/insertChat`, {}, {
+        headers: {
+          accessToken: TokenService.getToken() || '',
+          usernameLoged: TokenService.getUsenameToken(), 
+          usernameShow: this.usernameUrl()
+        }
+      })
+    
+   
+
+    public existChat =httpResource<responseApiProfileChat>(()=>({
+        url:`${environment.apiUrl}/chat/exists`,
+        headers: {
+          accessToken: TokenService.getToken() ?? '', 
+          usernameLoged: TokenService.getUsenameToken(),
+          usernameShow :this.usernameUrl()
+        }
+      }));
 
     
       

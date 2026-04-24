@@ -3,7 +3,7 @@
  * Incluye los datos del otro participante y el último mensaje.
  */
 export interface ChatPreview {
-  chat_id: number;
+  chat_id: string;
   // Datos del otro usuario
   other_user_id: number;
   other_username: string;
@@ -33,7 +33,7 @@ export interface ChatMessage {
  * Interfaz para la respuesta al iniciar/obtener un chat.
  */
 export interface ChatStartResponse {
-  chat_id: number;
+  chat_id: string;
   user_1: number;
   user_2: number;
 }
@@ -42,6 +42,6 @@ export interface ChatStartResponse {
  * Interfaz para la respuesta al enviar un mensaje.
  */
 export interface SendMessageResponse {
-  message_id: number;
+  message_id: string;
   success: boolean;
 }

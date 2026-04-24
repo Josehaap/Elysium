@@ -31,6 +31,8 @@ export class ProfilePlatform {
   protected usernameURL: string = '';
   // Inyección del servicio de chat para iniciar conversaciones
   private chatApi = inject(ChatApi);
+  //Comrpobamos que existe un chat 
+  protected existChat = signal<boolean>(false); 
 
 
   //*Cuando se inicie el componente vamos a comprobar que el usuario sea el usuario o sea una persona distinta.
@@ -39,8 +41,7 @@ export class ProfilePlatform {
       const token: accessToken = jwtDecode(TokenService.getToken());
       this.usernameURL = params['username'];
       this.profileApi.usernameUrl.set(params['username']);
-      this.isUserOrVisit = this.usernameURL === token['username'];
-
+      this.isUserOrVisit = this.usernameURL === token['username']; 
     });
   }
 
@@ -169,6 +170,15 @@ export class ProfilePlatform {
       },
     });
   }
+
+  protected createChat(){
+    this.profileApi.updateChat().subscribe({
+      next: (res)=>{
+        this.router.navigate(['elysium/chat'])
+      }
+    })
+  }
+  protected goToChat =() => this.router.navigate(['elysium/chat'])
 
   public logout = () => {
     TokenService.logout();

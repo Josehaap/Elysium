@@ -21,11 +21,11 @@ export class ChatApi {
    * Similar a la pantalla de DMs de Instagram.
    */
   public getChatList = httpResource<ChatPreview[]>(() => ({
-    url: `${environment.apiUrl}/chat/list`,
+    url: `${environment.apiUrl}/chat/getChats`,
     method: 'GET',
     headers: {
       accessToken: TokenService.getToken(),
-    },
+    }
   }));
 
   /**
@@ -33,12 +33,14 @@ export class ChatApi {
    * @param chatId - ID del chat
    * @returns Observable con la lista de mensajes ordenados cronológicamente
    */
-  getMessages(chatId: number) {
+  getMessages(chatId: string) {
     return this.http.get<ChatMessage[]>(
       `${environment.apiUrl}/chat/messages`,
-      {
-        params: { chatId: chatId.toString() },
-        headers: { accessToken: TokenService.getToken() },
+      { 
+        headers: {
+           accessToken: TokenService.getToken() ?? '', 
+           chatId: chatId ?? ''
+          },
       }
     );
   }
@@ -49,7 +51,7 @@ export class ChatApi {
    * @param content - Contenido del mensaje
    * @returns Observable con la respuesta del servidor
    */
-  sendMessage(chatId: number, content: string) {
+  sendMessage(chatId: string, content: string) {
     return this.http.post<SendMessageResponse>(
       `${environment.apiUrl}/chat/send`,
       { chatId, content },

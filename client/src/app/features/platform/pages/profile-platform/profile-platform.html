@@ -1,7 +1,5 @@
 @if (this.profileApi.getProfileInfoUser.hasValue()) {
-  <section
-    class="w-full p-8 md:p-9 flex flex-col md:flex-row gap-12 items-center md:items-start "
-  >
+  <section class="w-full p-8 md:p-9 flex flex-col md:flex-row gap-12 items-center md:items-start">
     <div class="flex flex-col items-center gap-6">
       <div class="relative group" [class.cursor-pointer]="isEditing()">
         <input
@@ -72,17 +70,21 @@
         </svg>
       </div>
       <!-- Buttons -->
-      @if (this.isUserOrVisit) {
-        <button
-          (click)="showForm()"
-          [class]="isEditing() ? 'isFollowOrEditing' : 'isNotFollowOrNotEditing'"
-        >
-          {{ isEditing() ? 'Guardar' : 'Editar perfil' }}
-        </button>
-      } @else {
-        <app-btnFollow [username]="usernameURL" class="w-full"></app-btnFollow>
-        
-      }
+      <div class="flex gap-2 w-60 ">
+        @if (this.isUserOrVisit) {
+          <button
+            (click)="showForm()"
+            [class]="isEditing() ? 'isFollowOrEditing' : 'isNotFollowOrNotEditing'"
+          >
+            {{ isEditing() ? 'Guardar' : 'Editar perfil' }}
+          </button>
+        } @else {
+          
+          <app-btnFollow [username]="usernameURL" class="w-full"></app-btnFollow>
+          <button [class]="'isNotFollowOrNotEditing'" (click)="profileApi.existChat.value()?.Data ? goToChat() : createChat()">{{profileApi.existChat.value()?.Data? 'Ir al chat': 'Iniciar chat'}}</button>
+
+        }
+      </div>
     </div>
 
     <!-- Columna de Información -->
@@ -113,7 +115,9 @@
 
       <div class="max-w-xl">
         @if (!isEditing()) {
-          <p class="text-lg text-gray-600 leading-relaxed font-medium  md:w-195 descripcion  text-left">
+          <p
+            class="text-lg text-gray-600 leading-relaxed font-medium md:w-195 descripcion text-left"
+          >
             {{ profileData()?.description_user }}
           </p>
         } @else {
@@ -142,12 +146,8 @@
           >
         </div>
         <div class="flex flex-col items-center md:items-start">
-          <span class="text-2xl font-black text-gray-900">{{
-            profileData()?.numberFollowed 
-          }}</span>
-          <span class="text-xs uppercase font-bold text-gray-400 tracking-widest"
-            >Seguidos</span
-          >
+          <span class="text-2xl font-black text-gray-900">{{ profileData()?.numberFollowed }}</span>
+          <span class="text-xs uppercase font-bold text-gray-400 tracking-widest">Seguidos</span>
         </div>
       </div>
     </div>
@@ -187,25 +187,30 @@
             [iWantImg]="true"
             [img]="imgUrlOption"
             [title]="'Configuración del perfil'"
-            [subtitle]="'Podrás cambiar la información visible de tu cuenta, ya sea nombre de usuario, description, etc'"
-            (click)=" goToProfile(); "
+            [subtitle]="
+              'Podrás cambiar la información visible de tu cuenta, ya sea nombre de usuario, description, etc'
+            "
+            (click)="goToProfile()"
           ></app-options>
-          <hr/>
+          <hr />
           <app-options
             [name]="'Interfaz'"
             [iWantImg]="false"
             [title]="'Configuración del perfil'"
-            [subtitle]="'Podrás cambiar la información visible de tu cuenta, ya sea nombre de usuario, description, etc'"
+            [subtitle]="
+              'Podrás cambiar la información visible de tu cuenta, ya sea nombre de usuario, description, etc'
+            "
             [iWantCheck]="true"
-
           ></app-options>
           <app-options
             [name]="'Sesión'"
             [iWantImg]="false"
             [title]="'Cerrar sesión'"
-            [subtitle]="'Se cerrará la sessión por lo cual se le redigirá a la landingpage de la plataforma'"
+            [subtitle]="
+              'Se cerrará la sessión por lo cual se le redigirá a la landingpage de la plataforma'
+            "
             [iWantCheck]="false"
-            (click)= "logout()"
+            (click)="logout()"
           ></app-options>
 
           <app-options
@@ -229,6 +234,6 @@
   <app-posts [listPost]="this.profileApi.getProfileInfoPublish.value().Data"></app-posts>
 } @else {
   <section class="placeholder-container">
-    <img class="placeholder" src="/img/placeholder/profile/profile_NoPublication.png" alt="">
+    <img class="placeholder" src="/img/placeholder/profile/profile_NoPublication.png" alt="" />
   </section>
 }

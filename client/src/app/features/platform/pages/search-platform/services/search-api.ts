@@ -10,6 +10,7 @@ import { SearchPlatformAPIResponse } from '../models/search-platform';
 
 export class SearchApi {
   protected http = inject(HttpClient); 
+  
   public getAllUser = httpResource<SearchPlatformAPIResponse>(()=>({
     url:`${environment.apiUrl}/user/search/getUsers`,
     headers: {
@@ -17,7 +18,7 @@ export class SearchApi {
     }
   }));
 
-  public getUserSameLike =(input:string)=> this.http.get<SearchPlatformAPIResponse>(`${environment.apiUrl}/user/search/getUsersSameLike`,{
+  public getUserSameLike = (input:string) => this.http.get<SearchPlatformAPIResponse>(`${environment.apiUrl}/user/search/getUsersSameLike`,{
     headers: {
       accessToken: TokenService.getToken(), 
       username : input

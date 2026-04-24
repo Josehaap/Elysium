@@ -3,6 +3,11 @@ export interface responseApiProfilePost{
     Data: Post[];
     Error:string
 }
+export interface responseApiProfileChat{
+    Success: boolean; 
+    Data: boolean;
+    Error:string
+}
 export interface responseApiProfileData{
     Success: boolean; 
     Data: Data;
