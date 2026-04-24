@@ -10,3 +10,10 @@ section{
 section::-webkit-scrollbar{
     display: none;
 }
+
+@media (max-width: 500px){
+  section{
+    height: 85%;
+  }
+ 
+}

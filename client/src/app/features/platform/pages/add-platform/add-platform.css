@@ -117,12 +117,7 @@ textarea {
         font-size: 16px;
     }
 
-    .btn-publicar {
-        position: sticky;
-        bottom: 100px; /* Lo subimos para que flote sobre el menú */
-        box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-        z-index: 10;
-    }
+    
 }
 
 /* Reset global para evitar desbordamientos */

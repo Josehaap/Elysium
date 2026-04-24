@@ -107,3 +107,16 @@ section.placeholder-container{
     width: 40%; 
     -webkit-user-drag: none;
 }
+
+
+
+@media (max-width: 600px) {
+    .menuMobile{
+        position: absolute;
+        top: 40px;
+        right: 40px;
+    }
+    .toggleMenu > div.menu  {
+        width: 100vw;
+    }
+}

@@ -13,3 +13,10 @@
 .containerInfoUser::-webkit-scrollbar{
     display: none;
 }
+
+@media (max-width: 500px) {
+  
+  .containerInfoUser{
+    width: 100%;
+  }
+}

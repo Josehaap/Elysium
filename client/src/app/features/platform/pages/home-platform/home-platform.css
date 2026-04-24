@@ -243,3 +243,12 @@ section {
   transform: none;
   background: #2c3e50;
 }
+
+@media (max-width: 500px){
+  .sectionUser{
+    width: 100%;
+  }
+  .dashboard{
+    display: none;
+  }
+}

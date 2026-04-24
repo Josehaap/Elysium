@@ -2,7 +2,6 @@
   <section
     class="w-full p-8 md:p-9 flex flex-col md:flex-row gap-12 items-center md:items-start "
   >
-    <!-- Columna de Imagen -->
     <div class="flex flex-col items-center gap-6">
       <div class="relative group" [class.cursor-pointer]="isEditing()">
         <input
@@ -114,7 +113,7 @@
 
       <div class="max-w-xl">
         @if (!isEditing()) {
-          <p class="text-lg text-gray-600 leading-relaxed font-medium w-195 descripcion">
+          <p class="text-lg text-gray-600 leading-relaxed font-medium  md:w-195 descripcion  text-left">
             {{ profileData()?.description_user }}
           </p>
         } @else {
@@ -155,6 +154,7 @@
     @if (menuInVisible()) {
       <div>
         <svg
+          class="menuMobile"
           (click)="this.menuInVisible.set(!this.menuInVisible())"
           width="40"
           height="40"
