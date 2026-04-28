@@ -36,7 +36,6 @@ export class TokenService {
     if (token.profile_img === '') return 'img/placeholder/profile/profile_userDefault.webp'
     if (token.profile_img.startsWith('http') || token.profile_img.startsWith('blob')) return token['profile_img']; 
     const newUrl = `${environment.apiUrl}/${token.profile_img}`; 
-    console.log(newUrl);
     return newUrl; 
     
   }

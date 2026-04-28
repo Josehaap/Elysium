@@ -1,4 +1,4 @@
-import { Component, computed, effect, inject, input, signal } from '@angular/core';
+import { Component, computed, effect, inject, input, output, signal } from '@angular/core';
 import { ActionApi } from './service/action-api';
 
 @Component({
@@ -10,6 +10,9 @@ import { ActionApi } from './service/action-api';
 export class CardActions {
   protected actionApi = inject(ActionApi);
   
+  public iWantComment = output<boolean>(); 
+  public iWantCommentValue = signal<boolean>(false); 
+
   public isLiked = input.required<boolean>();
   public likes = input.required<number>();
   public comments = input.required<number>();
@@ -56,5 +59,10 @@ export class CardActions {
         next: () => this.manualToggle.set(false)
       });
     }
+  }
+
+  public sendIwantViewComment(){
+    this.iWantCommentValue.set(!this.iWantCommentValue())
+    this.iWantComment.emit(this.iWantCommentValue());
   }
 }

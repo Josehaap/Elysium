@@ -1,0 +1,6 @@
+<section class="p-5 flex flex-col gap-10 overflow-scroll h-100 ">
+    @for (message of listMessage(); track $index) {
+        <app-message [dataComment]="message"></app-message>
+    }
+        
+</section>

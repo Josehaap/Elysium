@@ -5,9 +5,10 @@ import { btnFollow } from 'src/app/features/shared/btnFollow/btnFollow';
 import { CardActions } from "./card-actions/card-actions";
 import { startWith } from 'rxjs';
 import { environment } from 'src/environments/environment';
+import { Comments } from "src/app/features/shared/comments/comments";
 @Component({
   selector: 'app-post-card',
-  imports: [btnFollow, CardActions],
+  imports: [btnFollow, CardActions, Comments],
   templateUrl: './post-card.html',
   styleUrl: './post-card.css',
 })
@@ -18,7 +19,7 @@ export class PostCard {
 
   protected isExpanded = signal(false);
   protected isTitleExpanded = signal(false);
-
+  protected iwantViewComment = signal(false);
   toggleExpand() {
     this.isExpanded.set(!this.isExpanded());
   }

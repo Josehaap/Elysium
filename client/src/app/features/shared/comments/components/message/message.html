@@ -1,0 +1,17 @@
+<section class="containerMessage">
+   <div class="infoUser">
+    <img [src]="dataComment().profile_img" alt="">
+    <p>{{dataComment().username}}</p>
+   </div>
+   <div class="content" [class.expanded]="activeClassExpanded()">
+      <p class="message" >
+         {{dataComment().message}}
+      </p>
+   </div>
+   
+   @if (dataComment().message.length > 112) {
+      <span (click)="activeClassExpanded.set(!this.activeClassExpanded())">
+         {{activeClassExpanded() ? "Leer menos" :"Leer más"}}
+      </span>
+   }
+</section>

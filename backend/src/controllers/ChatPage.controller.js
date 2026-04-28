@@ -91,7 +91,9 @@ export default class ChatController{
 
 
     getMessage = async (req, res)=>{
-        console.log(req.header('chatId')); 
+        const chatId = req.header('chatId')
+        const response = await pool.query('SELECT * FROM  `message` where chat_id = ? ', chatId); 
+        console.log(response); 
     }
 
 }

@@ -24,8 +24,13 @@
       [likes]="dataPost().likes" 
       [comments]="dataPost().comment" 
       [shareds]="dataPost().shared" 
-      [isLiked]="dataPost().userLike">
+      [isLiked]="dataPost().userLike"
+      (iWantComment)="iwantViewComment.set($event)">
+     
     </app-card-actions>
   }
   </div>
+  @if (iwantViewComment()) {
+    <app-comments></app-comments>
+  }
 </div>
