@@ -8,5 +8,5 @@ import { ListMessage } from './components/list-message/list-message';
   styleUrl: './comments.css',
 })
 export class Comments {
-
+  
 }

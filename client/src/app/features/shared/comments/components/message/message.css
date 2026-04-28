@@ -12,10 +12,12 @@ section{
     position: absolute;
     width: 100%;
     align-items: center;
+    justify-content: space-between;
     gap: 10px;
     top: -10px;
     left: -17px;
     font-weight: bold;
+    border: 1px solid black;
 }
 
 img{

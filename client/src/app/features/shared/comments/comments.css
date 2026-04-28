@@ -1,7 +1,6 @@
 section.container{
     border-top: 5px solid #EFA287;
     padding-top:10px ;
-    border: 1px solid black;
 }
 section>div{
     display: flex;
@@ -19,6 +18,24 @@ section> p:last-of-type{
     padding-left: 5px;
     background-color: #E8E8E8;
     font-size: 10px;
-    color: red;
     color: rgba(0, 0, 0, 0.507);
+}
+
+div.input{
+    margin: auto;
+    width: 90%;
+    padding: 5px 10px ;
+    margin-top: 10px;
+    border-radius: 30px;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.153);
+}
+
+input{
+    width: 100%;
+    font-weight: 100;
+}
+
+input:focus{
+    border: none;
+    outline: none;
 }
