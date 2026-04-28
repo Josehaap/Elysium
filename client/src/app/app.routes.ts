@@ -3,12 +3,7 @@ import { Landingpage } from './features/landingpage/landingpage';
 import { Home } from './features/landingpage/pages/home/home';
 import { Login } from './features/landingpage/pages/login/login';
 import { Platform } from './features/platform/platform';
-import { HomePlatform } from './features/platform/pages/home-platform/home-platform';
 import { authGuard } from './core/guards/token-guard';
-import { ProfilePlatform } from './features/platform/pages/profile-platform/profile-platform';
-import { SearchPlatform } from './features/platform/pages/search-platform/search-platform';
-import { AddPlatform } from './features/platform/pages/add-platform/add-platform';
-import { ChatPlatform } from './features/platform/pages/chat-platform/chat-platform';
 //!Exportar las rutas ha archivos independientes
 export const routes: Routes = [
   {
@@ -32,23 +27,24 @@ export const routes: Routes = [
     children: [
       {
         path: 'home',
-        component: HomePlatform,
+        loadComponent:()=> import('./features/platform/pages/home-platform/home-platform').then(m => m.HomePlatform),
+       
       },
       {
         path: 'chat',
-        component: ChatPlatform,
+        loadComponent:()=> import('./features/platform/pages/chat-platform/chat-platform').then(m => m.ChatPlatform),
       },
       {
         path: 'add',
-        component: AddPlatform,
+        loadComponent:()=> import('./features/platform/pages/add-platform/add-platform').then(m=>m.AddPlatform),
       },
       {
         path: 'search',
-        component: SearchPlatform,
+        loadComponent:()=> import('./features/platform/pages/search-platform/search-platform').then(m=>m.SearchPlatform),
       },
       {
         path: 'profile/:username',
-        component: ProfilePlatform,
+        loadComponent:()=> import('./features/platform/pages/profile-platform/profile-platform').then(m=>m.ProfilePlatform),
       },
     ],
   },
