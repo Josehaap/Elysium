@@ -9,6 +9,4 @@ import { CardPost } from '../card-post/card-post';
 })
 export class ListPosts {
   public listPost= input.required<Post[]>();
-
-
 }

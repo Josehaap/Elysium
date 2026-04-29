@@ -55,3 +55,31 @@ p.texto.expanded {
 .btn-mas:hover {
     text-decoration: underline;
 }
+
+/* --- Mejoras de Imagen --- */
+.post-image-container {
+    width: 100%;
+    aspect-ratio: 16 / 10;
+    overflow: hidden;
+    border-radius: 18px;
+    background-color: #000;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+    transition: transform 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+    margin-bottom: 12px;
+}
+
+.post-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+
+.post-image-container:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 25px rgba(0, 0, 0, 0.15);
+}
+
+.post-image-container:hover .post-image {
+    transform: scale(1.08);
+}

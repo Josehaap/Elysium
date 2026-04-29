@@ -19,7 +19,6 @@ import { ChatApi } from '../chat-platform/services/chat-api';
   styleUrl: './profile-platform.css',
 })
 export class ProfilePlatform {
-  
   //Injectamos los servicios
   protected profileApi = inject(ProfileApi);
   private urlProfile = inject(ActivatedRoute);
@@ -31,9 +30,8 @@ export class ProfilePlatform {
   protected usernameURL: string = '';
   // Inyección del servicio de chat para iniciar conversaciones
   private chatApi = inject(ChatApi);
-  //Comrpobamos que existe un chat 
-  protected existChat = signal<boolean>(false); 
-
+  //Comrpobamos que existe un chat
+  protected existChat = signal<boolean>(false);
 
   //*Cuando se inicie el componente vamos a comprobar que el usuario sea el usuario o sea una persona distinta.
   ngOnInit() {
@@ -41,19 +39,22 @@ export class ProfilePlatform {
       const token: accessToken = jwtDecode(TokenService.getToken());
       this.usernameURL = params['username'];
       this.profileApi.usernameUrl.set(params['username']);
-      this.isUserOrVisit = this.usernameURL === token['username']; 
+      this.isUserOrVisit = this.usernameURL === token['username'];
     });
   }
 
-  
   protected profileData = linkedSignal({
     source: () => this.profileApi.getProfileInfoUser.value()?.Data,
     computation: (source) => {
       let urlMapeada: string = '';
       if (!source) return undefined;
       //* Vamos a comprobar que exista y que  no sea una url válida
-      if (source.urlImg === '') urlMapeada = 'img/placeholder/profile/profile_userDefault.webp'
-      else if(source.urlImg && !source.urlImg.startsWith('http') && !source.urlImg.startsWith('blob')) {
+      if (source.urlImg === '') urlMapeada = 'img/placeholder/profile/profile_userDefault.webp';
+      else if (
+        source.urlImg &&
+        !source.urlImg.startsWith('http') &&
+        !source.urlImg.startsWith('blob')
+      ) {
         urlMapeada = new URL(source.urlImg, environment.apiUrl).toString(); //Contruimos una nueva url válida apuntando a nuestro servidor ya sea en local o en producción
       } else urlMapeada = source.urlImg;
       return {
@@ -116,7 +117,7 @@ export class ProfilePlatform {
 
       if (this.modalData().profile_img_file) {
         formData.append('profile_img', this.modalData().profile_img_file!);
-        console.log(this.modalData().profile_img_file)
+        console.log(this.modalData().profile_img_file);
       }
       //Lanzamos la consulta
       this.profileApi.updateProfileInfo(formData, this.usernameURL);
@@ -139,18 +140,18 @@ export class ProfilePlatform {
 
   protected menuInVisible = signal(true);
 
-   public goToProfile() {
+  public goToProfile() {
     this.router.navigate([`elysium/profile/${TokenService.getUsenameToken()}`]);
     //Actualizamos nuestro señalComputada
-      this.modalData.set({
-        name: this.profileApi.getProfileInfoUser.value()?.Data.name || '',
-        surname: this.profileApi.getProfileInfoUser.value()?.Data.surname|| '',
-        description_user: this.profileApi.getProfileInfoUser.value()?.Data.description_user || '',
-        urlImg: this.profileApi.getProfileInfoUser.value()?.Data.urlImg|| '',
-      });
+    this.modalData.set({
+      name: this.profileApi.getProfileInfoUser.value()?.Data.name || '',
+      surname: this.profileApi.getProfileInfoUser.value()?.Data.surname || '',
+      description_user: this.profileApi.getProfileInfoUser.value()?.Data.description_user || '',
+      urlImg: this.profileApi.getProfileInfoUser.value()?.Data.urlImg || '',
+    });
 
-      this.menuInVisible.set(!this.menuInVisible())
-      this.showForm();
+    this.menuInVisible.set(!this.menuInVisible());
+    this.showForm();
   }
 
   /**
@@ -171,14 +172,14 @@ export class ProfilePlatform {
     });
   }
 
-  protected createChat(){
+  protected createChat() {
     this.profileApi.updateChat().subscribe({
-      next: (res)=>{
-        this.router.navigate(['elysium/chat'])
-      }
-    })
+      next: (res) => {
+        this.router.navigate(['elysium/chat']);
+      },
+    });
   }
-  protected goToChat =() => this.router.navigate(['elysium/chat'])
+  protected goToChat = () => this.router.navigate(['elysium/chat']);
 
   public logout = () => {
     TokenService.logout();
@@ -186,15 +187,14 @@ export class ProfilePlatform {
   };
   public deleteUser = () => {
     this.profileApi.deleteUser().subscribe({
-      next: (res)=>{
-        console.log(res); 
+      next: (res) => {
+        console.log(res);
         TokenService.logout();
         window.location.reload();
-
       },
-      error:(res)=>{
-        console.log(res); 
-      }
-    }); 
+      error: (res) => {
+        console.log(res);
+      },
+    });
   };
 }

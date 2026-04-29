@@ -183,3 +183,94 @@
   color: white;
   transform: scale(1.05);
 }
+
+/* Estilos para el modal de edición */
+.edit-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(5px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 2000;
+}
+
+.edit-modal {
+  background: white;
+  width: 90%;
+  max-width: 450px;
+  padding: 2rem;
+  border-radius: 20px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+}
+
+.edit-title {
+  font-size: 1.5rem;
+  font-weight: 800;
+  margin-bottom: 1.5rem;
+  color: #333;
+}
+
+.edit-field {
+  margin-bottom: 1.2rem;
+}
+
+.edit-field label {
+  display: block;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+  color: #666;
+}
+
+.edit-field input, .edit-field textarea {
+  width: 100%;
+  padding: 12px;
+  border: 2px solid #eee;
+  border-radius: 12px;
+  outline: none;
+  font-family: inherit;
+  transition: border-color 0.3s;
+}
+
+.edit-field input:focus, .edit-field textarea:focus {
+  border-color: #ff9900;
+}
+
+.edit-actions {
+  display: flex;
+  gap: 1rem;
+  margin-top: 2rem;
+}
+
+.btn-cancel {
+  background: #f3f4f6;
+  color: #4b5563;
+  padding: 12px;
+  border-radius: 12px;
+  font-weight: 700;
+  border: none;
+  cursor: pointer;
+}
+
+.btn-cancel:hover {
+  background: #e5e7eb;
+}
+
+.btn-save {
+  background: #ff9900;
+  color: white;
+  padding: 12px;
+  border-radius: 12px;
+  font-weight: 700;
+  border: none;
+  cursor: pointer;
+}
+
+.btn-save:hover {
+  background: #e68a00;
+}
+
