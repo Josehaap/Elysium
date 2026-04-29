@@ -1,12 +1,27 @@
-<div class="bg-[#F9F3F1] w-90  max-w-md h-auto min-h-[400px] p-5 rounded-[20px] shadow-md mx-auto">
+<div class="bg-[#F9F3F1] w-90 max-w-md h-auto min-h-[400px] p-5 rounded-[20px] shadow-md mx-auto">
   <div class="flex justify-between mb-7 items-center">
     <div class="flex gap-3 items-center">
-      <img class="rounded-full w-10" [src]="imgUrlProfile()" alt="imagen de perfil" (click)="this.routingElysium.goToProfile(dataPost().username);" />
+      <img
+        class="rounded-full w-10"
+        [src]="imgUrlProfile()"
+        alt="imagen de perfil"
+        (click)="this.routingElysium.goToProfile(dataPost().username)"
+      />
       <p class="font-bold">{{ dataPost().username }}</p>
     </div>
   </div>
-  <img class="h-50 w-full bg-black rounded-[10px]" alt="" [src]="dataPost().img_post=== '' ? 'img/placeholder/publish/publish.webp':dataPost().img_post " />
-  <h3 class="font-bold cursor-pointer" [class.expanded]="isTitleExpanded()" (click)="toggleTitle()">{{ dataPost().title }}</h3>
+  <div class="post-image-container">
+    <img
+      class="post-image"
+      alt=""
+      [src]="
+        dataPost().img_post === '' ? 'img/placeholder/publish/publish.webp' : dataPost().img_post
+      "
+    />
+  </div>
+  <h3 class="font-bold cursor-pointer" [class.expanded]="isTitleExpanded()" (click)="toggleTitle()">
+    {{ dataPost().title }}
+  </h3>
   <div class="caja-desc">
     <p class="texto" [class.expanded]="isExpanded()">
       {{ dataPost().description }}
@@ -19,18 +34,21 @@
   </div>
   <div class="mt-4 border-t border-gray-100">
     @if (this.dontViewActions()) {
-    <app-card-actions 
-      [id]="dataPost().post_id" 
-      [likes]="dataPost().likes" 
-      [comments]="dataPost().comment" 
-      [shareds]="dataPost().shared" 
-      [isLiked]="dataPost().userLike"
-      (iWantComment)="iwantViewComment.set($event)">
-     
-    </app-card-actions>
-  }
+      <app-card-actions
+        [id]="dataPost().post_id"
+        [likes]="dataPost().likes"
+        [comments]="localCommentCount()"
+        [shareds]="dataPost().shared"
+        [isLiked]="dataPost().userLike"
+        (iWantComment)="iwantViewComment.set($event)"
+      >
+      </app-card-actions>
+    }
   </div>
   @if (iwantViewComment()) {
-    <app-comments></app-comments>
+    <app-comments
+      [id]="dataPost().post_id"
+      (onCommentAction)="handleCommentAction($event)"
+    ></app-comments>
   }
 </div>

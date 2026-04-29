@@ -1,39 +1,80 @@
-      <div
-        class="md:w-full h-80 border containerPost"
-        [ngStyle]="{
-          'background-image': 'url(' + imageUrl() + ')',
-          'background-size': 'cover',
-          'background-position': 'center'
-        }"
+<div
+  class="md:w-full h-80 border containerPost"
+  [ngStyle]="{
+    'background-image': 'url(' + imageUrl() + ')',
+    'background-size': 'cover',
+    'background-position': 'center',
+  }"
+>
+  @if (isUserOrVisit()) {
+    <div class="toggleButton" (click)="viewOptions.set(!this.viewOptions())">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="20"
+        height="20"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        class="lucide lucide-more-vertical"
       >
-      @if (isUserOrVisit()) {
-        <div class="toggleButton" (click)="viewOptions.set(!this.viewOptions())">
-          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-more-vertical"><circle cx="12" cy="12" r="1"/><circle cx="12" cy="5" r="1"/><circle cx="12" cy="19" r="1"/></svg>
-        </div>
-      }
-        
+        <circle cx="12" cy="12" r="1" />
+        <circle cx="12" cy="5" r="1" />
+        <circle cx="12" cy="19" r="1" />
+      </svg>
+    </div>
+  }
 
-        @if(viewOptions()){
-          <section class="option">
-            <div class="menu-content">
-              <p class="mensaje">Opciones del Post</p>
-              
-              <button class="option-btn modify">
-                <span>Modificar</span>
-              </button>
+  @if (viewOptions()) {
+    <section class="option">
+      <div class="menu-content">
+        <p class="mensaje">Opciones del Post</p>
 
-              <button class="option-btn delete" (click)="sendDelete()">
-                <span>Eliminar</span>
-              </button>
+        <button class="option-btn modify" (click)="openEdit()">
+          <span>Modificar</span>
+        </button>
 
-              <span class="option-btn close-menu" (click)="viewOptions.set(false)">Cancelar</span>
-            </div>
-          </section>
-        }
+        <button class="option-btn delete" (click)="sendDelete()">
+          <span>Eliminar</span>
+        </button>
 
-        <div class="containerPostInfo">
-          <app-card-actions [id]="this.infoPost().id" [likes]="this.infoPost().likes" [comments]="this.infoPost().comment" [shareds]="this.infoPost().shared" [isLiked]="this.infoPost().userLike"></app-card-actions>
-        </div>
+        <span class="option-btn close-menu" (click)="viewOptions.set(false)">Cancelar</span>
+      </div>
+    </section>
+  }
+
+  <div class="containerPostInfo">
+    <app-card-actions
+      [id]="this.infoPost().id"
+      [likes]="this.infoPost().likes"
+      [comments]="this.infoPost().comment"
+      [shareds]="this.infoPost().shared"
+      [isLiked]="this.infoPost().userLike"
+    ></app-card-actions>
+  </div>
+</div>
+
+@if (isEditing()) {
+  <div class="edit-overlay" (click)="isEditing.set(false)">
+    <div class="edit-modal" (click)="$event.stopPropagation()">
+      <h3 class="edit-title">Editar Publicación</h3>
+      
+      <div class="edit-field">
+        <label>Título</label>
+        <input [(ngModel)]="editTitle" placeholder="Título del post" maxlength="50">
       </div>
 
-    
+      <div class="edit-field">
+        <label>Descripción</label>
+        <textarea [(ngModel)]="editDescription" placeholder="Descripción del post" rows="4" maxlength="200"></textarea>
+      </div>
+
+      <div class="edit-actions">
+        <button class="btn-cancel" (click)="isEditing.set(false)">Cancelar</button>
+        <button class="btn-save" (click)="saveEdit()">Guardar cambios</button>
+      </div>
+    </div>
+  </div>
+}

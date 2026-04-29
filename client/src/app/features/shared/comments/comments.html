@@ -1,14 +1,49 @@
 <section class="container">
-    <div >
-        <p>Comentarios</p>
-        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-corner-up-left-icon lucide-corner-up-left"><path d="M20 20v-7a4 4 0 0 0-4-4H4"/><path d="M9 14 4 9l5-5"/></svg>
-   
-    </div>
-     <p class="banner">Recuerda que los comentarios deben ser respetuosos y cumplir las 
-normas  de la comunidad de Elysium. </p>
-<app-list-message [listMessage]="[{profile_img:'', username:'Joselito', message:'hieniiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiooooooooooooooooooooooooooooooooooooooooooo123'},{profile_img:'', username:'Joselito', message:'hieniiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiooooooooooooooooooooooooooooooooooooooooooo123'},{profile_img:'', username:'Joselito', message:'hieniiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiooooooooooooooooooooooooooooooooooooooooooo123'},{profile_img:'', username:'Joselito', message:'hieniiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiooooooooooooooooooooooooooooooooooooooooooo123'},{profile_img:'', username:'Joselito', message:'hieniiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiooooooooooooooooooooooooooooooooooooooooooo123'},{profile_img:'', username:'Joselito', message:'hieniiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiooooooooooooooooooooooooooooooooooooooooooo123'},{profile_img:'', username:'Joselito', message:'hieniiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiooooooooooooooooooooooooooooooooooooooooooo123'},{profile_img:'', username:'Joselito', message:'hieniiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiooooooooooooooooooooooooooooooooooooooooooo123'},{profile_img:'', username:'Joselito', message:'hieniiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiooooooooooooooooooooooooooooooooooooooooooo123'},{profile_img:'', username:'Joselito', message:'hieniiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiooooooooooooooooooooooooooooooooooooooooooo123'},{profile_img:'', username:'Joselito', message:'hieniiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiooooooooooooooooooooooooooooooooooooooooooo123'}]"></app-list-message>
-<div class="input">
-    <input type="text" placeholder="Se respetuoso">
-    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-send-icon lucide-send"><path d="M14.536 21.686a.5.5 0 0 0 .937-.024l6.5-19a.496.496 0 0 0-.635-.635l-19 6.5a.5.5 0 0 0-.024.937l7.93 3.18a2 2 0 0 1 1.112 1.11z"/><path d="m21.854 2.147-10.94 10.939"/></svg>
-</div>
+  <div>
+    <p>Comentarios</p>
+    <svg
+      (click)="onCommentAction.emit({ action: CommentAction.CLOSED, isClosed: true })"
+      xmlns="http://www.w3.org/2000/svg"
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="2"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      class="lucide lucide-corner-up-left-icon lucide-corner-up-left cursor-pointer"
+    >
+      <path d="M20 20v-7a4 4 0 0 0-4-4H4" />
+      <path d="M9 14 4 9l5-5" />
+    </svg>
+  </div>
+  <p class="banner">
+    Recuerda que los comentarios deben ser respetuosos y cumplir las normas de la comunidad de
+    Elysium.
+  </p>
+  <app-list-message
+    [listMessage]="commentsResource.value()?.Data ?? []"
+    (onDelete)="commentsResource.reload(); onCommentAction.emit({ action: CommentAction.DELETED })"
+  ></app-list-message>
+  <div class="input">
+    <input type="text" placeholder="Se respetuoso" (keydown.enter)="insertComment($event)" />
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="2"
+      stroke-linecap round
+      stroke-linejoin="round"
+      class="lucide lucide-send-icon lucide-send"
+    >
+      <path
+        d="M14.536 21.686a.5.5 0 0 0 .937-.024l6.5-19a.496.496 0 0 0-.635-.635l-19 6.5a.5.5 0 0 0-.024.937l7.93 3.18a2 2 0 0 1 1.112 1.11z"
+      />
+      <path d="m21.854 2.147-10.94 10.939" />
+    </svg>
+  </div>
 </section>

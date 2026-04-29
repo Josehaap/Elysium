@@ -1,4 +1,4 @@
-import { Component, input } from '@angular/core';
+import { Component, input, output } from '@angular/core';
 import { Message } from "../message/message";
 import { IMessage } from "../../models/message";
 
@@ -11,4 +11,5 @@ import { IMessage } from "../../models/message";
 })
 export class ListMessage {
   public listMessage = input.required<IMessage[]>(); 
+  public onDelete = output<void>();
 }
