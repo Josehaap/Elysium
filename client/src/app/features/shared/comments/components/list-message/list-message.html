@@ -1,5 +1,5 @@
-<section class="p-5 flex flex-col gap-10  h-70 ">
-    @for (message of listMessage(); track $index) {
-        <app-message [dataComment]="message" (onDelete)="onDelete.emit()"></app-message>
-    } 
+<section class="p-5 flex flex-col gap-10 h-70">
+  @for (message of listMessage(); track $index) {
+    <app-message [dataComment]="message" (onDelete)="onDelete.emit()"></app-message>
+  }
 </section>

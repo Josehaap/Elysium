@@ -7,7 +7,7 @@
  * 
  * Los chats son de 1 a 1 entre usuarios.
  */
-import { Component, inject, signal, computed, ElementRef, ViewChild, AfterViewChecked } from '@angular/core';
+import { Component, inject, signal, computed, ElementRef, ViewChild, AfterViewChecked, OnInit } from '@angular/core';
 import { ChatApi } from './services/chat-api';
 import { ChatMessage, ChatPreview } from './models/chat';
 import { TokenService } from 'src/app/core/services/token-service';
@@ -22,9 +22,15 @@ import { accessToken } from '../../../shared/models/shared';
   templateUrl: './chat-platform.html',
   styleUrl: './chat-platform.css',
 })
-export class ChatPlatform implements AfterViewChecked {
+export class ChatPlatform implements OnInit, AfterViewChecked {
   // Inyección de dependencias
   protected chatApi = inject(ChatApi);
+
+  // Lista de chats procesada desde el resource de la API
+  protected chatList = computed(() => {
+    const res = this.chatApi.getChatList.value() as any;
+    return res?.Success ? res.Data as ChatPreview[] : [];
+  });
 
   // Referencia al contenedor de mensajes para auto-scroll
   @ViewChild('messagesContainer') private messagesContainer!: ElementRef;
@@ -49,6 +55,35 @@ export class ChatPlatform implements AfterViewChecked {
   // Flag para auto-scroll cuando llegan nuevos mensajes
   private shouldScroll = false;
 
+  // Conexión WebSocket
+  private socket!: WebSocket;
+
+  ngOnInit() {
+    this.initWebSocket();
+  }
+
+  private initWebSocket() {
+    const wsUrl = environment.apiUrl.replace('http://', 'ws://').replace('https://', 'wss://');
+    this.socket = new WebSocket(wsUrl);
+
+    this.socket.onmessage = (event) => {
+      const message = JSON.parse(event.data);
+      if (message.type === 'new_message') {
+        const newMessage = message.data;
+        // Solo añadimos el mensaje si pertenece al chat seleccionado y no es nuestro (ya lo añadimos optimísticamente)
+        if (this.selectedChat()?.chat_id === newMessage.chat_id && newMessage.user_send_id !== this.currentUserId) {
+          this.messages.update(prev => [...prev, newMessage]);
+          this.shouldScroll = true;
+        }
+      }
+    };
+
+    this.socket.onclose = () => {
+      console.log('WebSocket desconectado, reintentando...');
+      setTimeout(() => this.initWebSocket(), 3000);
+    };
+  }
+
   /**
    * Selecciona un chat y carga sus mensajes.
    * Marca el chat como activo y resetea el contador de no leídos visualmente.
@@ -64,13 +99,13 @@ export class ChatPlatform implements AfterViewChecked {
 
     // Cargamos los mensajes del chat seleccionado
     this.chatApi.getMessages(chat.chat_id).subscribe({
-      next: (msgs) => {
-        this.messages.set(msgs);
+      next: (res: any) => {
+        if (res.Success) {
+          this.messages.set(res.Data);
+          this.shouldScroll = true;
+          chat.unread_count = 0;
+        }
         this.loadingMessages.set(false);
-        this.shouldScroll = true;
-
-        // Reseteamos el unread_count visualmente al seleccionar el chat
-        chat.unread_count = 0;
       },
       error: () => {
         this.loadingMessages.set(false);
@@ -114,17 +149,14 @@ export class ChatPlatform implements AfterViewChecked {
     chat.last_message_at = optimisticMessage.sennt_at;
     chat.last_message_sender_id = this.currentUserId;
 
-    // Enviamos el mensaje al servidor
-    this.sendingMessage.set(true);
-    this.chatApi.sendMessage(chat.chat_id, content).subscribe({
-      next: () => {
-        this.sendingMessage.set(false);
-      },
-      error: () => {
-        this.sendingMessage.set(false);
-        // Si falla, podríamos eliminar el mensaje optimistic (opcional)
-      },
-    });
+    // Enviamos el mensaje al servidor vía WebSocket para tiempo real
+    this.socket.send(JSON.stringify({
+      chat_id: chat.chat_id,
+      user_send_id: this.currentUserId,
+      content: content
+    }));
+
+    this.sendingMessage.set(false);
   }
 
   /**
@@ -189,15 +221,15 @@ export class ChatPlatform implements AfterViewChecked {
 
   /**
    * Hace scroll hasta el último mensaje del contenedor.
-   */
+   */ 
   private scrollToBottom() {
-    try {
-      const el = this.messagesContainer?.nativeElement;
-      if (el) {
+      try {
+        const el = this.messagesContainer?.nativeElement;
+        if (el) {
         el.scrollTop = el.scrollHeight;
+        }
+      } catch (err) {
+        // Silenciar errores si el contenedor no existe aún
       }
-    } catch (err) {
-      // Silenciar errores si el contenedor no existe aún
-    }
   }
 }

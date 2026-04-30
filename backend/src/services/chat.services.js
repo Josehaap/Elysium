@@ -17,6 +17,18 @@ export default class ChatService {
         return RESPONSE[0]
     }
 
-
-
+    async getChatsByUser(userId) {
+        const RESPONSE = await pool.query(
+            `SELECT 
+                c.chat_id, 
+                u.user_id as contact_id, 
+                u.username as contact_username, 
+                u.profile_img as contact_img
+            FROM chat c
+            JOIN user u ON (CASE WHEN c.user_1 = ? THEN c.user_2 ELSE c.user_1 END) = u.user_id
+            WHERE c.user_1 = ? OR c.user_2 = ?`,
+            [userId, userId, userId]
+        );
+        return RESPONSE[0];
+    }
 }
