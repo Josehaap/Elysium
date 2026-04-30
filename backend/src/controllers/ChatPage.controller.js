@@ -129,7 +129,7 @@ export default class ChatController{
             if (!chatId) throw new Exception('Falta el ID del chat');
 
             const RESPONSE = await pool.query(
-                `SELECT message_id, content, user_send_id, sennt_at, is_read 
+                `SELECT message_id, content, user_send_id, post_id, sennt_at, is_read 
                 FROM message 
                 WHERE chat_id = ? 
                 ORDER BY sennt_at ASC`,

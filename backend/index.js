@@ -2,6 +2,7 @@ import app from "./src/app.js";   //*Importamos la creación de nuestro servidor
 import userRouter from "./src/routes/user.routes.js"; //Importamos las rutas de los usuarios. 
 import postRouter from "./src/routes/post.routes.js"; //Importamos las rutas de los usuarios. 
 import chatRouter from "./src/routes/chats.routes.js"; //Importamos las rutas de los usuarios. 
+import chatbotRouter from "./src/routes/chatbot.routes.js";
 import { WebSocketServer } from 'ws';
 import http from 'http';
 import pool from "./src/core/config/database/db.js";
@@ -15,12 +16,12 @@ wss.on('connection', (ws) => {
     ws.on('message', async (data) => {
         try {
             const messageData = JSON.parse(data.toString());
-            const { chat_id, user_send_id, content } = messageData;
+            const { chat_id, user_send_id, content, post_id } = messageData;
 
             // Guardar en la base de datos (sennt_at se genera automáticamente o por NOW())
             await pool.query(
-                'INSERT INTO message (chat_id, user_send_id, content, sennt_at) VALUES (?, ?, ?, NOW())',
-                [chat_id, user_send_id, content]
+                'INSERT INTO message (chat_id, user_send_id, content, post_id, sennt_at) VALUES (?, ?, ?, ?, NOW())',
+                [chat_id, user_send_id, content, post_id || null]
             );
 
             // Broadcast a todos los clientes conectados
@@ -30,6 +31,7 @@ wss.on('connection', (ws) => {
                     chat_id,
                     user_send_id,
                     content,
+                    post_id,
                     sennt_at: new Date()
                 }
             });
@@ -39,7 +41,6 @@ wss.on('connection', (ws) => {
                     client.send(responseData);
                 }
             });
-
         } catch (error) {
             console.error('Error al procesar mensaje WS:', error);
         }
@@ -56,6 +57,7 @@ wss.on('connection', (ws) => {
 app.use("/user", userRouter); 
 app.use('/post', postRouter);
 app.use('/chat', chatRouter);
+app.use('/chatbot', chatbotRouter);
 
 server.listen(3000, () => {
     console.log('Servidor ejecutándose en http://localhost:3000 con WebSockets');

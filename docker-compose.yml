@@ -1,0 +1,52 @@
+services:
+  database:
+    image: mariadb:latest
+    container_name: elysium-db
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: "ertUIbd93"
+      MYSQL_DATABASE: "elysiumDatabase"
+      MYSQL_USER: "userAdmin"
+      MYSQL_PASSWORD: "1234"
+    volumes:
+      - ./database/init.sql:/docker-entrypoint-initdb.d/init.sql
+      - elysium-db-data:/var/lib/mysql
+    networks:
+      - elysium-network
+
+  backend:
+    build: ./backend
+    container_name: elysium-backend
+    ports:
+      - "3000:3000"
+    environment:
+      - DB_HOST=database
+      - DB_USER=userAdmin
+      - DB_PASSWORD=1234
+      - DB_NAME=elysiumDatabase
+      - DB_PORT=3306
+      - PORT=3000
+      - JWT_ACCESS_SECRET=oiiuyytgOUIYOTYI8ERFQIONJÑK7654TYVUBIIO=&R%EXUDFIvbhn`toyvGUB
+      - JWT_REFRESH_SECRET=oWEDGTRiuyytgOURYHTJYNKWNWJEFNI87654TYVUBIIO=&R%EXUDFIvbhn`toyvGUB
+    depends_on:
+      - database
+    networks:
+      - elysium-network
+
+  client:
+    build: ./client
+    container_name: elysium-client
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+    networks:
+      - elysium-network
+
+networks:
+  elysium-network:
+    driver: bridge
+
+volumes:
+  elysium-db-data:

@@ -70,7 +70,7 @@
         </svg>
       </div>
       <!-- Buttons -->
-      <div class="flex gap-2 w-60 ">
+      <div class="flex gap-2 w-60">
         @if (this.isUserOrVisit) {
           <button
             (click)="showForm()"
@@ -79,10 +79,13 @@
             {{ isEditing() ? 'Guardar' : 'Editar perfil' }}
           </button>
         } @else {
-          
           <app-btnFollow [username]="usernameURL" class="w-full"></app-btnFollow>
-          <button [class]="'isNotFollowOrNotEditing'" (click)="profileApi.existChat.value()?.Data ? goToChat() : createChat()">{{profileApi.existChat.value()?.Data? 'Ir al chat': 'Iniciar chat'}}</button>
-
+          <button
+            [class]="'isNotFollowOrNotEditing'"
+            (click)="profileApi.existChat.value()?.Data ? goToChat() : createChat()"
+          >
+            {{ profileApi.existChat.value()?.Data ? 'Ir al chat' : 'Iniciar chat' }}
+          </button>
         }
       </div>
     </div>
@@ -194,20 +197,12 @@
           ></app-options>
           <hr />
           <app-options
-            [name]="'Interfaz'"
-            [iWantImg]="false"
-            [title]="'Configuración del perfil'"
-            [subtitle]="
-              'Podrás cambiar la información visible de tu cuenta, ya sea nombre de usuario, description, etc'
-            "
-            [iWantCheck]="true"
-          ></app-options>
-          <app-options
             [name]="'Sesión'"
             [iWantImg]="false"
+            [icon]="'session'"
             [title]="'Cerrar sesión'"
             [subtitle]="
-              'Se cerrará la sessión por lo cual se le redigirá a la landingpage de la plataforma'
+              'Se cerrará la sesión de forma segura y se le redirigirá a la página de inicio'
             "
             [iWantCheck]="false"
             (click)="logout()"
@@ -218,8 +213,11 @@
             class="text-red-500"
             [name]="'Delete '"
             [iWantImg]="false"
-            [title]="'Eliminar cuenta usuario'"
-            [subtitle]="'Esta acción es irreversible, se eliminará publicaciones todo. '"
+            [icon]="'delete'"
+            [title]="'Eliminar cuenta'"
+            [subtitle]="
+              'Esta acción es irreversible, se eliminarán permanentemente todos tus datos y publicaciones. '
+            "
             [iWantCheck]="false"
           ></app-options>
         </div>

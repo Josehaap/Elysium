@@ -14,23 +14,22 @@ section > .perfil {
   grid-row: 2/3;
   grid-column: 1/2;
   display: flex;
-  text-align: center;
+  justify-content: center;
   align-items: center;
 }
-.perfil >img{
-  width: 60px; 
+.perfil > img {
+  width: 60px;
   height: 60px;
-  
+
   /* Esto evita que la imagen se estire o se aplaste */
   object-fit: cover;
-  
+
   /* El radio al 50% en un cuadrado crea un círculo */
   border-radius: 50%;
-  
+
   /* Opcional: un pequeño borde para que resalte más */
   border: 2px solid #e5e7eb;
 }
-
 
 section > div.info {
   padding: 6px;

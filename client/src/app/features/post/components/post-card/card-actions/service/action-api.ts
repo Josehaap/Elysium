@@ -25,4 +25,8 @@ export class ActionApi {
   public deleteLike(id:string){
     return this.http.delete(`${environment.apiUrl}/post/Dlike`,{headers:this.getHeaders(id)} )
   }
+
+  public insertShared(id:string){
+    return this.http.post(`${environment.apiUrl}/post/shared`,null,{headers:this.getHeaders(id)} )
+  }
 }

@@ -3,7 +3,7 @@ import { inject, Injectable } from '@angular/core';
 import { jwtDecode } from 'jwt-decode';
 import { TokenService } from 'src/app/core/services/token-service';
 import { environment } from 'src/environments/environment';
-import { responseApiDashboard, ResponseApiNews } from '../models/home';
+import { ResponseSuggestedUsers, responseApiDashboard, ResponseApiNews } from '../models/home';
 import { accessToken } from '../../../../shared/models/shared';
 import { map } from 'rxjs';
 
@@ -14,14 +14,19 @@ export class HomeApi {
   private http = inject(HttpClient);
 
   /**
-   * Envía un mensaje al chatbot via webhook y devuelve la respuesta
+   * Envía un mensaje al chatbot via el proxy de la plataforma
    */
   sendChatMessage(message: string) {
-    return this.http.post<{ response: string }[]>(
-      'http://localhost:5678/webhook-test/chat',
-      { chatInput: message }
+    return this.http.post<any>(
+      `${environment.apiUrl}/chatbot/ask`,
+      { message },
+      {
+        headers: {
+          accessToken: TokenService.getToken(),
+        }
+      }
     ).pipe(
-      map(res => res[0]?.response ?? 'No se recibió respuesta.')
+      map(res => res.Data ?? 'No se recibió respuesta.')
     );
   }
   /**
@@ -47,19 +52,31 @@ export class HomeApi {
   }));
 
   public imgUserUrl: string = jwtDecode<accessToken>(TokenService.getToken())['profile_img'];
-/*
-  public getNewsInfo = httpResource<ResponseApiNews>(()=>({
-    url: 'https://real-time-news-data.p.rapidapi.com/search',
-  params: {
-    query: 'moda',
-    limit: 10,
-    time_published: 'anytime',
-    country: 'es',
-    lang: 'es'
-  },
-  headers: {
-    'x-rapidapi-host': 'real-time-news-data.p.rapidapi.com',
-    'x-rapidapi-key': '2db12bbb6amsh0353e38d8e1aaecp19a51djsn731107066263'
-    }
-  }));*/
+
+  /**
+   * Obtiene una lista de usuarios sugeridos
+   */
+  public getSuggestedUsers = httpResource<ResponseSuggestedUsers>(() => ({
+    url: `${environment.apiUrl}/user/search/getUsers`,
+    method: 'GET',
+    headers: {
+      accessToken: TokenService.getToken(),
+    },
+  }));
+
+  /**
+   * Sigue a un usuario
+   */
+  followUser(username: string) {
+    return this.http.post<any>(
+      `${environment.apiUrl}/user/follow`,
+      {},
+      {
+        headers: {
+          accessToken: TokenService.getToken(),
+          usernameNow: username,
+        },
+      }
+    );
+  }
 }

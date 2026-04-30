@@ -12,6 +12,7 @@ const router = express.Router(); //Generamos una instancia de las funcione de en
  */
 
 router.get("/info", postController.getDataInfo);
+router.get("/getPost", postController.getPost);
 router.post("/Ilike", postController.insertLike);
 router.delete("/Dlike", postController.deleteLike);
 router.delete('/delete', postController.deletePost);
@@ -34,5 +35,6 @@ router.delete(
   Token.validateToken,
   postController.deleteComment,
 );
+router.post("/shared", Token.validateToken, postController.insertShared);
 
 export default router;

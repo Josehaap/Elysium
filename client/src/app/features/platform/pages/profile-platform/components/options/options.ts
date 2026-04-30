@@ -13,4 +13,5 @@ export class Options {
   public title = input.required<string>();
   public subtitle = input.required<string>();
   public iWantCheck = input<boolean>();
+  public icon = input<string>();
 }

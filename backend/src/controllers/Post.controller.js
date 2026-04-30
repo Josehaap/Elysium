@@ -62,6 +62,21 @@ export default class PostController {
     }
   };
 
+  getPost = async (req, res) => {
+    try {
+      const post_id = req.header("post_id");
+      if (!post_id) throw new Exception("Falta el ID de la publicación");
+
+      const RESPONSE = await this.#postService.getDataPost(post_id);
+      
+      if (RESPONSE.length === 0) throw new Exception("No existe la publicación");
+
+      return res.status(200).send(helper.generateLiteralObject(this.#response, [true, RESPONSE[0], ""]));
+    } catch (error) {
+      res.status(500).send({ Success: false, Error: error.message });
+    }
+  };
+
   insertLike = async (req, res) => {
     try {
       const decoded = jwt.decode(req.header("accessToken"));
@@ -269,6 +284,27 @@ export default class PostController {
         return res.status(200).send(helper.generateLiteralObject(this.#response, [true, {}, ""]));
       } else {
         throw new Exception("No se pudo actualizar la publicación o no tienes permisos");
+      }
+    } catch (error) {
+      this.#valuesError[2] = error.message;
+      return res.status(error instanceof Exception ? 400 : 500).send(helper.generateLiteralObject(this.#response, this.#valuesError));
+    }
+  };
+
+  insertShared = async (req, res) => {
+    try {
+      const decoded = jwt.decode(req.header("accessToken"));
+      if (!decoded || !decoded.id) throw new Exception("Token inválido");
+      
+      const post_id = req.header("post_id");
+      if (!post_id) throw new Exception("Falta el ID de la publicación");
+
+      const result = await this.#postService.insertShared(post_id, decoded.id);
+
+      if (result.affectedRows === 1) {
+        return res.status(201).send(helper.generateLiteralObject(this.#response, [true, {}, ""]));
+      } else {
+        throw new Exception("No se pudo registrar que se compartió la publicación");
       }
     } catch (error) {
       this.#valuesError[2] = error.message;

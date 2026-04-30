@@ -3,7 +3,7 @@
 
   @if (homeApi.getNumberFollowed.hasValue() && homeApi.getNumberFollowed.value() > 0) {
     @if (homeApi.getDashboardInfo.hasValue()) {
-      <app-post [posts]="this.homeApi.getDashboardInfo.value().dataNewPost"></app-post>
+      <app-post [posts]="homeApi.getDashboardInfo.value().dataNewPost"></app-post>
     }
   }@else {
       <app-sugerens-user></app-sugerens-user>

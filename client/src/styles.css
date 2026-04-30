@@ -6,34 +6,50 @@
 /*Importamos el font */
 
 /*Creamos los colores: */
-:root{
-  --primary-light : #FC6C3A; 
-  --secondary-light : #EFA287; 
-  --accent-light : #CB6846; 
-  --bg-light : #F9F3F1; 
-  --text-light : #161210; 
+:root {
+  --primary-light: #fc6c3a;
+  --secondary-light: #efa287;
+  --accent-light: #cb6846;
+  --bg-light: #f9f3f1;
+  --text-light: #161210;
 }
 
 /* Colores de fondo */
-.bg-primary-light { background-color: var(--primary-light); }
-.bg-secondary-light { background-color: var(--secondary-light); }
-.bg-accent-light { background-color: var(--accent-light); }
-.bg-light { background-color: var(--bg-light); }
+.bg-primary-light {
+  background-color: var(--primary-light);
+}
+.bg-secondary-light {
+  background-color: var(--secondary-light);
+}
+.bg-accent-light {
+  background-color: var(--accent-light);
+}
+.bg-light {
+  background-color: var(--bg-light);
+}
 
 /* Colores de texto */
-.text-primary-light { color: var(--primary-light); }
-.text-secondary-light { color: var(--secondary-light); }
-.text-accent-light { color: var(--accent-light); }
-.text-light { color: var(--text-light); }
+.text-primary-light {
+  color: var(--primary-light);
+}
+.text-secondary-light {
+  color: var(--secondary-light);
+}
+.text-accent-light {
+  color: var(--accent-light);
+}
+.text-light {
+  color: var(--text-light);
+}
 
 /*Clase que determina la nueva font*/
 .gfs-didot-regular {
-  font-family: "GFS Didot", serif;
+  font-family: 'GFS Didot', serif;
   font-weight: 500;
-  font-style:normal;
+  font-style: normal;
 }
 .gfs-didot-italic-bold {
-  font-family: "GFS Didot", serif;
+  font-family: 'GFS Didot', serif;
   font-weight: 900;
   font-style: italic;
 }
@@ -70,8 +86,8 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
-body::-webkit-scrollbar{
-    display: none;
+body::-webkit-scrollbar {
+  display: none;
 }
 
 img,
@@ -82,4 +98,3 @@ svg {
   display: block;
   max-width: 100%;
 }
-
