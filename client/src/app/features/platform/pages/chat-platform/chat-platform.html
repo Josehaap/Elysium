@@ -19,8 +19,8 @@
 
     <!-- Lista de chats -->
     <div class="chatList">
-      @if (chatApi.getChatList.hasValue() && chatApi.getChatList.value()!.length > 0) {
-        @for (chat of chatApi.getChatList.value(); track chat.chat_id) {
+      @if (chatList().length > 0) {
+        @for (chat of chatList(); track chat.chat_id) {
           <div 
             class="chatItem" 
             [class.active]="selectedChat()?.chat_id === chat.chat_id"

@@ -269,7 +269,7 @@
 
   /* Burbuja del mensaje */
   .msgBubble {
-    max-width: 65%;
+    max-width: 50%;
     padding: 10px 16px;
     border-radius: 18px;
     position: relative;
@@ -301,6 +301,7 @@
     line-height: 1.45;
     word-wrap: break-word;
     overflow-wrap: break-word;
+    word-break: break-word;
   }
 
   /* Hora del mensaje */

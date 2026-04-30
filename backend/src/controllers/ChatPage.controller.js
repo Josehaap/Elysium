@@ -3,6 +3,7 @@ import pool from "../core/config/database/db.js";
 import Helper from "../utils/helpers.js";
 import Exception from "../utils/exceptions.js";
 import ChatService from "../services/chat.services.js";
+import jwt from "jsonwebtoken";
 const helper = new Helper(); 
 
 export default class ChatController{
@@ -90,10 +91,57 @@ export default class ChatController{
     }
 
 
-    getMessage = async (req, res)=>{
-        const chatId = req.header('chatId')
-        const response = await pool.query('SELECT * FROM  `message` where chat_id = ? ', chatId); 
-        console.log(response); 
+    getChats = async (req, res) => {
+        try {
+            const token = jwt.decode(req.header('accessToken'));
+            if (!token || !token.id) throw new Exception('Token inválido');
+            const id = token.id;
+
+            const RESPONSE = await pool.query(
+                `SELECT c.chat_id,
+                CASE 
+                    WHEN c.user_1 = ? THEN c.user_2
+                    ELSE c.user_1
+                END AS other_user_id,
+                (SELECT u.username FROM user u WHERE u.user_id = CASE WHEN c.user_1 = ? THEN c.user_2 ELSE c.user_1 END) AS other_username,
+                (SELECT u.profile_img FROM user u WHERE u.user_id = CASE WHEN c.user_1 = ? THEN c.user_2 ELSE c.user_1 END) AS other_profile_img,
+                (SELECT m.content FROM message m WHERE m.chat_id = c.chat_id ORDER BY m.sennt_at DESC LIMIT 1) AS last_message,
+                (SELECT m.sennt_at FROM message m WHERE m.chat_id = c.chat_id ORDER BY m.sennt_at DESC LIMIT 1) AS last_message_at, 
+                (SELECT m.user_send_id FROM message m WHERE m.chat_id = c.chat_id ORDER BY m.sennt_at DESC LIMIT 1) AS last_message_sender_id, 
+                (SELECT COUNT(*) FROM message m WHERE m.chat_id = c.chat_id AND m.user_send_id != ? AND m.is_read = 0) AS unread_count
+                FROM chat c 
+                WHERE c.user_1 = ? OR c.user_2 = ?
+                ORDER BY last_message_at DESC;`, 
+                [id, id, id, id, id, id]
+            );
+
+            return res.status(200).send(helper.generateLiteralObject(this.#response, [true, RESPONSE[0], '']));
+
+        } catch (error) {
+            this.#valuesError[2] = (error instanceof Exception) ? error.message : "Error al obtener los chats";
+            res.status((error instanceof Exception) ? 400 : 500).send(helper.generateLiteralObject(this.#response, this.#valuesError));
+        }
+    }
+
+    getMessages = async (req, res) => {
+        try {
+            const chatId = req.header('chatId');
+            if (!chatId) throw new Exception('Falta el ID del chat');
+
+            const RESPONSE = await pool.query(
+                `SELECT message_id, content, user_send_id, sennt_at, is_read 
+                FROM message 
+                WHERE chat_id = ? 
+                ORDER BY sennt_at ASC`,
+                [chatId]
+            );
+
+            return res.status(200).send(helper.generateLiteralObject(this.#response, [true, RESPONSE[0], '']));
+
+        } catch (error) {
+            this.#valuesError[2] = (error instanceof Exception) ? error.message : "Error al obtener los mensajes";
+            res.status((error instanceof Exception) ? 400 : 500).send(helper.generateLiteralObject(this.#response, this.#valuesError));
+        }
     }
 
 }
