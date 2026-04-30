@@ -15,10 +15,11 @@ import { environment } from 'src/environments/environment';
 import { DatePipe } from '@angular/common';
 import { jwtDecode } from 'jwt-decode';
 import { accessToken } from '../../../shared/models/shared';
+import { SharedPostCard } from '../../../shared/shared-post-card/shared-post-card';
 
 @Component({
   selector: 'app-chat-platform',
-  imports: [DatePipe],
+  imports: [DatePipe, SharedPostCard],
   templateUrl: './chat-platform.html',
   styleUrl: './chat-platform.css',
 })

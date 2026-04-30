@@ -1,1 +1,24 @@
-<p>sugerens-user works!</p>
+<div class="suggestions-container">
+  <h2 class="suggestions-title">Parece que aún no sigues a nadie</h2>
+  <p class="suggestions-subtitle">Sigue a algunos de estos usuarios para ver sus publicaciones:</p>
+
+  <div class="users-grid">
+    @if (homeApi.getSuggestedUsers.isLoading()) {
+      <div class="loading-spinner">Cargando sugerencias...</div>
+    } @else if (homeApi.getSuggestedUsers.value()?.Data; as users) {
+      @for (user of users; track user.user_id) {
+        <div class="user-card">
+          <div class="user-image-container">
+            <img [src]="getImgUrl(user.profile_img)" [alt]="user.username" class="user-image" />
+          </div>
+          <div class="user-info">
+            <span class="user-name">{{ user.username }}</span>
+            <button class="follow-btn" (click)="follow(user.username)">Seguir</button>
+          </div>
+        </div>
+      }
+    } @else {
+      <p>No hay sugerencias disponibles en este momento.</p>
+    }
+  </div>
+</div>

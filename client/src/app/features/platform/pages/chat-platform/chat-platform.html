@@ -114,6 +114,9 @@
 
                 <!-- Burbuja del mensaje -->
                 <div class="msgBubble">
+                  @if (msg.post_id) {
+                    <app-shared-post-card [postId]="msg.post_id"></app-shared-post-card>
+                  }
                   <p class="msgContent">{{ msg.content }}</p>
                   <span class="msgTime">
                     {{ msg.sennt_at | date:'HH:mm' }}

@@ -36,7 +36,7 @@
   </div>
 
   <!-- Tercer ícono: compartir -->
-  <div class="flex items-center gap-1">
+  <div class="flex items-center gap-1" (click)="openShareModal()">
     <svg
       xmlns="http://www.w3.org/2000/svg"
       width="24"
@@ -45,6 +45,7 @@
       fill="none"
       stroke="black"
       stroke-width="2"
+      class="cursor-pointer"
     >
       <circle cx="5" cy="6" r="3" />
       <path d="M12 6h5a2 2 0 0 1 2 2v7" />
@@ -53,9 +54,17 @@
       <path d="M12 18H7a2 2 0 0 1-2-2V9" />
       <path d="m9 15 3 3-3 3" />
     </svg>
-    <span>{{ shareds() }}</span>
+    <span>{{ totalShareds() }}</span>
   </div>
 </div>
+
+@if (showShareModal()) {
+  <app-share-post-modal 
+    [postId]="id()" 
+    (close)="showShareModal.set(false)" 
+    (shared)="onPostShared($event)">
+  </app-share-post-modal>
+}
 
 
 

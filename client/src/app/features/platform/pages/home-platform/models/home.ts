@@ -40,11 +40,23 @@ export interface DataNews {
     "source_name": string,
     "source_logo_url": string,
     "source_favicon_url": string,
-    "source_publication_id": "CAAqIQgKIhtDQklTRGdnTWFnb0tDR1ZzYkdVdVkyOXRLQUFQAQ",
+    "source_publication_id": string,
     "related_topics": [
         {
-            "topic_id": string
+            "topic_id": string,
             "topic_name": string
         }
     ]
+}
+
+export interface SuggestedUser {
+    user_id: number;
+    username: string;
+    profile_img: string;
+}
+
+export interface ResponseSuggestedUsers {
+    Success: boolean;
+    Data: SuggestedUser[];
+    Error: string;
 }

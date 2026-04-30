@@ -1,9 +1,12 @@
 import { Component, computed, effect, inject, input, output, signal } from '@angular/core';
 import { ActionApi } from './service/action-api';
+import { SharePostModal } from '../../../../shared/share-post-modal/share-post-modal';
+import { TokenService } from 'src/app/core/services/token-service';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-card-actions',
-  imports: [],
+  imports: [SharePostModal],
   templateUrl: './card-actions.html',
   styleUrl: './card-actions.css',
 })
@@ -18,6 +21,11 @@ export class CardActions {
   public comments = input.required<number>();
   public shareds = input.required<number>();
   public id = input.required<string>();
+
+  public showShareModal = signal(false);
+  private manualSharedCount = signal(0);
+  
+  protected totalShareds = computed(() => this.shareds() + this.manualSharedCount());
 
 
   
@@ -64,5 +72,35 @@ export class CardActions {
   public sendIwantViewComment(){
     this.iWantCommentValue.set(!this.iWantCommentValue())
     this.iWantComment.emit(this.iWantCommentValue());
+  }
+
+  public openShareModal() {
+    this.showShareModal.set(true);
+  }
+
+  public onPostShared(chatId: string) {
+    // 1. Incrementar contador en el backend
+    this.actionApi.insertShared(this.id()).subscribe({
+      next: () => {
+        this.manualSharedCount.update(c => c + 1);
+      }
+    });
+
+    // 2. Enviar mensaje por WebSocket
+    const wsUrl = environment.apiUrl.replace('http://', 'ws://').replace('https://', 'wss://');
+    const socket = new WebSocket(wsUrl);
+
+    socket.onopen = () => {
+      socket.send(JSON.stringify({
+        chat_id: chatId,
+        user_send_id: Number(TokenService.getIdToken()),
+        content: "Ha compartido una publicación",
+        post_id: this.id()
+      }));
+      setTimeout(() => socket.close(), 1000);
+    };
+
+    // 3. Cerrar modal
+    this.showShareModal.set(false);
   }
 }

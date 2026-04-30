@@ -69,4 +69,12 @@ export default class PostService {
     );
     return RESPONSE[0];
   }
+
+  async insertShared(post_id, user_id) {
+    const RESPONSE = await pool.query(
+      "INSERT INTO `shared` (post_id, user_id) VALUES (?, ?)",
+      [post_id, user_id]
+    );
+    return RESPONSE[0];
+  }
 }

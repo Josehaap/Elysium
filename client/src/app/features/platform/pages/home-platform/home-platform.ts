@@ -1,4 +1,4 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, inject, signal, ViewChild, ElementRef, AfterViewChecked } from '@angular/core';
 import { Post } from '../../../post/post';
 import { Router } from '@angular/router';
 import { HomeApi } from './services/home-api';
@@ -14,11 +14,13 @@ import { ListNews } from './components/list-news/list-news';
   templateUrl: './home-platform.html',
   styleUrl: './home-platform.css',
 })
-export class HomePlatform {
+export class HomePlatform implements AfterViewChecked {
   protected homeApi = inject(HomeApi);
   protected router = inject(Router);
   protected routingElysium = inject(RoutingElysium);
   protected imgUser: string = new URL(this.homeApi.imgUserUrl, environment.apiUrl).toString();
+
+  @ViewChild('chatContainer') private chatContainer!: ElementRef;
 
   // Mensajes del chat
   public messages = signal([
@@ -44,11 +46,12 @@ export class HomePlatform {
         this.messages.update((prev) => [...prev, { text: response, sender: 'bot' }]);
         this.isLoading.set(false);
       },
-      error: () => {
+      error: (err) => {
+        const errorMsg = err.error?.Error || 'Lo siento, hubo un error al procesar tu mensaje. Inténtalo de nuevo.';
         this.messages.update((prev) => [
           ...prev,
           {
-            text: 'Lo siento, hubo un error al procesar tu mensaje. Inténtalo de nuevo.',
+            text: errorMsg,
             sender: 'bot',
           },
         ]);
@@ -61,4 +64,15 @@ export class HomePlatform {
     this.routingElysium.goToProfile(TokenService.getUsenameToken());
   };
   imgUrl = () => TokenService.getProfileImg();
+
+  ngAfterViewChecked() {
+    this.scrollToBottom();
+  }
+
+  private scrollToBottom() {
+    try {
+      const el = this.chatContainer.nativeElement;
+      el.scrollTop = el.scrollHeight;
+    } catch (err) {}
+  }
 }

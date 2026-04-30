@@ -27,6 +27,7 @@ export interface ChatMessage {
   user_send_id: number;
   sender_username: string;
   sender_profile_img: string;
+  post_id?: string;
 }
 
 /**
