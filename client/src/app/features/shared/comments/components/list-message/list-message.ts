@@ -1,7 +1,6 @@
 import { Component, input, output } from '@angular/core';
-import { Message } from "../message/message";
-import { IMessage } from "../../models/message";
-
+import { Message } from '../message/message';
+import { IMessage } from '../../models/message';
 
 @Component({
   selector: 'app-list-message',
@@ -10,6 +9,6 @@ import { IMessage } from "../../models/message";
   styleUrl: './list-message.css',
 })
 export class ListMessage {
-  public listMessage = input.required<IMessage[]>(); 
+  public listMessage = input.required<IMessage[]>();
   public onDelete = output<void>();
 }

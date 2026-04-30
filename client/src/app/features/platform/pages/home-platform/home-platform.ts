@@ -6,7 +6,7 @@ import { environment } from 'src/environments/environment';
 import { RoutingElysium } from 'src/app/core/services/routingElysium';
 import { TokenService } from 'src/app/core/services/token-service';
 import { SugerensUser } from './components/sugerens-user/sugerens-user';
-import { ListNews } from "./components/list-news/list-news";
+import { ListNews } from './components/list-news/list-news';
 
 @Component({
   selector: 'app-home-platform',
@@ -18,11 +18,11 @@ export class HomePlatform {
   protected homeApi = inject(HomeApi);
   protected router = inject(Router);
   protected routingElysium = inject(RoutingElysium);
-  protected imgUser: string = new URL(this.homeApi.imgUserUrl,environment.apiUrl).toString() ;
+  protected imgUser: string = new URL(this.homeApi.imgUserUrl, environment.apiUrl).toString();
 
   // Mensajes del chat
   public messages = signal([
-    { text: '¡Hola! Soy tu asistente de Elysium. ¿En qué puedo ayudarte hoy?', sender: 'bot' }
+    { text: '¡Hola! Soy tu asistente de Elysium. ¿En qué puedo ayudarte hoy?', sender: 'bot' },
   ]);
 
   // Estado de carga del chatbot
@@ -34,28 +34,31 @@ export class HomePlatform {
     if (!text || this.isLoading()) return;
 
     // Añadir mensaje del usuario
-    this.messages.update(prev => [...prev, { text, sender: 'user' }]);
+    this.messages.update((prev) => [...prev, { text, sender: 'user' }]);
     input.value = '';
 
     // Enviar petición HTTP al webhook
     this.isLoading.set(true);
     this.homeApi.sendChatMessage(text).subscribe({
       next: (response) => {
-        this.messages.update(prev => [...prev, { text: response, sender: 'bot' }]);
+        this.messages.update((prev) => [...prev, { text: response, sender: 'bot' }]);
         this.isLoading.set(false);
       },
       error: () => {
-        this.messages.update(prev => [...prev, {
-          text: 'Lo siento, hubo un error al procesar tu mensaje. Inténtalo de nuevo.',
-          sender: 'bot'
-        }]);
+        this.messages.update((prev) => [
+          ...prev,
+          {
+            text: 'Lo siento, hubo un error al procesar tu mensaje. Inténtalo de nuevo.',
+            sender: 'bot',
+          },
+        ]);
         this.isLoading.set(false);
-      }
+      },
     });
   }
 
-  goToPerfil =() =>{
+  goToPerfil = () => {
     this.routingElysium.goToProfile(TokenService.getUsenameToken());
-  }
+  };
   imgUrl = () => TokenService.getProfileImg();
 }

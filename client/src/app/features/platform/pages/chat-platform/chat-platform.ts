@@ -221,15 +221,15 @@ export class ChatPlatform implements OnInit, AfterViewChecked {
 
   /**
    * Hace scroll hasta el último mensaje del contenedor.
-   */
+   */ 
   private scrollToBottom() {
-    try {
-      const el = this.messagesContainer?.nativeElement;
-      if (el) {
+      try {
+        const el = this.messagesContainer?.nativeElement;
+        if (el) {
         el.scrollTop = el.scrollHeight;
+        }
+      } catch (err) {
+        // Silenciar errores si el contenedor no existe aún
       }
-    } catch (err) {
-      // Silenciar errores si el contenedor no existe aún
-    }
   }
 }
