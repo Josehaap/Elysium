@@ -3,7 +3,7 @@ import Token from "../core/middleware/Token.js";
 const router = express.Router(); //Generamos una instancia de las funcione de enrutamiento.
 import pool from "../core/config/database/db.js";
 import Exception from "../utils/exceptions.js";
-import ChatController from "../controllers/ChatPAge.controller.js";
+import ChatController from "../controllers/ChatPage.controller.js";
 import jwt from "jsonwebtoken";
 
 /**

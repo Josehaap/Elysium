@@ -1,0 +1,11 @@
+node_modules
+.angular
+dist
+.git
+.vscode
+client/node_modules
+client/.angular
+client/dist
+backend/node_modules
+backend/.env
+docker/persistence_vol_database

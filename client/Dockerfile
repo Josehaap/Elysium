@@ -5,7 +5,11 @@ WORKDIR /app
 
 COPY package*.json pnpm-lock.yaml* ./
 
-RUN npm install -g pnpm && pnpm install
+# Configure pnpm to use a flat node_modules structure (hoisted)
+# This prevents "module not found" errors with Angular CLI and peer dependencies in Docker
+RUN npm install -g pnpm && \
+    pnpm config set node-linker hoisted && \
+    pnpm install
 
 COPY . .
 
@@ -15,10 +19,8 @@ RUN pnpm build --configuration production
 FROM nginx:alpine
 
 # Copy built files from build-stage
+# Path might need adjustment based on angular.json, but usually it's dist/[project]/browser
 COPY --from=build-stage /app/dist/client/browser /usr/share/nginx/html
-
-# Copy custom nginx config if needed (optional)
-# COPY nginx.conf /etc/nginx/conf.d/default.conf
 
 EXPOSE 80
 
