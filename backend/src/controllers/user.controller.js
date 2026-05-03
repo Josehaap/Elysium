@@ -270,9 +270,9 @@ export default class UserController {
         await this.#userService.activateUserAccount(token);
 
       if (isValidActivation === true) {
-        return res.redirect("http://localhost:4200/login?activated=true");
+        return res.redirect("http://localhost:80/login?activated=true");
       } else {
-        return res.redirect("http://localhost:4200/login?activated=false");
+        return res.redirect("http://localhost:80/login?activated=false");
       }
     } catch (error) {
       this.#valuesError[2] = (error instanceof Exception) ? error.message: this.#valuesError[2]; 
