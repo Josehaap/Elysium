@@ -29,6 +29,11 @@ services:
       - PORT=3000
       - JWT_ACCESS_SECRET=oiiuyytgOUIYOTYI8ERFQIONJÑK7654TYVUBIIO=&R%EXUDFIvbhn`toyvGUB
       - JWT_REFRESH_SECRET=oWEDGTRiuyytgOURYHTJYNKWNWJEFNI87654TYVUBIIO=&R%EXUDFIvbhn`toyvGUB
+      - userSenderEmail=deharojimenezjose1@gmail.com
+      - apiKeyUserSenderEmail=hojm wfdf ujuq gdru
+      - urlUserNormal=http://localhost:3000
+      - urlUserEnterprise=http://localhost:3000
+      - levelSegurityDefault=10
     depends_on:
       - database
     networks:
