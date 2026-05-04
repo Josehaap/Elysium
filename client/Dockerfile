@@ -18,6 +18,9 @@ RUN pnpm build --configuration production
 # Stage 2: Serve
 FROM nginx:alpine
 
+# Configuración de Nginx para SPA (redirige rutas a index.html)
+COPY nginx.conf /etc/nginx/conf.d/default.conf
+
 # Copy built files from build-stage
 # Path might need adjustment based on angular.json, but usually it's dist/[project]/browser
 COPY --from=build-stage /app/dist/client/browser /usr/share/nginx/html
