@@ -9,10 +9,10 @@
       @for (user of users; track user.user_id) {
         <div class="user-card">
           <div class="user-image-container">
-            <img [src]="getImgUrl(user.profile_img)" [alt]="user.username" class="user-image" />
+            <img [src]="getImgUrl(user.profile_img)" [alt]="user.username" class="user-image" style="cursor: pointer;" (click)="routingElysium.goToProfile(user.username)" />
           </div>
           <div class="user-info">
-            <span class="user-name">{{ user.username }}</span>
+            <span class="user-name" style="cursor: pointer;" (click)="routingElysium.goToProfile(user.username)">{{ user.username }}</span>
             <button class="follow-btn" (click)="follow(user.username)">Seguir</button>
           </div>
         </div>

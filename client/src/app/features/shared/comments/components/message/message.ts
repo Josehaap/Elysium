@@ -4,6 +4,7 @@ import { TokenService } from 'src/app/core/services/token-service';
 import { environment } from 'src/environments/environment';
 import { CommentApi } from '../../services/comments-api';
 import { Router } from '@angular/router';
+import { RoutingElysium } from 'src/app/core/services/routingElysium';
 
 
 @Component({
@@ -16,6 +17,7 @@ export class Message {
   //Cuando se carge el mensaje vamos a comprobar si el comentario procede del usuario o de otro usuario
   private commentApi = inject(CommentApi);
   private router = inject(Router);
+  protected routingElysium = inject(RoutingElysium);
   public onDelete = output<void>();
 
   protected activeClassExpanded = signal<boolean>(false);
@@ -48,7 +50,7 @@ export class Message {
   }
 
   protected goToProfile() {
-    this.router.navigate([`elysium/profile/${this.dataComment().username}`]);
+    this.routingElysium.goToProfile(this.dataComment().username);
   }
 
 

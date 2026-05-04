@@ -18,13 +18,13 @@ export default class ChatbotController {
             // 1. Intentar obtener los modelos disponibles para ver si Ollama está corriendo
             let models = [];
             try {
-                const tagsResponse = await fetch("http://localhost:11434/api/tags");
+                const tagsResponse = await fetch("http://ollama:11434/api/tags");
                 if (tagsResponse.ok) {
                     const tagsData = await tagsResponse.json();
                     models = tagsData.models.map(m => m.name);
                 }
             } catch (e) {
-                throw new Exception("No se pudo conectar con Ollama. ¿Está el servidor corriendo en http://localhost:11434?");
+                throw new Exception("No se pudo conectar con Ollama.");
             }
 
             if (models.length === 0) {
@@ -38,7 +38,7 @@ export default class ChatbotController {
 
             console.log(`Usando modelo Ollama: ${modelToUse}`);
 
-            const response = await fetch("http://localhost:11434/api/chat", {
+            const response = await fetch("http://ollama:11434/api/chat", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",

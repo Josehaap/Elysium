@@ -16,6 +16,7 @@ import { DatePipe } from '@angular/common';
 import { jwtDecode } from 'jwt-decode';
 import { accessToken } from '../../../shared/models/shared';
 import { SharedPostCard } from '../../../shared/shared-post-card/shared-post-card';
+import { RoutingElysium } from 'src/app/core/services/routingElysium';
 
 @Component({
   selector: 'app-chat-platform',
@@ -26,6 +27,7 @@ import { SharedPostCard } from '../../../shared/shared-post-card/shared-post-car
 export class ChatPlatform implements OnInit, AfterViewChecked {
   // Inyección de dependencias
   protected chatApi = inject(ChatApi);
+  protected routingElysium = inject(RoutingElysium);
 
   // Lista de chats procesada desde el resource de la API
   protected chatList = computed(() => {

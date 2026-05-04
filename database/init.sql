@@ -19,7 +19,7 @@ create table if not exists user(
 create table if not exists user_activity(
     activity_id bigint primary key AUTO_INCREMENT, 
     user_id bigint not null, 
-    action_type ENUM('create', 'update', 'delete') not null,
+    action_type ENUM('create', 'update', 'delete', 'login') not null,
     action_details text not null, 
     create_at timestamp default current_timestamp, 
     constraint fk_userAct_user FOREIGN KEY (user_id) references user(user_id) on delete cascade

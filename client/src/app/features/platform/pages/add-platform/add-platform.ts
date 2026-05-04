@@ -62,9 +62,9 @@ export class AddPlatform {
             return;
         }
 
-        if (post.title === '' && post.description === '' && !this.selectedFile) {
+        if (!this.selectedFile) {
             this.alertLevel.set('danger');
-            this.alertMessage.set('Debes rellenar al menos un campo o seleccionar una imagen');
+            this.alertMessage.set('No se puede subir un post sin imagen');
             setTimeout(() => this.alertMessage.set(''), 3000);
             return;
         }

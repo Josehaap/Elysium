@@ -2,6 +2,7 @@ import { Component, inject } from '@angular/core';
 import { environment } from 'src/environments/environment';
 import { HomeApi } from '../../services/home-api';
 import { CommonModule } from '@angular/common';
+import { RoutingElysium } from 'src/app/core/services/routingElysium';
 
 @Component({
   selector: 'app-sugerens-user',
@@ -11,6 +12,7 @@ import { CommonModule } from '@angular/common';
 })
 export class SugerensUser {
   protected homeApi = inject(HomeApi);
+  protected routingElysium = inject(RoutingElysium);
   protected apiUrl = environment.apiUrl;
 
   follow(username: string) {
@@ -29,7 +31,7 @@ export class SugerensUser {
   }
 
   getImgUrl(profileImg: string): string {
-    if (!profileImg) return 'assets/img/default-avatar.png';
+    if (!profileImg) return 'img/placeholder/profile/profile_userDefault.webp';
 
     // Si ya es una URL completa (http o https), la devolvemos tal cual
     if (profileImg.startsWith('http')) return profileImg;

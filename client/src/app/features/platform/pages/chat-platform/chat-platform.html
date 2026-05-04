@@ -31,6 +31,8 @@
               <img 
                 [src]="getProfileImgUrl(chat.other_profile_img)" 
                 [alt]="chat.other_username" 
+                style="cursor: pointer;"
+                (click)="$event.stopPropagation(); routingElysium.goToProfile(chat.other_username)"
               />
               <!-- Indicador de mensajes no leídos -->
               @if (chat.unread_count > 0) {
@@ -41,7 +43,7 @@
             <!-- Información del chat -->
             <div class="chatItemInfo">
               <div class="chatItemTop">
-                <span class="chatItemName">{{ chat.other_username }}</span>
+                <span class="chatItemName" style="cursor: pointer;" (click)="$event.stopPropagation(); routingElysium.goToProfile(chat.other_username)">{{ chat.other_username }}</span>
                 <span class="chatItemTime">{{ formatChatDate(chat.last_message_at) }}</span>
               </div>
               <p class="chatItemLastMsg" [class.unread]="chat.unread_count > 0">
@@ -75,9 +77,11 @@
           [src]="getProfileImgUrl(selectedChat()!.other_profile_img)" 
           [alt]="selectedChat()!.other_username" 
           class="chatMainAvatar"
+          style="cursor: pointer;"
+          (click)="routingElysium.goToProfile(selectedChat()!.other_username)"
         />
         <div class="chatMainUserInfo">
-          <span class="chatMainUsername">{{ selectedChat()!.other_username }}</span>
+          <span class="chatMainUsername" style="cursor: pointer;" (click)="routingElysium.goToProfile(selectedChat()!.other_username)">{{ selectedChat()!.other_username }}</span>
         </div>
       </div>
 
@@ -109,6 +113,8 @@
                     [src]="getProfileImgUrl(msg.sender_profile_img)" 
                     [alt]="msg.sender_username" 
                     class="msgAvatar"
+                    style="cursor: pointer;"
+                    (click)="routingElysium.goToProfile(msg.sender_username)"
                   />
                 }
 

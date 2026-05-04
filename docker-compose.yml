@@ -49,9 +49,20 @@ services:
     networks:
       - elysium-network
 
+  ollama:
+    image: ollama/ollama:latest
+    container_name: elysium-ollama
+    ports:
+      - "11434:11434"
+    volumes:
+      - ollama-data:/root/.ollama
+    networks:
+      - elysium-network
+
 networks:
   elysium-network:
     driver: bridge
 
 volumes:
   elysium-db-data:
+  ollama-data:
