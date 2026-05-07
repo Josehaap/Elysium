@@ -1,49 +1,44 @@
-<section class="container">
-  <div>
-    <p>Comentarios</p>
-    <svg
-      (click)="onCommentAction.emit({ action: CommentAction.CLOSED, isClosed: true })"
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      stroke-width="2"
-      stroke-linecap="round"
-      stroke-linejoin="round"
-      class="lucide lucide-corner-up-left-icon lucide-corner-up-left cursor-pointer"
-    >
-      <path d="M20 20v-7a4 4 0 0 0-4-4H4" />
-      <path d="M9 14 4 9l5-5" />
-    </svg>
-  </div>
-  <p class="banner">
-    Recuerda que los comentarios deben ser respetuosos y cumplir las normas de la comunidad de
-    Elysium.
-  </p>
-  <app-list-message
-    [listMessage]="commentsResource.value()?.Data ?? []"
-    (onDelete)="commentsResource.reload(); onCommentAction.emit({ action: CommentAction.DELETED })"
-  ></app-list-message>
-  <div class="input">
-    <input type="text" placeholder="Se respetuoso" (keydown.enter)="insertComment($event)" />
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      stroke-width="2"
-      stroke-linecap round
-      stroke-linejoin="round"
-      class="lucide lucide-send-icon lucide-send"
-    >
-      <path
-        d="M14.536 21.686a.5.5 0 0 0 .937-.024l6.5-19a.496.496 0 0 0-.635-.635l-19 6.5a.5.5 0 0 0-.024.937l7.93 3.18a2 2 0 0 1 1.112 1.11z"
-      />
-      <path d="m21.854 2.147-10.94 10.939" />
-    </svg>
-  </div>
-</section>
+<div class="drawer-backdrop" (click)="onCommentAction.emit({ action: CommentAction.CLOSED, isClosed: true })">
+  <section class="comments-drawer" (click)="$event.stopPropagation()">
+    
+    <div class="drawer-header">
+      <div class="header-top">
+        <h3 class="drawer-title">Comentarios</h3>
+        <button class="close-drawer-btn" (click)="onCommentAction.emit({ action: CommentAction.CLOSED, isClosed: true })">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+        </button>
+      </div>
+
+      @if (imageUrl()) {
+        <div class="drawer-image-container">
+          <img [src]="imageUrl()" alt="Post image" class="drawer-post-img">
+        </div>
+      }
+
+      @if (title()) {
+        <p class="post-context">{{ title() }}</p>
+      }
+
+      <p class="banner">
+        Recuerda que los comentarios deben ser respetuosos y cumplir las normas de la comunidad de Elysium.
+      </p>
+    </div>
+
+    <div class="drawer-content">
+      <app-list-message
+        [listMessage]="commentsResource.value()?.Data ?? []"
+        (onDelete)="commentsResource.reload(); onCommentAction.emit({ action: CommentAction.DELETED })"
+      ></app-list-message>
+    </div>
+
+    <div class="drawer-footer">
+      <div class="input-container">
+        <input type="text" placeholder="Escribe un comentario respetuoso..." (keydown.enter)="insertComment($event)" />
+        <button class="send-comment-btn">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-send"><path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/></svg>
+        </button>
+      </div>
+    </div>
+
+  </section>
+</div>

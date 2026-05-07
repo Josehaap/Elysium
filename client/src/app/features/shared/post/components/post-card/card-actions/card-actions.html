@@ -61,7 +61,7 @@
 @if (showShareModal()) {
   <app-share-post-modal 
     [postId]="id()" 
-    (close)="showShareModal.set(false)" 
+    (close)="closeShareModal()" 
     (shared)="onPostShared($event)">
   </app-share-post-modal>
 }

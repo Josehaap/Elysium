@@ -13,6 +13,8 @@ export class Comments {
   protected CommentAction = CommentAction;
   protected commenApi = inject(CommentApi)
   public id = input.required<string>(); 
+  public title = input<string>('');
+  public imageUrl = input<string>('');
   public onCommentAction = output<CommentEvent>();
 
   protected commentsResource = this.commenApi.getComents(this.id);

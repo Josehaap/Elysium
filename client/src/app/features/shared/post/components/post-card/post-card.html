@@ -48,6 +48,8 @@
   @if (iwantViewComment()) {
     <app-comments
       [id]="dataPost().post_id"
+      [title]="dataPost().title"
+      [imageUrl]="imgUrlPost()"
       (onCommentAction)="handleCommentAction($event)"
     ></app-comments>
   }

@@ -2,11 +2,9 @@
     position: relative;
     border-radius: 30px;
     overflow: hidden;
-    transition: transform 0.5s ease;
+    transition: box-shadow 0.5s ease;
     user-select: none;
     cursor: default;
-    will-change: transform;
-    transform: translateZ(0);
 }
 
 .containerPost::after{
@@ -18,8 +16,6 @@
     backdrop-filter: blur(5px);
     -webkit-backdrop-filter: blur(5px);
     background-color: rgba(255, 255, 255, 0.304);
-    will-change: transform;
-    transform: translateZ(0);
     pointer-events: none;
 }
 
@@ -34,12 +30,10 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    will-change: transform;
-    transform: translateZ(0);
 }
 
 .containerPost:hover{
-    transform: scale(1.01);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.15);
     .toggleButton {
         opacity: 1;
     }
@@ -53,7 +47,6 @@
     opacity: 0;
     transition: all 0.3s ease;
     z-index: 20;
-    /* Círculo traslúcido elegante */
     background: rgba(255, 255, 255, 0.15);
     backdrop-filter: blur(8px);
     border: 1px solid rgba(255, 255, 255, 0.2);
@@ -70,16 +63,13 @@
 
 .toggleButton:hover {
     background: rgba(255, 255, 255, 0.3);
-    transform: rotate(90deg) scale(1.1);
 }
 
-/* --- MENÚ DE OPCIONES (Premium Glassmorphism) --- */
+/* --- MENÚ DE OPCIONES --- */
 .option {
   position: absolute;
   inset: 0;
-  /* Fondo oscuro traslúcido para centrar la atención */
   background-color: rgba(0, 0, 0, 0.45);
-  /* Efecto de cristal esmerilado profundo */
   backdrop-filter: blur(14px) saturate(160%);
   -webkit-backdrop-filter: blur(14px) saturate(160%);
   z-index: 15;
@@ -87,14 +77,7 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  /* Animación de entrada suave */
-  animation: menuAppear 0.4s cubic-bezier(0.23, 1, 0.32, 1);
   padding: 24px;
-}
-
-@keyframes menuAppear {
-  from { opacity: 0; backdrop-filter: blur(0px); }
-  to { opacity: 1; backdrop-filter: blur(14px); }
 }
 
 .option .menu-content {
@@ -103,13 +86,6 @@
   display: flex;
   flex-direction: column;
   gap: 14px;
-  /* El contenido sube suavemente al aparecer */
-  animation: contentSlide 0.5s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-@keyframes contentSlide {
-  from { transform: translateY(30px); opacity: 0; }
-  to { transform: translateY(0); opacity: 1; }
 }
 
 .mensaje {
@@ -127,7 +103,6 @@
   width: 100%;
   padding: 16px;
   border-radius: 9px;
-  /* Estilo de botón "vidrio" con borde fino */
   border: 1px solid rgba(255, 255, 255, 0.15);
   background: rgba(255, 255, 255, 0.08);
   color: white;
@@ -138,36 +113,23 @@
   justify-content: center;
   gap: 12px;
   cursor: pointer;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: all 0.3s;
 }
 
 .option-btn:hover {
   background: rgba(255, 255, 255, 0.18);
   border-color: rgba(255, 255, 255, 0.3);
-  transform: translateY(-3px);
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
 }
 
 .option-btn.modify {
-  /* Tinte azul sutil para modificar */
   background: rgba(59, 130, 246, 0.15);
   border-color: rgba(59, 130, 246, 0.2);
 }
 
-.option-btn.modify:hover {
-  background: rgba(59, 130, 246, 0.3);
-}
-
 .option-btn.delete {
-  /* Tinte rojo elegante para eliminar */
   background: rgba(239, 68, 68, 0.15);
   border-color: rgba(239, 68, 68, 0.2);
   color: #fca5a5;
-}
-
-.option-btn.delete:hover {
-  background: rgba(239, 68, 68, 0.4);
-  color: white;
 }
 
 .close-menu {
@@ -176,101 +138,70 @@
   font-weight: 500;
   cursor: pointer;
   text-align: center;
-  transition: all 0.2s;
 }
 
-.close-menu:hover {
-  color: white;
-  transform: scale(1.05);
-}
-
-/* Estilos para el modal de edición */
+/* --- MODAL EDICIÓN --- */
 .edit-overlay {
   position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
+  inset: 0;
   background: rgba(0, 0, 0, 0.6);
-  backdrop-filter: blur(5px);
+  backdrop-filter: blur(10px);
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 2000;
+  z-index: 10000;
 }
 
 .edit-modal {
   background: white;
   width: 90%;
-  max-width: 450px;
-  padding: 2rem;
-  border-radius: 20px;
-  box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+  max-width: 500px;
+  padding: 32px;
+  border-radius: 24px;
 }
 
 .edit-title {
-  font-size: 1.5rem;
-  font-weight: 800;
-  margin-bottom: 1.5rem;
-  color: #333;
+  font-size: 1.8rem;
+  font-weight: 900;
+  margin-bottom: 24px;
 }
 
 .edit-field {
-  margin-bottom: 1.2rem;
+  margin-bottom: 20px;
 }
 
 .edit-field label {
   display: block;
-  font-weight: 700;
-  margin-bottom: 0.5rem;
-  color: #666;
+  font-weight: 800;
+  margin-bottom: 8px;
 }
 
 .edit-field input, .edit-field textarea {
   width: 100%;
-  padding: 12px;
-  border: 2px solid #eee;
+  padding: 14px;
+  border: 2px solid #f3f4f6;
   border-radius: 12px;
-  outline: none;
-  font-family: inherit;
-  transition: border-color 0.3s;
-}
-
-.edit-field input:focus, .edit-field textarea:focus {
-  border-color: #ff9900;
 }
 
 .edit-actions {
   display: flex;
-  gap: 1rem;
-  margin-top: 2rem;
+  gap: 12px;
 }
 
 .btn-cancel {
+  flex: 1;
   background: #f3f4f6;
   color: #4b5563;
-  padding: 12px;
+  padding: 14px;
   border-radius: 12px;
-  font-weight: 700;
-  border: none;
-  cursor: pointer;
-}
-
-.btn-cancel:hover {
-  background: #e5e7eb;
+  font-weight: 800;
 }
 
 .btn-save {
+  flex: 2;
   background: #ff9900;
   color: white;
-  padding: 12px;
+  padding: 14px;
   border-radius: 12px;
-  font-weight: 700;
-  border: none;
-  cursor: pointer;
+  font-weight: 800;
 }
-
-.btn-save:hover {
-  background: #e68a00;
-}
-

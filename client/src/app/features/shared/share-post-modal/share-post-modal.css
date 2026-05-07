@@ -1,56 +1,74 @@
 .modal-overlay {
   position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.5);
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(10px);
+  z-index: 10000;
   display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 1000;
-  backdrop-filter: blur(4px);
+  justify-content: flex-end;
+  animation: fadeIn 0.4s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
 
 .modal-content {
-  background: white;
-  width: 90%;
-  max-width: 400px;
-  border-radius: 20px;
-  overflow: hidden;
-  box-shadow: 0 10px 25px rgba(0,0,0,0.2);
-  animation: slideUp 0.3s ease-out;
+  width: 100%;
+  max-width: 480px;
+  height: 100vh;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(20px);
+  box-shadow: -15px 0 50px rgba(0, 0, 0, 0.15);
+  display: flex;
+  flex-direction: column;
+  animation: slideInRight 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  position: relative;
+  border-left: 1px solid rgba(255, 255, 255, 0.3);
 }
 
-@keyframes slideUp {
-  from { transform: translateY(20px); opacity: 0; }
-  to { transform: translateY(0); opacity: 1; }
+@keyframes slideInRight {
+  from { transform: translateX(100%); opacity: 0.5; }
+  to { transform: translateX(0); opacity: 1; }
 }
 
 .modal-header {
-  padding: 15px 20px;
-  border-bottom: 1px solid #eee;
+  padding: 32px 24px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 
 .modal-header h3 {
+  font-size: 1.8rem;
+  font-weight: 900;
+  color: #1a1a1a;
   margin: 0;
-  font-size: 1.1rem;
-  font-weight: 600;
+  letter-spacing: -0.5px;
 }
 
 .close-btn {
-  background: none;
+  background: rgba(0, 0, 0, 0.05);
   border: none;
   cursor: pointer;
-  padding: 5px;
-  color: #666;
+  padding: 8px;
+  border-radius: 50%;
+  color: #1a1a1a;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+}
+
+.close-btn:hover {
+  background: rgba(0, 0, 0, 0.1);
+  transform: scale(1.1);
 }
 
 .modal-body {
-  max-height: 400px;
+  flex: 1;
   overflow-y: auto;
   padding: 10px 0;
 }
@@ -63,46 +81,71 @@
 .chat-item {
   display: flex;
   align-items: center;
-  padding: 12px 20px;
+  padding: 16px 24px;
   cursor: pointer;
-  transition: background 0.2s;
+  transition: all 0.2s;
 }
 
 .chat-item:hover {
-  background: #f8f9fa;
+  background: rgba(0, 0, 0, 0.03);
 }
 
 .avatar {
-  width: 44px;
-  height: 44px;
+  width: 50px;
+  height: 50px;
   border-radius: 50%;
   object-fit: cover;
-  margin-right: 12px;
+  margin-right: 15px;
+  border: 2px solid white;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.05);
 }
 
 .username {
   flex-grow: 1;
-  font-weight: 500;
-  color: #262626;
+  font-weight: 700;
+  color: #1a1a1a;
+  font-size: 1rem;
 }
 
 .send-btn {
-  background: #0095f6;
+  background: #ff9900;
   color: white;
   border: none;
-  padding: 6px 16px;
-  border-radius: 8px;
-  font-weight: 600;
-  font-size: 0.9rem;
+  padding: 8px 20px;
+  border-radius: 10px;
+  font-weight: 800;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
   cursor: pointer;
+  transition: all 0.2s;
 }
 
 .send-btn:hover {
-  background: #1877f2;
+  background: #e68a00;
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(255, 153, 0, 0.3);
 }
 
 .empty-msg {
   text-align: center;
-  padding: 30px;
-  color: #8e8e8e;
+  padding: 60px 24px;
+  color: #888;
+  font-weight: 500;
+}
+
+/* Scrollbar elegante */
+.modal-body::-webkit-scrollbar {
+  width: 5px;
+}
+
+.modal-body::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+}
+
+@media (max-width: 640px) {
+  .modal-content {
+    max-width: 100%;
+  }
 }

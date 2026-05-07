@@ -49,12 +49,22 @@
     <app-card-actions
       [id]="this.infoPost().id"
       [likes]="this.infoPost().likes"
-      [comments]="this.infoPost().comment"
+      [comments]="this.localCommentCount()"
       [shareds]="this.infoPost().shared"
       [isLiked]="this.infoPost().userLike"
+      (iWantComment)="iwantViewComment.set($event)"
     ></app-card-actions>
   </div>
 </div>
+
+@if (iwantViewComment()) {
+  <app-comments
+    [id]="infoPost().id"
+    [title]="infoPost().title"
+    [imageUrl]="imageUrl()"
+    (onCommentAction)="handleCommentAction($event)"
+  ></app-comments>
+}
 
 @if (isEditing()) {
   <div class="edit-overlay" (click)="isEditing.set(false)">

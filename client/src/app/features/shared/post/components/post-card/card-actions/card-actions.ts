@@ -14,6 +14,7 @@ export class CardActions {
   protected actionApi = inject(ActionApi);
 
   public iWantComment = output<boolean>();
+  public shareModalStatus = output<boolean>();
   public iWantCommentValue = signal<boolean>(false);
 
   public isLiked = input.required<boolean>();
@@ -73,6 +74,12 @@ export class CardActions {
 
   public openShareModal() {
     this.showShareModal.set(true);
+    this.shareModalStatus.emit(true);
+  }
+
+  public closeShareModal() {
+    this.showShareModal.set(false);
+    this.shareModalStatus.emit(false);
   }
 
   public onPostShared(chatId: string) {
@@ -101,5 +108,6 @@ export class CardActions {
 
     // 3. Cerrar modal
     this.showShareModal.set(false);
+    this.shareModalStatus.emit(false);
   }
 }

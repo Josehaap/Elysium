@@ -1,6 +1,8 @@
-import { Component, computed, inject, input, signal } from '@angular/core';
+import { Component, computed, inject, input, linkedSignal, signal } from '@angular/core';
 import { NgStyle } from '@angular/common';
 import { CardActions } from 'src/app/features/shared/post/components/post-card/card-actions/card-actions';
+import { Comments } from 'src/app/features/shared/comments/comments';
+import { CommentAction, CommentEvent } from 'src/app/features/shared/comments/models/message';
 import { Post } from 'src/app/features/platform/pages/profile-platform/models/profile';
 import { environment } from 'src/environments/environment';
 import { PostApi } from '../../services/post-api';
@@ -11,7 +13,7 @@ import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-card-post',
-  imports: [NgStyle, CardActions, FormsModule],
+  imports: [NgStyle, CardActions, FormsModule, Comments],
   templateUrl: './card-post.html',
   styleUrl: './card-post.css',
 })
@@ -42,6 +44,22 @@ export class CardPost {
     });
   }
   public infoPost = input.required<Post>();
+  protected localCommentCount = linkedSignal(() => this.infoPost().comment);
+  protected iwantViewComment = signal(false);
+
+  protected handleCommentAction(event: CommentEvent) {
+    switch (event.action) {
+      case CommentAction.ADDED:
+        this.localCommentCount.update((c) => c + 1);
+        break;
+      case CommentAction.DELETED:
+        this.localCommentCount.update((c) => c - 1);
+        break;
+      case CommentAction.CLOSED:
+        this.iwantViewComment.set(false);
+        break;
+    }
+  }
 
   protected isEditing = signal(false);
   protected editTitle = signal('');

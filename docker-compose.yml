@@ -21,22 +21,27 @@ services:
     ports:
       - "3000:3000"
     environment:
-      - DB_HOST=database
-      - DB_USER=userAdmin
-      - DB_PASSWORD=1234
-      - DB_NAME=elysiumDatabase
-      - DB_PORT=3306
-      - PORT=3000
-      - JWT_ACCESS_SECRET=oiiuyytgOUIYOTYI8ERFQIONJÑK7654TYVUBIIO=&R%EXUDFIvbhn`toyvGUB
-      - JWT_REFRESH_SECRET=oWEDGTRiuyytgOURYHTJYNKWNWJEFNI87654TYVUBIIO=&R%EXUDFIvbhn`toyvGUB
-      - userSenderEmail=deharojimenezjose1@gmail.com
-      - apiKeyUserSenderEmail=hojm wfdf ujuq gdru
-      - urlUserNormal=http://localhost:3000
-      - urlUserEnterprise=http://localhost:3000
-      - levelSegurityDefault=10
+    - DB_HOST=${DB_HOST}
+    - DB_USER=${DB_USER}
+    - DB_PASSWORD=${DB_PASSWORD}
+    - DB_NAME=${DB_NAME}
+    - DB_PORT=${DB_PORT}
+
+    - PORT=${PORT}
+
+    - JWT_ACCESS_SECRET=${JWT_ACCESS_SECRET}
+    - JWT_REFRESH_SECRET=${JWT_REFRESH_SECRET}
+
+    - userSenderEmail=${userSenderEmail}
+    - apiKeyUserSenderEmail=${apiKeyUserSenderEmail}
+
+    - urlUserNormal=${urlUserNormal}
+    - urlUserEnterprise=${urlUserEnterprise}
+
+    - levelSegurityDefault=${levelSegurityDefault}
     depends_on:
       - database
-    networks:
+    networks: 
       - elysium-network
 
   client:
@@ -49,8 +54,9 @@ services:
     networks:
       - elysium-network
 
+  services:
   ollama:
-    image: ollama/ollama:latest
+    image: ollama/ollama:0.6.8
     container_name: elysium-ollama
     ports:
       - "11434:11434"
@@ -58,6 +64,13 @@ services:
       - ollama-data:/root/.ollama
     networks:
       - elysium-network
+    entrypoint: >
+      /bin/sh -c "
+      ollama serve &
+      sleep 5 &&
+      ollama list | grep llama3.1:8b || ollama pull llama3.1:8b &&
+      wait
+      "
 
 networks:
   elysium-network:
