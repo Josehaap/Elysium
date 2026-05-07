@@ -1,5 +1,5 @@
 import { Component, inject, signal, ViewChild, ElementRef, AfterViewChecked } from '@angular/core';
-import { Post } from '../../../post/post';
+import { Post } from '../../../shared/post/post';
 import { Router } from '@angular/router';
 import { HomeApi } from './services/home-api';
 import { environment } from 'src/environments/environment';
@@ -7,6 +7,7 @@ import { RoutingElysium } from 'src/app/core/services/routingElysium';
 import { TokenService } from 'src/app/core/services/token-service';
 import { SugerensUser } from './components/sugerens-user/sugerens-user';
 import { ListNews } from './components/list-news/list-news';
+import { viewChild } from '@angular/core';
 
 @Component({
   selector: 'app-home-platform',
@@ -20,7 +21,7 @@ export class HomePlatform implements AfterViewChecked {
   protected routingElysium = inject(RoutingElysium);
   protected imgUser: string = new URL(this.homeApi.imgUserUrl, environment.apiUrl).toString();
 
-  @ViewChild('chatContainer') private chatContainer!: ElementRef;
+  private chatContainer = viewChild<ElementRef>('chatContainer');
 
   // Mensajes del chat
   public messages = signal([
@@ -47,7 +48,9 @@ export class HomePlatform implements AfterViewChecked {
         this.isLoading.set(false);
       },
       error: (err) => {
-        const errorMsg = err.error?.Error || 'Lo siento, hubo un error al procesar tu mensaje. Inténtalo de nuevo.';
+        const errorMsg =
+          err.error?.Error ||
+          'Lo siento, hubo un error al procesar tu mensaje. Inténtalo de nuevo.';
         this.messages.update((prev) => [
           ...prev,
           {
@@ -71,7 +74,7 @@ export class HomePlatform implements AfterViewChecked {
 
   private scrollToBottom() {
     try {
-      const el = this.chatContainer.nativeElement;
+      const el = this.chatContainer()?.nativeElement;
       el.scrollTop = el.scrollHeight;
     } catch (err) {}
   }

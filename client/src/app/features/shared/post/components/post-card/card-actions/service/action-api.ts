@@ -1,0 +1,35 @@
+import { HttpClient, HttpHeaders, httpResource } from '@angular/common/http';
+import { inject, Injectable, Signal } from '@angular/core';
+import { jwtDecode } from 'jwt-decode';
+import { TokenService } from 'src/app/core/services/token-service';
+import { environment } from 'src/environments/environment';
+import { accessToken } from '../../../../../models/shared';
+import { ResponseApiActions } from '../models/action';
+@Injectable({
+  providedIn: 'root',
+})
+export class ActionApi {
+  public http = inject(HttpClient);
+  protected getHeaders(post_id: string): HttpHeaders {
+    return new HttpHeaders({
+      accessToken: TokenService.getToken(),
+      post_id: post_id,
+    });
+  }
+
+  public insertLike(id: string) {
+    return this.http.post(`${environment.apiUrl}/post/Ilike`, null, {
+      headers: this.getHeaders(id),
+    });
+  }
+
+  public deleteLike(id: string) {
+    return this.http.delete(`${environment.apiUrl}/post/Dlike`, { headers: this.getHeaders(id) });
+  }
+
+  public insertShared(id: string) {
+    return this.http.post(`${environment.apiUrl}/post/shared`, null, {
+      headers: this.getHeaders(id),
+    });
+  }
+}

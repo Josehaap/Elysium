@@ -37,6 +37,7 @@ export default class ProfileController {
       if (!decoded || !decoded.id) throw new Exception("Token inválido o no proporcionado");
 
       const id = decoded.id;
+      
       const RESPONSE = await this.#userService.getAllPostUser(['post_id'], id);
 
       if (!RESPONSE) throw new Exception("No se pudieron obtener las publicaciones");

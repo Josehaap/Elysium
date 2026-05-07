@@ -1,6 +1,6 @@
 import { Component, computed, inject, input, signal } from '@angular/core';
 import { NgStyle } from '@angular/common';
-import { CardActions } from 'src/app/features/post/components/post-card/card-actions/card-actions';
+import { CardActions } from 'src/app/features/shared/post/components/post-card/card-actions/card-actions';
 import { Post } from 'src/app/features/platform/pages/profile-platform/models/profile';
 import { environment } from 'src/environments/environment';
 import { PostApi } from '../../services/post-api';
@@ -55,14 +55,16 @@ export class CardPost {
   }
 
   protected saveEdit() {
-    this.apiPost.updatePost(this.infoPost().id, this.editTitle(), this.editDescription()).subscribe({
-      next: (res) => {
-        if (res.Success) {
-          window.location.reload();
-        }
-      },
-      error: (err) => console.error(err)
-    });
+    this.apiPost
+      .updatePost(this.infoPost().id, this.editTitle(), this.editDescription())
+      .subscribe({
+        next: (res) => {
+          if (res.Success) {
+            window.location.reload();
+          }
+        },
+        error: (err) => console.error(err),
+      });
   }
 
   public imageUrl = computed(() => {

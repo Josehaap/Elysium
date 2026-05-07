@@ -1,0 +1,13 @@
+@if (post(); as p) {
+  <div class="shared-post-card">
+    <img [src]="getImgUrl(p.img_post)" alt="Post image" class="post-img">
+    <div class="post-info">
+      <p class="post-title">{{ p.title }}</p>
+      <p class="post-desc">{{ p.description }}</p>
+    </div>
+  </div>
+} @else if (loading()) {
+  <div class="shared-post-card loading">
+    <div class="skeleton"></div>
+  </div>
+}

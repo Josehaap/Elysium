@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output, inject, signal, computed } from '@angular/core';
+import { Component, inject, computed, input, output } from '@angular/core';
 import { ChatApi } from '../../platform/pages/chat-platform/services/chat-api';
 import { ChatPreview } from '../../platform/pages/chat-platform/models/chat';
 import { CommonModule } from '@angular/common';
@@ -14,9 +14,9 @@ import { environment } from 'src/environments/environment';
 export class SharePostModal {
   private chatApi = inject(ChatApi);
 
-  @Input() postId!: string;
-  @Output() close = new EventEmitter<void>();
-  @Output() shared = new EventEmitter<string>(); // Emit chat_id when shared
+ public postId = input.required<string>();
+ public close = output<void>();
+  public shared = output<string>();
 
   protected chatList = computed(() => {
     const res = this.chatApi.getChatList.value() as any;

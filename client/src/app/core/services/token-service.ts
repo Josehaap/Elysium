@@ -9,7 +9,6 @@ import { environment } from 'src/environments/environment';
   providedIn: 'root',
 })
 export class TokenService {
-  //!Pasar el nombre de accessToken al .env
   /**
    * 
    * @returns dede

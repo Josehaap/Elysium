@@ -30,7 +30,7 @@ export class CommentApi {
   }
 
 
-  public getComents = (idPost: () => any) => httpResource<ResponseCommmentAPI>(() => {
+  public getComents = (idPost: () => string) => httpResource<ResponseCommmentAPI>(() => {
     return {
       url: `${environment.apiUrl}/post/getComment`,
       method: 'GET',

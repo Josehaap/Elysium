@@ -94,6 +94,7 @@ export default class ChatController{
     getChats = async (req, res) => {
         try {
             const token = jwt.decode(req.header('accessToken'));
+            console.log(token); 
             if (!token || !token.id) throw new Exception('Token inválido');
             const id = token.id;
 

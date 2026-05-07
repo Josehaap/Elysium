@@ -1,6 +1,5 @@
 import { Component, input } from '@angular/core';
-import { infoDataPost } from '../../../platform/pages/home-platform/models/home';
-
+import { infoDataPost } from 'src/app/features/platform/pages/home-platform/models/home';
 import { PostCard } from '../post-card/post-card';
 @Component({
   selector: 'app-post-list',

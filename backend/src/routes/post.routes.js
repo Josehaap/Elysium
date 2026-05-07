@@ -17,24 +17,11 @@ router.post("/Ilike", postController.insertLike);
 router.delete("/Dlike", postController.deleteLike);
 router.delete('/delete', postController.deletePost);
 router.put('/update', postController.updatePost);
-router.post(
-  "/add",
-  Token.validateToken,
-  UploadServices.validateImg().single("img_post"),
-  postController.addPost,
-);
+router.post("/add",Token.validateToken,UploadServices.validateImg().single("img_post"),postController.addPost);
 router.delete("/delete", Token.validateToken, postController.deletePost);
-router.post(
-  "/insertComment",
-  Token.validateToken,
-  postController.insertComment,
-);
+router.post("/insertComment",Token.validateToken,postController.insertComment,);
 router.get("/getComment", Token.validateToken, postController.getComment);
-router.delete(
-  "/deleteComment",
-  Token.validateToken,
-  postController.deleteComment,
-);
+router.delete("/deleteComment",Token.validateToken,postController.deleteComment,);
 router.post("/shared", Token.validateToken, postController.insertShared);
 
 export default router;

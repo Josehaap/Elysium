@@ -1,6 +1,6 @@
 import { Component, input } from '@angular/core';
-import { Card } from '../card/card';
-import { DataUser } from '../../models/search-platform';
+import { Card } from '../card';
+import { DataUser } from '../../../models/search-platform';
 
 @Component({
   selector: 'app-list-card',
