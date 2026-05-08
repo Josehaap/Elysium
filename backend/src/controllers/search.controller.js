@@ -36,9 +36,7 @@ export default class SearchController{
             res.status(200).send(helper.generateLiteralObject(this.#response, [true, dataRespAleatorio, '']))
         } catch (error) {
             
-            console.log(error.message
-
-            )
+            console.log(error.message)
         }
     }
     /**
@@ -60,9 +58,7 @@ export default class SearchController{
             res.status(200).send(helper.generateLiteralObject(this.#response, [true, dataRespAleatorio, '']))
         } catch (error) {
             
-            console.log(error.message
-
-            )
+            console.log(error.message)
         }
     }
 

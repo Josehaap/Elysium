@@ -11,7 +11,6 @@ import { fileURLToPath } from 'url';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-//TODO utilizar herramienta de archivos para enviar arcchivos html con una estructura determinada. 
 /**
  * @description Clase Singleton que gestiona el envío de correos transaccionales a través de Brevo (ex Sendinblue).
  * Solo se crea una instancia de la API para toda la aplicación.

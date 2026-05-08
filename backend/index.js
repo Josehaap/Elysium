@@ -18,13 +18,11 @@ wss.on('connection', (ws) => {
             const messageData = JSON.parse(data.toString());
             const { chat_id, user_send_id, content, post_id } = messageData;
 
-            // Guardar en la base de datos (sennt_at se genera automáticamente o por NOW())
             await pool.query(
                 'INSERT INTO message (chat_id, user_send_id, content, post_id, sennt_at) VALUES (?, ?, ?, ?, NOW())',
                 [chat_id, user_send_id, content, post_id || null]
             );
 
-            // Broadcast a todos los clientes conectados
             const responseData = JSON.stringify({
                 type: 'new_message',
                 data: {

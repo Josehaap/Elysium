@@ -5,7 +5,7 @@ import UploadServices from "../core/middleware/upload.services.js";
 import DashboardController from "../controllers/Dashboard.controller.js";
 import ProfileController from "../controllers/Profile.controller.js";
 import Token from "../core/middleware/Token.js";
-import SearchController from "../controllers/searchController.js";
+import SearchController from "../controllers/search.controller.js";
 const router = express.Router(); //Generamos una instancia de las funcione de enrutamiento.
 const user = new UserController();
 const dashboard = new DashboardController();
