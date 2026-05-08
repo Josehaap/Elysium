@@ -21,27 +21,27 @@ services:
     ports:
       - "3000:3000"
     environment:
-    - DB_HOST=${DB_HOST}
-    - DB_USER=${DB_USER}
-    - DB_PASSWORD=${DB_PASSWORD}
-    - DB_NAME=${DB_NAME}
-    - DB_PORT=${DB_PORT}
+      DB_HOST: ${DB_HOST}
+      DB_USER: ${DB_USER}
+      DB_PASSWORD: ${DB_PASSWORD}
+      DB_NAME: ${DB_NAME}
+      DB_PORT: ${DB_PORT}
 
-    - PORT=${PORT}
+      PORT: ${PORT}
 
-    - JWT_ACCESS_SECRET=${JWT_ACCESS_SECRET}
-    - JWT_REFRESH_SECRET=${JWT_REFRESH_SECRET}
+      JWT_ACCESS_SECRET: ${JWT_ACCESS_SECRET}
+      JWT_REFRESH_SECRET: ${JWT_REFRESH_SECRET}
 
-    - userSenderEmail=${userSenderEmail}
-    - apiKeyUserSenderEmail=${apiKeyUserSenderEmail}
+      userSenderEmail: ${userSenderEmail}
+      apiKeyUserSenderEmail: ${apiKeyUserSenderEmail}
 
-    - urlUserNormal=${urlUserNormal}
-    - urlUserEnterprise=${urlUserEnterprise}
+      urlUserNormal: ${urlUserNormal}
+      urlUserEnterprise: ${urlUserEnterprise}
 
-    - levelSegurityDefault=${levelSegurityDefault}
+      levelSegurityDefault: ${levelSegurityDefault}
     depends_on:
       - database
-    networks: 
+    networks:
       - elysium-network
 
   client:
@@ -54,7 +54,6 @@ services:
     networks:
       - elysium-network
 
-  services:
   ollama:
     image: ollama/ollama:0.6.8
     container_name: elysium-ollama
