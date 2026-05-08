@@ -52,6 +52,8 @@
       [comments]="this.infoPost().comment"
       [shareds]="this.infoPost().shared"
       [isLiked]="this.infoPost().userLike"
+      (iWantComment)="iwantViewComment.set($event)"
+      (onOpenShare)="onOpenShare.emit($event)"
     ></app-card-actions>
   </div>
 </div>

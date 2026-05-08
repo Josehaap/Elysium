@@ -1,4 +1,4 @@
-import { Component, computed, inject, input, signal } from '@angular/core';
+import { Component, computed, inject, input, linkedSignal, output, signal } from '@angular/core';
 import { NgStyle } from '@angular/common';
 import { CardActions } from 'src/app/features/post/components/post-card/card-actions/card-actions';
 import { Post } from 'src/app/features/platform/pages/profile-platform/models/profile';
@@ -42,6 +42,16 @@ export class CardPost {
     });
   }
   public infoPost = input.required<Post>();
+  public onOpenShare = output<string>(); // Bubble up to list
+
+  protected iwantViewComment = signal(false);
+  protected localCommentCount = linkedSignal(() => this.infoPost().comment);
+
+  protected handleCommentAction(event: any) {
+    if (event.action === 'CLOSED') {
+      this.iwantViewComment.set(false);
+    }
+  }
 
   protected isEditing = signal(false);
   protected editTitle = signal('');

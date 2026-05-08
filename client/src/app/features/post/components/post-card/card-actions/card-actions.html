@@ -58,13 +58,5 @@
   </div>
 </div>
 
-@if (showShareModal()) {
-  <app-share-post-modal 
-    [postId]="id()" 
-    (close)="showShareModal.set(false)" 
-    (shared)="onPostShared($event)">
-  </app-share-post-modal>
-}
-
 
 

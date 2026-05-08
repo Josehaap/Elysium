@@ -1,4 +1,4 @@
-import { Component, computed, inject, input, linkedSignal, signal } from '@angular/core';
+import { Component, computed, inject, input, linkedSignal, output, signal } from '@angular/core';
 import { infoDataPost } from '../../../platform/pages/home-platform/models/home';
 import { RoutingElysium } from 'src/app/core/services/routingElysium';
 import { btnFollow } from 'src/app/features/shared/btnFollow/btnFollow';
@@ -15,6 +15,7 @@ import { CommentAction, CommentEvent } from 'src/app/features/shared/comments/mo
 })
 export class PostCard {
   public dontViewActions = input<boolean>(true);
+  public onOpenShare = output<string>(); // Bubble up to list
   protected routingElysium = inject(RoutingElysium);
   public dataPost = input.required<infoDataPost>();
   protected localCommentCount = linkedSignal(() => this.dataPost().comment);

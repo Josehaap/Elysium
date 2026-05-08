@@ -41,6 +41,7 @@
         [shareds]="dataPost().shared"
         [isLiked]="dataPost().userLike"
         (iWantComment)="iwantViewComment.set($event)"
+        (onOpenShare)="onOpenShare.emit($event)"
       >
       </app-card-actions>
     }
