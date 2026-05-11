@@ -4,6 +4,7 @@ import { CardActions } from 'src/app/features/post/components/post-card/card-act
 import { Post } from 'src/app/features/platform/pages/profile-platform/models/profile';
 import { environment } from 'src/environments/environment';
 import { PostApi } from '../../services/post-api';
+import { CommentAction } from 'src/app/features/shared/comments/models/message';
 import { ActivatedRoute } from '@angular/router';
 import { TokenService } from 'src/app/core/services/token-service';
 
@@ -43,13 +44,15 @@ export class CardPost {
   }
   public infoPost = input.required<Post>();
   public onOpenShare = output<string>(); // Bubble up to list
+  public onOpenComments = output<Post>(); // Bubble up to list
 
-  protected iwantViewComment = signal(false);
   protected localCommentCount = linkedSignal(() => this.infoPost().comment);
 
-  protected handleCommentAction(event: any) {
-    if (event.action === 'CLOSED') {
-      this.iwantViewComment.set(false);
+  public updateCommentCount(action: CommentAction) {
+    if (action === CommentAction.ADDED) {
+      this.localCommentCount.update(c => c + 1);
+    } else if (action === CommentAction.DELETED) {
+      this.localCommentCount.update(c => c - 1);
     }
   }
 

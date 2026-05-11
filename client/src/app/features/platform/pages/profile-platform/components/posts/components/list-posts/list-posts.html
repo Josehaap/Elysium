@@ -1,6 +1,10 @@
 <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 ">
     @for (post of listPost(); track $index) {
-        <app-card-post [infoPost]="post" (onOpenShare)="handleOpenShare($event)"></app-card-post>
+        <app-card-post 
+            [infoPost]="post" 
+            (onOpenShare)="handleOpenShare($event)"
+            (onOpenComments)="handleOpenComments($event)"
+        ></app-card-post>
     }
 </section>
 
@@ -11,4 +15,12 @@
     (shared)="sharingPostId.set(null)"
   >
   </app-share-post-modal>
+}
+
+@if (commentingPost()) {
+  <app-profile-comment-drawer
+    [post]="commentingPost()!"
+    (onClose)="handleCloseComments()"
+    (onCommentAction)="handleDrawerCommentAction($event)"
+  ></app-profile-comment-drawer>
 }

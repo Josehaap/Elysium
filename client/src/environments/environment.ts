@@ -1,4 +1,7 @@
+const IP = 'localhost';
+
 export const environment = {
   production: false,
-  apiUrl: 'http://localhost:3000'
+  ip: IP,
+  apiUrl: `http://${IP}:3000`
 };

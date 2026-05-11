@@ -34,6 +34,8 @@ services:
       userSenderEmail: ${userSenderEmail}
       apiKeyUserSenderEmail: ${apiKeyUserSenderEmail}
 
+      HOST_IP: ${HOST_IP}
+      CLIENT_URL: ${CLIENT_URL}
       urlUserNormal: ${urlUserNormal}
       urlUserEnterprise: ${urlUserEnterprise}
 

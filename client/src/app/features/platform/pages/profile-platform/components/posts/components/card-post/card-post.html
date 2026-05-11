@@ -49,10 +49,10 @@
     <app-card-actions
       [id]="this.infoPost().id"
       [likes]="this.infoPost().likes"
-      [comments]="this.infoPost().comment"
+      [comments]="this.localCommentCount()"
       [shareds]="this.infoPost().shared"
       [isLiked]="this.infoPost().userLike"
-      (iWantComment)="iwantViewComment.set($event)"
+      (iWantComment)="onOpenComments.emit(infoPost())"
       (onOpenShare)="onOpenShare.emit($event)"
     ></app-card-actions>
   </div>

@@ -1,0 +1,39 @@
+<!-- Overlay oscuro para el fondo -->
+<div class="popup-overlay" (click)="closeDrawer()">
+  
+  <!-- Contenedor principal del Pop-up -->
+  <div class="popup-content" (click)="$event.stopPropagation()">
+    
+    <!-- Encabezado con botón de cerrar -->
+    <div class="popup-header">
+      <h2 class="popup-title">Comentarios</h2>
+      <button class="close-btn" (click)="closeDrawer()">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M18 6 6 18"/><path d="m6 6 12 12"/>
+        </svg>
+      </button>
+    </div>
+    
+    <!-- Cuerpo del popup: Imagen y Comentarios -->
+    <div class="popup-body">
+      
+      <!-- Sección de la imagen del Post -->
+      <div class="popup-image-container">
+        <img
+          class="post-image"
+          alt="Post Image"
+          [src]="imgUrlPost()"
+        />
+      </div>
+      
+      <!-- Reutilización del componente de comentarios -->
+      <div class="popup-comments-container">
+        <app-comments
+          [id]="post().id"
+          (onCommentAction)="handleCommentAction($event)"
+        ></app-comments>
+      </div>
+      
+    </div>
+  </div>
+</div>
