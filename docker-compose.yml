@@ -5,10 +5,10 @@ services:
     ports:
       - "3306:3306"
     environment:
-      MYSQL_ROOT_PASSWORD: "ertUIbd93"
-      MYSQL_DATABASE: "elysiumDatabase"
-      MYSQL_USER: "userAdmin"
-      MYSQL_PASSWORD: "1234"
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD} 
     volumes:
       - ./database/init.sql:/docker-entrypoint-initdb.d/init.sql
       - elysium-db-data:/var/lib/mysql

@@ -30,7 +30,7 @@ img{
 
 section::after{
     content: '';
-    background-color: var(--bg-light );
+    background-color:white;
     position: absolute;
     bottom: -3px;
     right: -15px;

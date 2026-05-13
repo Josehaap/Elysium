@@ -90,7 +90,7 @@ export class AddPlatform {
             error: (err) => {
                 console.error('Error al enviar:', err);
                 this.alertLevel.set('danger');
-                this.alertMessage.set(err.error?.Error || 'Hubo un error al crear la publicación.');
+                this.alertMessage.set( 'Debes rellenar todos los campos. ');
                 setTimeout(() => this.alertMessage.set(''), 3000);
             }
         });

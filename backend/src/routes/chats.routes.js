@@ -21,4 +21,10 @@ router.get("/messages", Token.validateToken, chatController.getMessages);
 
 router.post("/insertChat",Token.validateToken, chatController.createChat);
 
+// Alias para iniciar chat desde el frontend
+router.post("/start", Token.validateToken, chatController.createChat);
+
+// Ruta para enviar mensajes vía REST (necesaria para ciertas acciones del frontend)
+router.post("/send", Token.validateToken, chatController.sendMessage);
+
 export default router;

@@ -4,7 +4,6 @@ import { Home } from './features/landingpage/pages/home/home';
 import { Login } from './features/landingpage/pages/login/login';
 import { Platform } from './features/platform/platform';
 import { authGuard } from './core/guards/token-guard';
-//!Exportar las rutas ha archivos independientes
 export const routes: Routes = [
   {
     path: '',

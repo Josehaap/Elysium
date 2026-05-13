@@ -97,7 +97,8 @@ CREATE TABLE if not exists `message` (
     post_id bigint NULL,
     sennt_at timestamp default current_timestamp,
     is_read boolean,
-    user_send_id bigint not null CONSTRAINT fk_message_chat FOREIGN KEY (chat_id) REFERENCES chat (chat_id),
+    user_send_id bigint not null,
+    CONSTRAINT fk_message_chat FOREIGN KEY (chat_id) REFERENCES chat (chat_id),
     CONSTRAINT fk_message_user FOREIGN KEY (user_send_id) REFERENCES user (user_id),
     CONSTRAINT fk_message_post FOREIGN KEY (post_id) REFERENCES post (post_id)
 );

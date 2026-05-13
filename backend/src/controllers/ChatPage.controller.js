@@ -119,6 +119,7 @@ export default class ChatController{
 
         } catch (error) {
             this.#valuesError[2] = (error instanceof Exception) ? error.message : "Error al obtener los chats";
+            console.error(error);
             res.status((error instanceof Exception) ? 400 : 500).send(helper.generateLiteralObject(this.#response, this.#valuesError));
         }
     }
@@ -140,8 +141,48 @@ export default class ChatController{
 
         } catch (error) {
             this.#valuesError[2] = (error instanceof Exception) ? error.message : "Error al obtener los mensajes";
+            console.error(error);
             res.status((error instanceof Exception) ? 400 : 500).send(helper.generateLiteralObject(this.#response, this.#valuesError));
         }
     }
+
+    sendMessage = async (req, res) => {
+        try {
+            const token = jwt.decode(req.header("accessToken"));
+            if (!token || !token.id) throw new Exception("Token inválido");
+
+            const { chatId, content, post_id } = req.body;
+            if (!chatId || !content) throw new Exception("Faltan datos del mensaje");
+
+            const RESPONSE = await pool.query(
+                "INSERT INTO message (chat_id, user_send_id, content, post_id, sennt_at) VALUES (?, ?, ?, ?, NOW())",
+                [chatId, token.id, content, post_id || null],
+            );
+
+            if (RESPONSE[0].affectedRows !== 1)
+                throw new Exception("Error al guardar el mensaje");
+
+            return res.status(200).send(
+                helper.generateLiteralObject(this.#response, [
+                    true,
+                    {
+                        chat_id: chatId,
+                        user_send_id: token.id,
+                        content,
+                        post_id: post_id || null,
+                        sennt_at: new Date(),
+                    },
+                    "",
+                ]),
+            );
+        } catch (error) {
+            this.#valuesError[2] =
+                error instanceof Exception ? error.message : "Error al enviar el mensaje";
+            console.error(error);
+            res
+                .status(error instanceof Exception ? 400 : 500)
+                .send(helper.generateLiteralObject(this.#response, this.#valuesError));
+        }
+    };
 
 }
