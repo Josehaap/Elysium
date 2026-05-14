@@ -14,9 +14,7 @@
     <img
       class="post-image"
       alt=""
-      [src]="
-        dataPost().img_post === '' ? 'img/placeholder/publish/publish.webp' : dataPost().img_post
-      "
+      [src]="dataPost().img_post === '' ? 'img/placeholder/publish/publish.webp' : imgUrlCard()"
     />
   </div>
   <h3 class="font-bold cursor-pointer" [class.expanded]="isTitleExpanded()" (click)="toggleTitle()">

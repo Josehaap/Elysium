@@ -34,12 +34,15 @@ export class PostCard {
 
   public imgUrlProfile = computed(() => {
     const imgProfile = this.dataPost().profile_img;
-    if (
-      imgProfile.startsWith('http') ||
-      imgProfile.startsWith('blob') ||
-      imgProfile.startsWith('img/placeholder')
-    )
-      return imgProfile;
+    if (imgProfile.startsWith('http') || imgProfile.startsWith('blob') ) return imgProfile;
+    if (imgProfile.startsWith('img/placeholder')) return imgProfile;
+    const newUrl = `${environment.apiUrl}/${imgProfile}`;
+    return newUrl;
+  });
+  public imgUrlCard = computed(() => {
+    const imgProfile = this.dataPost().img_post;
+    if (imgProfile.startsWith('http') || imgProfile.startsWith('blob') ) return imgProfile;
+    if (imgProfile.startsWith('img/placeholder')) return imgProfile;
     const newUrl = `${environment.apiUrl}/${imgProfile}`;
     return newUrl;
   });
