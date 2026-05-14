@@ -109,3 +109,4 @@ export class SharedPostCard implements OnInit {
     return `${environment.apiUrl}/${path}`;
   }
 }
+

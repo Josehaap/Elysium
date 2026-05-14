@@ -12,7 +12,7 @@
   <app-share-post-modal
     [postId]="sharingPostId()!"
     (close)="sharingPostId.set(null)"
-    (shared)="sharingPostId.set(null)"
+    (shared)="handleShared($event)"
   >
   </app-share-post-modal>
 }
