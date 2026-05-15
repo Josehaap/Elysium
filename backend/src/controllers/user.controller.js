@@ -368,11 +368,13 @@ export default class UserController {
       const id = token["id"];
       UploadServices.deleteUserFolder(token['username']);
       const RESPONSE = await this.#userService.deleteUser(id);
+      console.log(RESPONSE);
       if (!RESPONSE) throw new Error();
       
      res.status(RESPONSE.affectedRows === 0 ? 400 : 200).send(helper.generateLiteralObject(RESPONSE.affectedRows !== 0))
 
     } catch (error) {
+      console.log(error.message)
       this.#valuesError[2] = (error instanceof Exception) ? error.message: this.#valuesError[2]; 
       
       res.status((error instanceof Exception) ? 400 : 500).send(helper.generateLiteralObject(this.#response, this.#valuesError));

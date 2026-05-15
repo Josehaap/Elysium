@@ -1,7 +1,8 @@
 section.container{
     border-top: 5px solid #EFA287;
     padding-top:10px ;
-    background: var(--bg-light);
+
+    background: transparent;
 
 }
 section>div{
